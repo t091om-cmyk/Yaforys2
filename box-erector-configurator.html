@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Конфигуратор формирователя коробов - ЯФОР</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --blue: #1F4E79;
+      --blue-m: #2E75B6;
+      --blue-l: #D6E4F0;
+      --blue-p: #EEF4FB;
+      --orange: #C55A11;
+      --orange-p: #FCE4D6;
+      --green: #1E6B3C;
+      --green-p: #E2EFDA;
+      --grey: #505968;
+      --grey-l: #F4F6F9;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
+      background: var(--blue-p);
+      color: var(--grey);
+    }
+
+    /* Header */
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--blue);
+      color: white;
+      padding: 16px 24px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+
+    .header-content {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo {
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -1px;
+    }
+
+    .logo-r {
+      color: var(--orange);
+    }
+
+    .header-subtitle {
+      font-size: 13px;
+      opacity: 0.85;
+      margin-left: auto;
+    }
+
+    /* Main layout */
+    .container {
+      max-width: 1400px;
+      margin: 24px auto;
+      padding: 0 24px;
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 24px;
+    }
+
+    @media (max-width: 1024px) {
+      .container {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Left column */
+    .config-section {
+      background: white;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
+
+    .section-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--blue);
+      margin-bottom: 16px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* Box type grid */
+    .box-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .box-card {
+      position: relative;
+      border: 2px solid var(--grey-l);
+      border-radius: 8px;
+      padding: 12px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      background: white;
+    }
+
+    .box-card:hover {
+      border-color: var(--blue-m);
+      box-shadow: 0 4px 8px rgba(31,78,121,0.1);
+    }
+
+    .box-card.selected {
+      border-color: var(--orange);
+      background: var(--orange-p);
+    }
+
+    .box-card input[type="radio"] {
+      display: none;
+    }
+
+    .box-icon {
+      width: 60px;
+      height: 54px;
+      margin: 0 auto 8px;
+    }
+
+    .box-card-name {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--grey);
+      margin-bottom: 4px;
+    }
+
+    .box-card-hint {
+      font-size: 11px;
+      color: #999;
+      line-height: 1.3;
+    }
+
+    /* Speed buttons */
+    .speed-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .speed-btn {
+      border: 2px solid var(--grey-l);
+      background: white;
+      padding: 12px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--grey);
+      transition: all 0.2s;
+    }
+
+    .speed-btn:hover {
+      border-color: var(--blue-m);
+    }
+
+    .speed-btn.selected {
+      border-color: var(--blue-m);
+      background: var(--blue-p);
+      color: var(--blue);
+      font-weight: 600;
+    }
+
+    /* Pills */
+    .pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .pill {
+      border: 2px solid var(--grey-l);
+      background: white;
+      padding: 8px 12px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 13px;
+      transition: all 0.2s;
+    }
+
+    .pill:hover {
+      border-color: var(--blue-m);
+    }
+
+    .pill.selected {
+      border-color: var(--green);
+      background: var(--green-p);
+      color: var(--green);
+      font-weight: 600;
+    }
+
+    .pill input[type="radio"] {
+      display: none;
+    }
+
+    /* Checkboxes */
+    .checkbox-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .checkbox-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      font-size: 13px;
+    }
+
+    .checkbox-item input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+      accent-color: var(--blue-m);
+    }
+
+    /* Right column - sticky result */
+    .result-panel {
+      position: sticky;
+      top: 80px;
+      background: white;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      height: fit-content;
+    }
+
+    .result-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--blue);
+      margin-bottom: 4px;
+    }
+
+    .result-tag {
+      font-size: 12px;
+      color: #999;
+      margin-bottom: 16px;
+    }
+
+    .result-features {
+      list-style: none;
+      margin-bottom: 16px;
+      border-top: 1px solid var(--grey-l);
+      padding-top: 12px;
+    }
+
+    .result-features li {
+      font-size: 12px;
+      margin-bottom: 8px;
+      color: var(--grey);
+      line-height: 1.4;
+    }
+
+    .result-features li::before {
+      content: "✓ ";
+      color: var(--green);
+      font-weight: 600;
+      margin-right: 6px;
+    }
+
+    .result-specs {
+      font-size: 12px;
+      margin-bottom: 16px;
+      border-collapse: collapse;
+    }
+
+    .result-specs td {
+      padding: 8px 0;
+      border-bottom: 1px solid var(--grey-l);
+    }
+
+    .result-specs td:first-child {
+      font-weight: 600;
+      color: var(--blue);
+      width: 45%;
+      padding-right: 8px;
+    }
+
+    .result-specs td:last-child {
+      color: var(--grey);
+    }
+
+    .result-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 16px;
+    }
+
+    .addon-tag {
+      background: var(--orange-p);
+      border: 1px solid var(--orange);
+      color: var(--orange);
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 500;
+    }
+
+    .submit-btn {
+      width: 100%;
+      background: var(--blue);
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .submit-btn:hover {
+      background: var(--blue-m);
+    }
+
+    /* Modal */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal {
+      background: white;
+      border-radius: 8px;
+      padding: 32px;
+      max-width: 500px;
+      width: 90%;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    }
+
+    .modal-title {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--blue);
+      margin-bottom: 20px;
+    }
+
+    .modal-summary {
+      background: var(--blue-p);
+      padding: 16px;
+      border-radius: 6px;
+      margin-bottom: 20px;
+      font-size: 13px;
+    }
+
+    .modal-summary-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .modal-summary-row:last-child {
+      margin-bottom: 0;
+    }
+
+    .modal-summary-label {
+      font-weight: 600;
+      color: var(--blue);
+    }
+
+    .modal-summary-value {
+      color: var(--grey);
+    }
+
+    .modal-inputs {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .modal-inputs input {
+      border: 1px solid var(--grey-l);
+      padding: 10px 12px;
+      border-radius: 6px;
+      font-size: 13px;
+    }
+
+    .modal-inputs input:focus {
+      outline: none;
+      border-color: var(--blue-m);
+      box-shadow: 0 0 0 3px rgba(46,117,182,0.1);
+    }
+
+    .modal-buttons {
+      display: flex;
+      gap: 10px;
+    }
+
+    .modal-buttons button {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .modal-send {
+      background: var(--blue);
+      color: white;
+    }
+
+    .modal-send:hover {
+      background: var(--blue-m);
+    }
+
+    .modal-cancel {
+      background: var(--grey-l);
+      color: var(--grey);
+    }
+
+    .modal-cancel:hover {
+      background: #e0e0e0;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        margin: 12px auto;
+        padding: 0 12px;
+        gap: 12px;
+      }
+
+      .config-section {
+        margin-bottom: 12px;
+        padding: 16px;
+      }
+
+      .result-panel {
+        position: static;
+      }
+
+      .box-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .header-subtitle {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="header-content">
+      <div class="logo">ЯФО<span class="logo-r">Р</span></div>
+      <div class="header-subtitle">Конфигуратор формирователя коробов</div>
+    </div>
+  </div>
+
+  <div class="container">
+    <!-- Left column -->
+    <div class="left-column">
+      <!-- Section 1: Box type -->
+      <div class="config-section">
+        <div class="section-title">Тип конструкции короба</div>
+        <div class="box-grid" id="boxTypeGrid">
+          <!-- Generated by JS -->
+        </div>
+      </div>
+
+      <!-- Section 2: Speed -->
+      <div class="config-section">
+        <div class="section-title">Производительность</div>
+        <div class="speed-buttons" id="speedButtons">
+          <!-- Generated by JS -->
+        </div>
+      </div>
+
+      <!-- Section 3: Product type -->
+      <div class="config-section">
+        <div class="section-title">Тип продукта</div>
+        <div class="pills" id="productPills">
+          <!-- Generated by JS -->
+        </div>
+      </div>
+
+      <!-- Section 4: Options -->
+      <div class="config-section">
+        <div class="section-title">Дополнительные опции</div>
+        <div class="checkbox-list" id="optionsList">
+          <!-- Generated by JS -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Right column -->
+    <div class="result-panel" id="resultPanel">
+      <div class="result-title" id="resultTitle">Выберите параметры</div>
+      <div class="result-tag" id="resultTag"></div>
+      <ul class="result-features" id="resultFeatures"></ul>
+      <table class="result-specs" id="resultSpecs"></table>
+      <div class="result-tags" id="resultTags"></div>
+      <button class="submit-btn" id="submitBtn">Сформировать запрос на КП</button>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal">
+      <div class="modal-title">Запрос на КП готов</div>
+      <div class="modal-summary" id="modalSummary"></div>
+      <div class="modal-inputs">
+        <input type="text" id="modalName" placeholder="Имя" required>
+        <input type="text" id="modalCompany" placeholder="Компания" required>
+        <input type="tel" id="modalPhone" placeholder="Телефон" required>
+      </div>
+      <div class="modal-buttons">
+        <button class="modal-send" id="modalSendBtn">Отправить в ЯФОР</button>
+        <button class="modal-cancel" id="modalCancelBtn">Закрыть</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Models data
+    const models = {
+      YCZ: {
+        name: 'YCZ',
+        tag: 'Формирователь плоских коробов',
+        boxes: ['flat'],
+        feats: ['Плоский бланк → готовый короб за один цикл', 'Скорость до 10 коробов/мин', 'Малый формат: 150-400 мм', 'Механический привод, простое обслуживание', 'Пищевое исполнение, нержавеющая сталь', 'Совместим с автоподачей заготовок'],
+        specs: [['Скорость', 'до 10 кор./мин'], ['Тип коробов', 'плоский бланк'], ['Привод', 'механический'], ['Формат', '150–400 мм']]
+      },
+      GPK: {
+        name: 'GPK-43H25EP',
+        tag: 'Формирователь гофрокоробов RSC',
+        boxes: ['rsc'],
+        feats: ['Американка RSC — 4-х клапанный гофрокороб', 'До 30 коробов/мин — высокая производительность', 'Автоматическая подача и склейка клапанов', 'Горячий клей в стандарте', 'Совместим с заклейщиком скотчем GPC50', 'Гофрокартон — любая плотность'],
+        specs: [['Скорость', 'до 30 кор./мин'], ['Тип коробов', 'RSC (американка)'], ['Склейка', 'горячий клей'], ['Формат', 'под заказ']]
+      },
+      Q1530: {
+        name: 'BOIX Q-1530',
+        tag: 'Универсальный формирователь',
+        boxes: ['rsc', 'platform', 'column', 'dwall', 'p84', 'punnet', 'autolock', 'conical'],
+        feats: ['Широкий спектр конструкций коробов', 'До 20 коробов/мин', 'Быстрая смена типа короба — без инструмента', 'Сервоприводы: высокая точность и надёжность', 'Встроенный датировщик (опция)', 'Пищевое исполнение'],
+        specs: [['Скорость', 'до 20 кор./мин'], ['Типов коробов', '8+'], ['Привод', 'сервоприводы'], ['Склейка', 'горячий клей']]
+      },
+      E7: {
+        name: 'E-7 SMIPAC',
+        tag: 'Формирователь для открытых форм',
+        boxes: ['rsc', 'platform', 'column', 'dwall'],
+        feats: ['Открытые лотки, колонные и двустенные коробы', 'До 15 коробов/мин', 'Гибкая настройка под формат', 'Надёжная механическая конструкция', 'Минимальное время переналадки', 'Пищевое исполнение'],
+        specs: [['Скорость', 'до 15 кор./мин'], ['Типов коробов', '4'], ['Привод', 'механический/серво'], ['Формат', 'широкий диапазон']]
+      },
+      FP4: {
+        name: 'FP-4/2M-3',
+        tag: 'Высокоскоростной формирователь',
+        boxes: ['rsc', 'p84', 'conical'],
+        feats: ['До 30 коробов/мин — высокая скорость', 'P-84, конические и RSC коробы', 'Точная сервоэлектрика', 'Горячий клей в стандарте', 'Автоматическая подача заготовок', 'Интеграция с весовыми и упаковочными линиями'],
+        specs: [['Скорость', 'до 30 кор./мин'], ['Типов коробов', '3'], ['Привод', 'сервоэлектрика'], ['Склейка', 'горячий клей']]
+      },
+      Q2400: {
+        name: 'BOIX Q-2400',
+        tag: 'Высокоскоростной универсальный',
+        boxes: ['rsc', 'p84', 'punnet', 'autolock', 'conical'],
+        feats: ['До 40 коробов/мин — максимальная скорость', 'Авто-замок, пюнет, RSC, конические', 'Двойной сервопривод', 'Быстрая смена формата', 'Для интенсивного производства 24/7', 'Встроенный датировщик'],
+        specs: [['Скорость', 'до 40 кор./мин'], ['Типов коробов', '5+'], ['Привод', 'двойной серво'], ['Режим работы', '24/7']]
+      }
+    };
+
+    const boxTypes = [
+      { id: 'flat', name: 'Плоский короб', hint: 'раскладной, одна деталь' },
+      { id: 'rsc', name: 'Американка RSC', hint: '4-х клапанный гофрокороб' },
+      { id: 'platform', name: 'Открытый лоток', hint: 'без крышки, лоток' },
+      { id: 'column', name: 'Колонный', hint: 'усиленные углы' },
+      { id: 'dwall', name: 'Двойная стенка', hint: 'двойная стенка' },
+      { id: 'p84', name: 'P-84', hint: 'специальное дно' },
+      { id: 'punnet', name: 'Пюнет C1', hint: 'открытый пюнет' },
+      { id: 'autolock', name: 'Авто-замок', hint: 'автоматическое дно' },
+      { id: 'conical', name: 'Конический', hint: 'расширяющийся книзу' }
+    ];
+
+    const speeds = [
+      { id: 'low', label: 'До 10 коробов/мин' },
+      { id: 'mid', label: '10 – 25 коробов/мин' },
+      { id: 'high', label: '25 – 40 коробов/мин' }
+    ];
+
+    const products = [
+      { id: 'meat', emoji: '🥩', label: 'Мясо / птица' },
+      { id: 'fish', emoji: '🐟', label: 'Рыба / морепродукты' },
+      { id: 'frozen', emoji: '❄️', label: 'Заморозка' },
+      { id: 'packaged', emoji: '🥡', label: 'Фасованная продукция' },
+      { id: 'other', emoji: '🍱', label: 'Другое' }
+    ];
+
+    const options = [
+      { id: 'feeder', label: 'Автоматическая подача заготовок' },
+      { id: 'dating', label: 'Датировщик / маркировка короба' },
+      { id: 'hotglue', label: 'Горячий клей' },
+      { id: 'weighing', label: 'Интеграция с весовой линией' },
+      { id: 'tapsealer', label: 'Автоматическая заклейка скотчем' }
+    ];
+
+    // SVG icons
+    function getSVGIcon(boxId) {
+      const svgs = {
+        flat: '<svg viewBox="0 0 60 54" fill="none" stroke="#2E75B6" stroke-width="2"><rect x="8" y="14" width="44" height="30"/><line x1="8" y1="29" x2="52" y2="29"/><line x1="30" y1="14" x2="30" y2="44"/></svg>',
+        rsc: '<svg viewBox="0 0 60 54" fill="none" stroke="#2E75B6" stroke-width="2"><rect x="10" y="20" width="40" height="28"/><line x1="10" y1="20" x2="10" y2="8"/><line x1="50" y1="20" x2="50" y2="8"/><line x1="30" y1="20" x2="30" y2="12"/><path d="M10 8 L30 12 L50 8" fill="none"/></svg>',
+        platform: '<svg viewBox="0 0 60 54" fill="none" stroke="#2E75B6" stroke-width="2"><rect x="10" y="28" width="40" height="18"/><line x1="10" y1="28" x2="15" y2="10"/><line x1="50" y1="28" x2="45" y2="10"/><line x1="15" y1="10" x2="45" y2="10"/></svg>',
+        column: '<svg viewBox="0 0 60 54" fill="none" stroke="#2E75B6" stroke-width="2"><rect x="10" y="10" width="40" height="36"/><circle cx="30" cy="28" r="8"/><line x1="10" y1="28" x2="22" y2="28"/><line x1="38" y1="28" x2="50" y2="28"/></svg>',
+        dwall: '<svg viewBox="0 0 60 54" fill="none" stroke="#2E75B6" stroke-width="2"><rect x="10" y="14" width="40" height="26"/><line x1="15" y1="14" x2="15" y2="40"/><line x1="45" y1="14" x2="45" y2="40"/><line x1="18" y1="27" x2="42" y2="27"/></svg>',
+        p84: '<svg viewBox="0 0 60 54" fill="none" stroke="#2E75B6" stroke-width="2"><path d="M12 14 L48 14 L50 27 L52 40 L8 40 L10 27 Z"/><line x1="30" y1="14" x2="30" y2="40"/></svg>',
+        punnet: '<svg viewBox="0 0 60 54" fill="none" stroke="#2E75B6" stroke-width="2"><path d="M12 28 L18 12 Q30 8 42 12 L48 28"/><line x1="12" y1="28" x2="48" y2="28"/><line x1="12" y1="28" x2="10" y2="42"/><line x1="48" y1="28" x2="50" y2="42"/><line x1="10" y1="42" x2="50" y2="42"/></svg>',
+        autolock: '<svg viewBox="0 0 60 54" fill="none" stroke="#2E75B6" stroke-width="2"><rect x="10" y="18" width="40" height="24"/><path d="M20 18 L25 8 L30 18"/><path d="M40 18 L45 8 L50 18"/><line x1="20" y1="30" x2="25" y2="35" L30 30"/></svg>',
+        conical: '<svg viewBox="0 0 60 54" fill="none" stroke="#2E75B6" stroke-width="2"><path d="M30 8 L15 20 L12 42 L48 42 L45 20 Z"/><line x1="30" y1="8" x2="30" y2="42"/></svg>'
+      };
+      return svgs[boxId] || '';
+    }
+
+    // State
+    let state = {
+      boxType: null,
+      speed: null,
+      product: null,
+      options: []
+    };
+
+    // Render box grid
+    function renderBoxGrid() {
+      const grid = document.getElementById('boxTypeGrid');
+      grid.innerHTML = boxTypes.map(box => `
+        <label class="box-card" data-box="${box.id}">
+          <input type="radio" name="boxType" value="${box.id}">
+          <div class="box-icon">${getSVGIcon(box.id)}</div>
+          <div class="box-card-name">${box.name}</div>
+          <div class="box-card-hint">${box.hint}</div>
+        </label>
+      `).join('');
+
+      grid.addEventListener('change', (e) => {
+        if (e.target.name === 'boxType') {
+          state.boxType = e.target.value;
+          document.querySelectorAll('.box-card').forEach(c => c.classList.remove('selected'));
+          document.querySelector(`[data-box="${state.boxType}"]`).classList.add('selected');
+          updateResult();
+        }
+      });
+    }
+
+    // Render speed buttons
+    function renderSpeedButtons() {
+      const container = document.getElementById('speedButtons');
+      container.innerHTML = speeds.map(s => `
+        <button type="button" class="speed-btn" data-speed="${s.id}">${s.label}</button>
+      `).join('');
+
+      container.addEventListener('click', (e) => {
+        if (e.target.classList.contains('speed-btn')) {
+          state.speed = e.target.dataset.speed;
+          document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('selected'));
+          e.target.classList.add('selected');
+          updateResult();
+        }
+      });
+    }
+
+    // Render products
+    function renderProducts() {
+      const container = document.getElementById('productPills');
+      container.innerHTML = products.map(p => `
+        <label class="pill">
+          <input type="radio" name="product" value="${p.id}">
+          ${p.emoji} ${p.label}
+        </label>
+      `).join('');
+
+      container.addEventListener('change', (e) => {
+        if (e.target.name === 'product') {
+          state.product = e.target.value;
+          document.querySelectorAll('.pill').forEach(p => p.classList.remove('selected'));
+          e.target.parentElement.classList.add('selected');
+          updateResult();
+        }
+      });
+    }
+
+    // Render options
+    function renderOptions() {
+      const container = document.getElementById('optionsList');
+      container.innerHTML = options.map(o => `
+        <label class="checkbox-item">
+          <input type="checkbox" name="option" value="${o.id}">
+          ${o.label}
+        </label>
+      `).join('');
+
+      container.addEventListener('change', (e) => {
+        state.options = Array.from(document.querySelectorAll('input[name="option"]:checked')).map(c => c.value);
+        updateResult();
+      });
+    }
+
+    // Select model based on box type and speed
+    function selectModel() {
+      if (!state.boxType) return null;
+
+      let candidates = [];
+      const speedPriority = { low: 1, mid: 2, high: 3 };
+
+      // Find models compatible with box type
+      const compatibleModels = Object.entries(models).filter(([_, m]) => m.boxes.includes(state.boxType));
+
+      if (compatibleModels.length === 0) return null;
+
+      // Special rules
+      if (state.boxType === 'flat') return models.YCZ;
+      if (state.boxType === 'rsc') return models.GPK;
+
+      // For multi-compatible types, filter by speed
+      if (state.speed) {
+        const speedRanges = {
+          low: [10, 15, 20],
+          mid: [15, 20, 25, 30],
+          high: [25, 30, 40]
+        };
+        const maxSpeeds = {
+          YCZ: 10,
+          GPK: 30,
+          Q1530: 20,
+          E7: 15,
+          FP4: 30,
+          Q2400: 40
+        };
+
+        const filtered = compatibleModels.filter(([_, m]) => {
+          const modelSpeed = maxSpeeds[m.name.split(' ')[0]] || 0;
+          return speedRanges[state.speed].some(v => v <= modelSpeed);
+        });
+
+        if (filtered.length > 0) {
+          return filtered.sort((a, b) => {
+            const speedA = maxSpeeds[a[1].name.split(' ')[0]];
+            const speedB = maxSpeeds[b[1].name.split(' ')[0]];
+            return speedA - speedB;
+          })[0][1];
+        }
+      }
+
+      return compatibleModels[0][1];
+    }
+
+    // Update result panel
+    function updateResult() {
+      const model = selectModel();
+      const resultPanel = document.getElementById('resultPanel');
+
+      if (!model) {
+        document.getElementById('resultTitle').textContent = 'Выберите параметры';
+        document.getElementById('resultTag').textContent = '';
+        document.getElementById('resultFeatures').innerHTML = '';
+        document.getElementById('resultSpecs').innerHTML = '';
+        document.getElementById('resultTags').innerHTML = '';
+        return;
+      }
+
+      document.getElementById('resultTitle').textContent = model.name;
+      document.getElementById('resultTag').textContent = model.tag;
+
+      const features = model.feats.map(f => `<li>${f}</li>`).join('');
+      document.getElementById('resultFeatures').innerHTML = features;
+
+      const specs = model.specs.map(([k, v]) => `<tr><td>${k}</td><td>${v}</td></tr>`).join('');
+      document.getElementById('resultSpecs').innerHTML = specs;
+
+      // Addon tags
+      const addonLabels = {
+        feeder: 'Автоподача',
+        dating: 'Датировщик',
+        hotglue: 'Горячий клей',
+        weighing: 'Весовая линия',
+        tapsealer: 'Заклейка'
+      };
+      const tags = state.options.map(o => `<span class="addon-tag">${addonLabels[o]}</span>`).join('');
+      document.getElementById('resultTags').innerHTML = tags;
+    }
+
+    // Modal functions
+    function openModal() {
+      const model = selectModel();
+      if (!model) return;
+
+      const summary = document.getElementById('modalSummary');
+      const boxName = boxTypes.find(b => b.id === state.boxType)?.name || 'Не выбран';
+      const speedLabel = speeds.find(s => s.id === state.speed)?.label || 'Не выбрана';
+      const productLabel = products.find(p => p.id === state.product)?.label || 'Не выбран';
+
+      const optionsText = state.options.length > 0 ? state.options.map(o => {
+        const opt = options.find(x => x.id === o);
+        return opt ? opt.label : '';
+      }).join(', ') : 'Нет';
+
+      summary.innerHTML = `
+        <div class="modal-summary-row">
+          <span class="modal-summary-label">Тип короба:</span>
+          <span class="modal-summary-value">${boxName}</span>
+        </div>
+        <div class="modal-summary-row">
+          <span class="modal-summary-label">Производительность:</span>
+          <span class="modal-summary-value">${speedLabel}</span>
+        </div>
+        <div class="modal-summary-row">
+          <span class="modal-summary-label">Продукт:</span>
+          <span class="modal-summary-value">${productLabel}</span>
+        </div>
+        <div class="modal-summary-row">
+          <span class="modal-summary-label">Опции:</span>
+          <span class="modal-summary-value">${optionsText}</span>
+        </div>
+        <div class="modal-summary-row" style="margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(31,78,121,0.2); font-weight: 600;">
+          <span class="modal-summary-label">Рекомендована:</span>
+          <span class="modal-summary-value">${model.name}</span>
+        </div>
+      `;
+
+      document.getElementById('modalOverlay').classList.add('active');
+    }
+
+    function closeModal() {
+      document.getElementById('modalOverlay').classList.remove('active');
+      document.getElementById('modalName').value = '';
+      document.getElementById('modalCompany').value = '';
+      document.getElementById('modalPhone').value = '';
+    }
+
+    // Event listeners
+    document.getElementById('submitBtn').addEventListener('click', openModal);
+    document.getElementById('modalCancelBtn').addEventListener('click', closeModal);
+    document.getElementById('modalSendBtn').addEventListener('click', () => {
+      const name = document.getElementById('modalName').value.trim();
+      const company = document.getElementById('modalCompany').value.trim();
+      const phone = document.getElementById('modalPhone').value.trim();
+
+      if (!name || !company || !phone) {
+        alert('Пожалуйста, заполните все поля');
+        return;
+      }
+
+      alert(`Спасибо! Ваш запрос отправлен.\n\nИмя: ${name}\nКомпания: ${company}\nТелефон: ${phone}`);
+      closeModal();
+    });
+
+    document.getElementById('modalOverlay').addEventListener('click', (e) => {
+      if (e.target.id === 'modalOverlay') closeModal();
+    });
+
+    // Initialize
+    renderBoxGrid();
+    renderSpeedButtons();
+    renderProducts();
+    renderOptions();
+    updateResult();
+  </script>
+</body>
+</html>

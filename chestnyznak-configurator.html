@@ -1,0 +1,1146 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Конфигуратор «Честный знак» — ЯФОР</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --blue: #1F3864;
+            --blue-m: #2E5BA8;
+            --blue-l: #D6E4F0;
+            --blue-p: #E8F0FC;
+            --orange: #E87722;
+            --orange-p: #FFF3E0;
+            --red: #C00000;
+            --red-p: #FCE4E4;
+            --green: #1A7A3F;
+            --green-p: #E6F4EC;
+            --grey: #555E6B;
+            --grey-l: #F5F7FA;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            background: #fff;
+            color: var(--grey);
+        }
+
+        /* Header */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: var(--blue);
+            color: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            max-width: 1600px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
+
+        .logo-r {
+            color: var(--orange);
+        }
+
+        .header-title {
+            font-size: 0.9rem;
+            font-weight: 400;
+            opacity: 0.9;
+        }
+
+        .header-badge {
+            background: var(--red);
+            color: white;
+            padding: 0.4rem 0.8rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        /* Alert for urgent deadlines */
+        .urgent-alert {
+            background: var(--red);
+            color: white;
+            padding: 0.8rem 2rem;
+            text-align: center;
+            font-size: 0.9rem;
+            font-weight: 500;
+            display: none;
+            position: sticky;
+            top: 60px;
+            z-index: 99;
+        }
+
+        .urgent-alert.active {
+            display: block;
+        }
+
+        /* Main container */
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 3rem;
+        }
+
+        @media (max-width: 1400px) {
+            .container {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+        }
+
+        /* Left column */
+        .config-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 2.5rem;
+        }
+
+        /* Section styling */
+        .config-section {
+            background: var(--grey-l);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--blue-m);
+        }
+
+        .section-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--blue);
+            margin-bottom: 1.5rem;
+        }
+
+        /* Pills for categories */
+        .pills {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 0.8rem;
+        }
+
+        .pill {
+            position: relative;
+            cursor: pointer;
+            padding: 0.8rem 1rem;
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            text-align: left;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+        }
+
+        .pill:hover {
+            border-color: var(--blue-m);
+            background: var(--blue-p);
+        }
+
+        .pill input[type="checkbox"] {
+            display: none;
+        }
+
+        .pill input[type="checkbox"]:checked + label {
+            background: var(--blue);
+            color: white;
+            border-color: var(--blue);
+        }
+
+        .pill label {
+            display: block;
+            cursor: pointer;
+            padding: 0.8rem 1rem;
+            margin: -0.8rem -1rem;
+            border-radius: 4px;
+        }
+
+        .pill-main {
+            font-weight: 500;
+            display: block;
+        }
+
+        .pill-date {
+            font-size: 0.75rem;
+            opacity: 0.7;
+            margin-top: 0.3rem;
+            display: block;
+        }
+
+        .pill-date.required {
+            color: var(--red);
+            font-weight: 600;
+        }
+
+        .pill-badge {
+            display: inline-block;
+            background: var(--green);
+            color: white;
+            padding: 0.2rem 0.4rem;
+            border-radius: 2px;
+            font-size: 0.65rem;
+            margin-top: 0.3rem;
+        }
+
+        /* Volume buttons */
+        .volume-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .vol-btn {
+            padding: 1rem;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: left;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .vol-btn:hover {
+            border-color: var(--blue-m);
+            background: var(--blue-p);
+        }
+
+        .vol-btn.active {
+            border-color: var(--blue);
+            background: var(--blue);
+            color: white;
+        }
+
+        /* Lines stepper */
+        .stepper {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .stepper-btn {
+            width: 40px;
+            height: 40px;
+            border: 1px solid #ddd;
+            background: white;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+
+        .stepper-btn:hover {
+            border-color: var(--blue-m);
+            color: var(--blue-m);
+        }
+
+        .stepper-display {
+            font-size: 1.1rem;
+            font-weight: 600;
+            min-width: 80px;
+        }
+
+        /* Checkboxes */
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.8rem;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            margin-top: 2px;
+            cursor: pointer;
+            accent-color: var(--blue-m);
+        }
+
+        .checkbox-item label {
+            cursor: pointer;
+            flex: 1;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        /* Right column - sticky panel */
+        .result-panel {
+            position: sticky;
+            top: 80px;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 2rem;
+            max-height: calc(100vh - 100px);
+            overflow-y: auto;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .result-panel-title {
+            font-size: 0.85rem;
+            color: var(--grey);
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .result-empty {
+            color: var(--grey);
+            font-size: 0.9rem;
+            padding: 2rem 0;
+            text-align: center;
+        }
+
+        /* Package card */
+        .package-card {
+            display: none;
+        }
+
+        .package-card.active {
+            display: block;
+        }
+
+        .package-header {
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid var(--blue-l);
+            padding-bottom: 1rem;
+        }
+
+        .package-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--blue);
+            margin-bottom: 0.3rem;
+        }
+
+        .package-badge {
+            display: inline-block;
+            background: var(--orange-p);
+            color: var(--orange);
+            padding: 0.3rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .package-tag {
+            font-size: 0.8rem;
+            color: var(--grey);
+        }
+
+        .timeline {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            margin: 1.5rem 0;
+            padding: 1rem;
+            background: var(--green-p);
+            border-radius: 6px;
+            color: var(--green);
+            font-weight: 500;
+        }
+
+        .timeline::before {
+            content: '🕐';
+            font-size: 1.1rem;
+        }
+
+        .features-list {
+            margin: 1.5rem 0;
+        }
+
+        .feature-item {
+            display: flex;
+            gap: 0.6rem;
+            margin-bottom: 0.8rem;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        .feature-item::before {
+            content: '✓';
+            color: var(--green);
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .result-block {
+            margin-top: 1.5rem;
+        }
+
+        .result-block-title {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--grey);
+            text-transform: uppercase;
+            margin-bottom: 0.8rem;
+        }
+
+        .deadlines-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+        }
+
+        .deadline-item {
+            font-size: 0.85rem;
+            padding: 0.6rem;
+            background: var(--red-p);
+            border-radius: 4px;
+            color: var(--red);
+            font-weight: 500;
+        }
+
+        .tags-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+        }
+
+        .tag {
+            display: inline-block;
+            background: var(--orange-p);
+            color: var(--orange);
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .empty-message {
+            font-size: 0.85rem;
+            color: var(--grey);
+            font-style: italic;
+        }
+
+        .cta-button {
+            width: 100%;
+            padding: 1rem;
+            margin-top: 2rem;
+            background: var(--blue);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        .cta-button:hover:not(:disabled) {
+            background: var(--blue-m);
+        }
+
+        .cta-button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 200;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: white;
+            border-radius: 8px;
+            padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-header {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--blue);
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-section-title {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--grey);
+            text-transform: uppercase;
+            margin-bottom: 0.8rem;
+        }
+
+        .modal-summary {
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-bottom: 0.4rem;
+            color: var(--grey);
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            transition: border-color 0.2s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--blue-m);
+            background: var(--blue-p);
+        }
+
+        .modal-note {
+            font-size: 0.8rem;
+            color: var(--grey);
+            background: var(--green-p);
+            padding: 0.8rem;
+            border-radius: 4px;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .modal-btn {
+            flex: 1;
+            padding: 0.8rem;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .modal-btn-primary {
+            background: var(--blue);
+            color: white;
+        }
+
+        .modal-btn-primary:hover {
+            background: var(--blue-m);
+        }
+
+        .modal-btn-secondary {
+            background: #f0f0f0;
+            color: var(--grey);
+        }
+
+        .modal-btn-secondary:hover {
+            background: #e0e0e0;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--grey);
+        }
+
+        /* Scrollbar styling */
+        .result-panel::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .result-panel::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .result-panel::-webkit-scrollbar-thumb {
+            background: var(--blue-l);
+            border-radius: 3px;
+        }
+
+        .result-panel::-webkit-scrollbar-thumb:hover {
+            background: var(--blue-m);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <div>
+                <div class="logo">ЯФО<span class="logo-r">Р</span></div>
+                <div class="header-title">Конфигуратор системы «Честный знак»</div>
+            </div>
+            <div class="header-badge">ПП РФ №205 · Вступил в силу</div>
+        </div>
+    </header>
+
+    <!-- Urgent alert -->
+    <div class="urgent-alert" id="urgentAlert"></div>
+
+    <!-- Main container -->
+    <div class="container">
+        <!-- Left column -->
+        <div class="config-panel">
+            <!-- Section 1: Categories -->
+            <div class="config-section">
+                <div class="section-title">Категории продукции</div>
+                <div class="pills" id="categoriesContainer"></div>
+            </div>
+
+            <!-- Section 2: Volume -->
+            <div class="config-section">
+                <div class="section-title">Суточный объём производства</div>
+                <div class="volume-buttons" id="volumeContainer"></div>
+            </div>
+
+            <!-- Section 3: Lines -->
+            <div class="config-section">
+                <div class="section-title">Количество упаковочных линий</div>
+                <div class="stepper">
+                    <button class="stepper-btn" id="linesDecrement">−</button>
+                    <div class="stepper-display" id="linesDisplay">1 линия</div>
+                    <button class="stepper-btn" id="linesIncrement">+</button>
+                </div>
+            </div>
+
+            <!-- Section 4: Current Infrastructure -->
+            <div class="config-section">
+                <div class="section-title">Текущая инфраструктура</div>
+                <div class="checkbox-group" id="infrastructureContainer"></div>
+            </div>
+
+            <!-- Section 5: What they need -->
+            <div class="config-section">
+                <div class="section-title">Что нужно в пакете</div>
+                <div class="checkbox-group" id="needsContainer"></div>
+            </div>
+        </div>
+
+        <!-- Right column: Result panel -->
+        <aside class="result-panel">
+            <div class="result-panel-title">📋 Рекомендуемый пакет</div>
+            <div class="result-empty" id="resultEmpty">Выберите параметры слева</div>
+
+            <div id="packageCards"></div>
+
+            <button class="cta-button" id="ctaButton" disabled>Сформировать запрос на КП</button>
+        </aside>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal">
+            <button class="modal-close" id="modalClose">×</button>
+            <div class="modal-header">Ваш запрос на внедрение «Честного знака»</div>
+
+            <div class="modal-section">
+                <div class="modal-section-title">Выбранное решение</div>
+                <div class="modal-summary" id="modalSummary"></div>
+            </div>
+
+            <div class="modal-section">
+                <div class="modal-section-title">Параметры производства</div>
+                <div class="modal-summary" id="modalParams"></div>
+            </div>
+
+            <div class="modal-section">
+                <div class="modal-section-title">Ваши контакты</div>
+                <div class="form-group">
+                    <label>Имя</label>
+                    <input type="text" id="modalName" placeholder="Иван Петров">
+                </div>
+                <div class="form-group">
+                    <label>Компания</label>
+                    <input type="text" id="modalCompany" placeholder="ООО Мясокомбинат">
+                </div>
+                <div class="form-group">
+                    <label>Телефон / Email</label>
+                    <input type="text" id="modalContact" placeholder="+7 (999) 123-45-67">
+                </div>
+            </div>
+
+            <div class="modal-note">
+                ✓ Ответим в течение 1 рабочего дня. Бесплатный аудит готовности к маркировке.
+            </div>
+
+            <div class="modal-buttons">
+                <button class="modal-btn modal-btn-secondary" id="modalCancel">Отменить</button>
+                <button class="modal-btn modal-btn-primary" id="modalSubmit">Отправить в ЯФОР</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data
+        const categories = [
+            { id: 'gis', emoji: '📋', name: 'Регистрация в ГИС МТ', date: '2026-03-01', required: true },
+            { id: 'meat', emoji: '🥩', name: 'Готовые мясные продукты', date: '2026-08-01' },
+            { id: 'poultry', emoji: '🍗', name: 'Птица, субпродукты', date: '2026-08-01' },
+            { id: 'semifab', emoji: '🥡', name: 'Полуфабрикаты мясные', date: '2026-08-01' },
+            { id: 'sausage', emoji: '🌭', name: 'Колбасы, сосиски, ветчина', date: '2026-10-01' },
+            { id: 'farm', emoji: '🌾', name: 'КФХ / с.-х. кооперативы', date: '2026-10-01' },
+            { id: 'sales', emoji: '🛒', name: 'Передача данных о продажах', date: '2027-06-01' }
+        ];
+
+        const volumes = [
+            { id: 'low', label: 'До 2 000 уп/сут (малое производство)' },
+            { id: 'mid', label: '2 000 – 10 000 уп/сут (среднее)' },
+            { id: 'high', label: 'Более 10 000 уп/сут (крупное)' }
+        ];
+
+        const infrastructure = [
+            { id: 'erp', label: 'Есть 1С / ERP система' },
+            { id: 'printers', label: 'Есть принтеры этикеток' },
+            { id: 'edo', label: 'Работаем с ЭДО (электронный документооборот)' },
+            { id: 'gs1', label: 'Зарегистрированы в GS1' },
+            { id: 'specialist', label: 'Есть технический специалист' }
+        ];
+
+        const needs = [
+            { id: 'equipment', label: 'Оборудование (принтеры, сканеры, весы с DataMatrix)' },
+            { id: 'software', label: 'Программное обеспечение и интеграция' },
+            { id: 'registration', label: 'Регистрация в GS1 и ГИС МТ' },
+            { id: 'edo', label: 'Подключение к ЭДО' },
+            { id: 'aggregation', label: 'Агрегация (короба, паллеты)' },
+            { id: 'training', label: 'Обучение персонала' },
+            { id: 'support', label: 'Техническая поддержка после запуска' }
+        ];
+
+        const packages = {
+            START: {
+                name: 'Пакет «СТАРТ»',
+                tag: 'Малое производство · 1 линия · до 2 000 уп/сут',
+                badge: 'Быстрый старт',
+                timeline: 'от 10 рабочих дней',
+                result: '100% соответствие требованиям с первого дня',
+                features: [
+                    'Принтер этикеток с модулем DataMatrix',
+                    'ПО «ЯФОР.Марки» — интеграция с ГИС МТ',
+                    'Регистрация в GS1 и ГИС МТ под ключ',
+                    'Шаблоны этикеток под вашу продукцию',
+                    'Обучение 2 сотрудников',
+                    'Техподдержка 3 месяца'
+                ]
+            },
+            PROF: {
+                name: 'Пакет «ПРОФИ»',
+                tag: 'Среднее производство · до 3 линий · до 10 000 уп/сут',
+                badge: 'Оптимальный выбор',
+                timeline: 'от 14 рабочих дней',
+                result: 'Автоматизация ≥80% операций маркировки',
+                features: [
+                    'Принтеры-аппликаторы на каждую линию',
+                    'Интеграция с 1С / ERP вашего предприятия',
+                    'Агрегация: короба и паллеты (опция)',
+                    'Автоматическое формирование УПД в ЭДО',
+                    'Обучение команды до 8 человек',
+                    'Техподдержка 6 месяцев'
+                ]
+            },
+            PLANT: {
+                name: 'Пакет «ЗАВОД»',
+                tag: 'Крупное производство · от 4 линий · более 10 000 уп/сут',
+                badge: 'Комплексное решение',
+                timeline: 'от 21 рабочего дня',
+                result: '0 ручных операций — полный автомат',
+                features: [
+                    'Высокоскоростные принтеры-аппликаторы на все линии',
+                    'Камеры верификации DataMatrix на каждой линии',
+                    'Полная интеграция с ERP / MES / WMS',
+                    'Агрегация: штука → короб → паллета (SSCC)',
+                    'Подключение к ЭДО (Диадок, СБИС, 1С-ЭДО)',
+                    'Выделенный менеджер поддержки 12 месяцев'
+                ]
+            }
+        };
+
+        // State
+        let state = {
+            categories: [],
+            volume: null,
+            lines: 1,
+            infrastructure: [],
+            needs: [],
+            currentPackage: null
+        };
+
+        // Initialize
+        function init() {
+            renderCategories();
+            renderVolumes();
+            renderInfrastructure();
+            renderNeeds();
+            setupEventListeners();
+            updateResult();
+        }
+
+        // Render categories
+        function renderCategories() {
+            const container = document.getElementById('categoriesContainer');
+            container.innerHTML = categories.map(cat => `
+                <div class="pill">
+                    <input type="checkbox" id="cat-${cat.id}" value="${cat.id}" onchange="toggleCategory('${cat.id}')">
+                    <label for="cat-${cat.id}">
+                        <span class="pill-main">${cat.emoji} ${cat.name}</span>
+                        <span class="pill-date ${cat.required ? 'required' : ''}">
+                            ${cat.required ? '✓ Обязательно сейчас' : `с ${formatDate(cat.date)}`}
+                        </span>
+                    </label>
+                </div>
+            `).join('');
+        }
+
+        // Render volumes
+        function renderVolumes() {
+            const container = document.getElementById('volumeContainer');
+            container.innerHTML = volumes.map(vol => `
+                <button class="vol-btn ${state.volume === vol.id ? 'active' : ''}"
+                    onclick="selectVolume('${vol.id}')">
+                    ${vol.label}
+                </button>
+            `).join('');
+        }
+
+        // Render infrastructure
+        function renderInfrastructure() {
+            const container = document.getElementById('infrastructureContainer');
+            container.innerHTML = infrastructure.map(item => `
+                <div class="checkbox-item">
+                    <input type="checkbox" id="infra-${item.id}" value="${item.id}"
+                        onchange="toggleInfra('${item.id}')">
+                    <label for="infra-${item.id}">${item.label}</label>
+                </div>
+            `).join('');
+        }
+
+        // Render needs
+        function renderNeeds() {
+            const container = document.getElementById('needsContainer');
+            container.innerHTML = needs.map(item => `
+                <div class="checkbox-item">
+                    <input type="checkbox" id="needs-${item.id}" value="${item.id}"
+                        onchange="toggleNeeds('${item.id}')">
+                    <label for="needs-${item.id}">${item.label}</label>
+                </div>
+            `).join('');
+        }
+
+        // Event handlers
+        function toggleCategory(id) {
+            const idx = state.categories.indexOf(id);
+            if (idx > -1) {
+                state.categories.splice(idx, 1);
+            } else {
+                state.categories.push(id);
+            }
+            updateResult();
+        }
+
+        function selectVolume(id) {
+            state.volume = id;
+            renderVolumes();
+            updateResult();
+        }
+
+        function toggleInfra(id) {
+            const idx = state.infrastructure.indexOf(id);
+            if (idx > -1) {
+                state.infrastructure.splice(idx, 1);
+            } else {
+                state.infrastructure.push(id);
+            }
+            updateResult();
+        }
+
+        function toggleNeeds(id) {
+            const idx = state.needs.indexOf(id);
+            if (idx > -1) {
+                state.needs.splice(idx, 1);
+            } else {
+                state.needs.push(id);
+            }
+            updateResult();
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            document.getElementById('linesIncrement').addEventListener('click', () => {
+                if (state.lines < 20) state.lines++;
+                updateLinesDisplay();
+                updateResult();
+            });
+
+            document.getElementById('linesDecrement').addEventListener('click', () => {
+                if (state.lines > 1) state.lines--;
+                updateLinesDisplay();
+                updateResult();
+            });
+
+            document.getElementById('ctaButton').addEventListener('click', openModal);
+            document.getElementById('modalClose').addEventListener('click', closeModal);
+            document.getElementById('modalCancel').addEventListener('click', closeModal);
+            document.getElementById('modalSubmit').addEventListener('click', submitRequest);
+        }
+
+        function updateLinesDisplay() {
+            const text = state.lines === 1 ? '1 линия' : `${state.lines} линий`;
+            document.getElementById('linesDisplay').textContent = text;
+        }
+
+        // Calculate package
+        function calculatePackage() {
+            if (!state.volume || state.lines === null) return null;
+
+            let pkg = null;
+
+            if (state.volume === 'low' && state.lines <= 1) {
+                pkg = 'START';
+            } else if (state.volume === 'mid' && state.lines <= 3) {
+                pkg = 'PROF';
+            } else if (state.volume === 'high' || state.lines > 3) {
+                pkg = 'PLANT';
+            }
+
+            // Upgrades
+            const hasAggr = state.needs.includes('aggregation');
+            const hasEdo = state.needs.includes('edo');
+
+            if (pkg === 'START' && (hasAggr || hasEdo)) {
+                pkg = 'PROF';
+            }
+
+            return pkg;
+        }
+
+        // Update result panel
+        function updateResult() {
+            const pkg = calculatePackage();
+            state.currentPackage = pkg;
+
+            const empty = document.getElementById('resultEmpty');
+            const cards = document.getElementById('packageCards');
+
+            // Update CTA button
+            const ctaBtn = document.getElementById('ctaButton');
+            ctaBtn.disabled = !state.volume || !state.lines;
+
+            if (!pkg) {
+                empty.style.display = 'block';
+                cards.innerHTML = '';
+            } else {
+                empty.style.display = 'none';
+                renderPackageCard(pkg);
+            }
+
+            // Update urgent alert
+            updateUrgentAlert();
+        }
+
+        function renderPackageCard(pkgKey) {
+            const pkg = packages[pkgKey];
+            const cards = document.getElementById('packageCards');
+
+            let html = `
+                <div class="package-card active">
+                    <div class="package-header">
+                        <div class="package-name">${pkg.name}</div>
+                        <div class="package-badge">${pkg.badge}</div>
+                        <div class="package-tag">${pkg.tag}</div>
+                    </div>
+
+                    <div class="timeline">${pkg.timeline}</div>
+
+                    <div class="features-list">
+                        ${pkg.features.map(f => `<div class="feature-item">${f}</div>`).join('')}
+                    </div>
+
+                    <div class="result-block">
+                        <div class="result-block-title">Результат реализации</div>
+                        <div style="font-size: 0.9rem; color: var(--green); font-weight: 500;">${pkg.result}</div>
+                    </div>
+            `;
+
+            // Deadlines block
+            if (state.categories.length > 0) {
+                const selectedCats = state.categories.map(id =>
+                    categories.find(c => c.id === id)
+                ).filter(Boolean);
+
+                html += `
+                    <div class="result-block">
+                        <div class="result-block-title">Дедлайны</div>
+                        <div class="deadlines-list">
+                            ${selectedCats.map(cat =>
+                                `<div class="deadline-item">${cat.name} — ${formatDate(cat.date)}</div>`
+                            ).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+
+            // What they need
+            if (state.needs.length > 0) {
+                const needLabels = state.needs.map(id =>
+                    needs.find(n => n.id === id)?.label
+                ).filter(Boolean);
+
+                html += `
+                    <div class="result-block">
+                        <div class="result-block-title">В пакет включено</div>
+                        <div class="tags-list">
+                            ${needLabels.map(label => `<div class="tag">${label}</div>`).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+
+            html += '</div>';
+            cards.innerHTML = html;
+        }
+
+        function updateUrgentAlert() {
+            const now = new Date('2026-04-09');
+            const sixMonthsLater = new Date(now.getTime() + 6 * 30 * 24 * 60 * 60 * 1000);
+
+            const urgent = state.categories.some(id => {
+                const cat = categories.find(c => c.id === id);
+                const catDate = new Date(cat.date);
+                return catDate <= sixMonthsLater && catDate >= now;
+            });
+
+            const alert = document.getElementById('urgentAlert');
+            if (urgent) {
+                alert.textContent = '⚠️ У вас есть категории с дедлайном в течение 6 месяцев. Рекомендуем начать внедрение немедленно.';
+                alert.classList.add('active');
+            } else {
+                alert.classList.remove('active');
+            }
+        }
+
+        // Modal functions
+        function openModal() {
+            if (!state.volume || !state.lines) return;
+
+            const pkg = packages[state.currentPackage];
+            const modalSummary = document.getElementById('modalSummary');
+            const modalParams = document.getElementById('modalParams');
+
+            // Summary
+            let summary = `<strong>${pkg.name}</strong><br>${pkg.tag}`;
+            modalSummary.innerHTML = summary;
+
+            // Params
+            const volLabel = volumes.find(v => v.id === state.volume).label;
+            let params = `
+                Объём: ${volLabel}<br>
+                Линий: ${state.lines}<br>
+            `;
+
+            if (state.categories.length > 0) {
+                params += `Категории: ${state.categories.map(id =>
+                    categories.find(c => c.id === id).name
+                ).join(', ')}<br>`;
+            }
+
+            modalParams.innerHTML = params;
+
+            document.getElementById('modalOverlay').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('modalOverlay').classList.remove('active');
+        }
+
+        function submitRequest() {
+            const name = document.getElementById('modalName').value.trim();
+            const company = document.getElementById('modalCompany').value.trim();
+            const contact = document.getElementById('modalContact').value.trim();
+
+            if (!name || !company || !contact) {
+                alert('Пожалуйста, заполните все поля контактов.');
+                return;
+            }
+
+            alert(`Спасибо! Ваш запрос на КП отправлен в ЯФОР.\n\nПакет: ${packages[state.currentPackage].name}\nКомпания: ${company}\n\nОтветим в течение 1 рабочего дня.`);
+            closeModal();
+            document.getElementById('modalName').value = '';
+            document.getElementById('modalCompany').value = '';
+            document.getElementById('modalContact').value = '';
+        }
+
+        // Helpers
+        function formatDate(dateStr) {
+            const date = new Date(dateStr);
+            const days = ['вск', 'пнд', 'втр', 'срд', 'чтв', 'птн', 'сбт'];
+            const months = ['янв', 'фев', 'мар', 'апр', 'май', 'июн', 'июл', 'авг', 'сен', 'окт', 'ноя', 'дек'];
+            return `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`;
+        }
+
+        // Start
+        init();
+    </script>
+</body>
+</html>

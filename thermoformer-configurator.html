@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Конфигуратор термоформера — ЯФОР</title>
+<style>
+:root{
+  --blue:   #1F4E79; --blue-m: #2E75B6; --blue-l: #D6E4F0; --blue-p: #EEF4FB;
+  --orange: #C55A11; --orange-p:#FCE4D6;
+  --green:  #1E6B3C; --green-p: #E2EFDA;
+  --grey:   #505968; --grey-l: #F4F6F9;
+  --white:  #FFFFFF; --border: #D0DCE8;
+  --r:10px; --sh:0 3px 16px rgba(31,78,121,.09);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#ECF0F5;color:#1a2a3a;min-height:100vh}
+
+/* HEADER */
+.hd{background:var(--blue);padding:14px 28px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:100;box-shadow:0 2px 10px rgba(0,0,0,.25)}
+.hd-logo{font-size:22px;font-weight:900;color:#fff;letter-spacing:1px}
+.hd-logo span{color:var(--orange)}
+.hd-sub{font-size:12px;color:rgba(255,255,255,.6)}
+.hd-badge{margin-left:auto;background:rgba(255,255,255,.15);color:#fff;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px}
+
+/* LAYOUT */
+.layout{display:grid;grid-template-columns:1fr 340px;gap:20px;max-width:1080px;margin:24px auto;padding:0 20px 60px;align-items:start}
+
+/* SECTION */
+.sect{background:var(--white);border-radius:var(--r);border:1.5px solid var(--border);padding:20px 22px;box-shadow:var(--sh);margin-bottom:14px}
+.sect-title{font-size:14px;font-weight:700;color:var(--blue);margin-bottom:4px;display:flex;align-items:center;gap:8px}
+.sect-num{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:var(--blue);color:#fff;font-size:10px;font-weight:700;flex-shrink:0}
+.sect-sub{font-size:12px;color:var(--grey);margin-bottom:14px}
+
+/* PILLS */
+.pills{display:flex;flex-wrap:wrap;gap:8px}
+.pill{border:2px solid var(--border);border-radius:8px;padding:10px 14px;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:9px;min-width:120px;flex:1}
+.pill:hover{border-color:var(--blue-m);background:var(--blue-p)}
+.pill.sel{border-color:var(--blue-m);background:var(--blue-p)}
+.pill.multi-sel{border-color:var(--blue-m);background:var(--blue-p)}
+.pill-icon{font-size:20px;flex-shrink:0}
+.pill-body .pill-name{font-size:13px;font-weight:700;color:var(--blue);line-height:1.2}
+.pill-body .pill-hint{font-size:11px;color:var(--grey);margin-top:2px}
+
+/* 3-COL GRID OPTIONS */
+.opts3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.opt{border:2px solid var(--border);border-radius:8px;padding:12px 8px;cursor:pointer;text-align:center;transition:all .15s}
+.opt:hover{border-color:var(--blue-m);background:var(--blue-p)}
+.opt.sel{border-color:var(--blue-m);background:var(--blue-p)}
+.opt-icon{font-size:22px;margin-bottom:5px}
+.opt-val{font-size:13px;font-weight:700;color:var(--blue)}
+.opt-hint{font-size:11px;color:var(--grey);margin-top:2px}
+
+/* 2-COL GRID */
+.opts2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+
+/* PRODUCT PILLS — 2-row wrap */
+.prod-pills{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+
+/* EXTRAS */
+.extras{display:flex;flex-direction:column;gap:8px}
+.extra{border:2px solid var(--border);border-radius:8px;padding:11px 14px;cursor:pointer;transition:all .15s}
+.extra:hover{border-color:var(--blue-m);background:var(--blue-p)}
+.extra.sel{border-color:var(--blue-m);background:var(--blue-p)}
+.extra-row{display:flex;align-items:flex-start;gap:10px}
+.extra-cb{width:18px;height:18px;border-radius:4px;border:2px solid var(--border);flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;transition:all .15s}
+.extra.sel .extra-cb{background:var(--blue-m);border-color:var(--blue-m);color:#fff}
+.extra-icon{font-size:18px;flex-shrink:0}
+.extra-info .extra-name{font-size:13px;font-weight:700;color:var(--blue)}
+.extra-info .extra-desc{font-size:11px;color:var(--grey);margin-top:2px;line-height:1.4}
+
+/* RESULT PANEL */
+.result-wrap{position:sticky;top:72px}
+.result{background:var(--white);border-radius:var(--r);border:1.5px solid var(--border);box-shadow:var(--sh);overflow:hidden}
+.result-hd{background:var(--blue);padding:16px 18px}
+.result-hd-lbl{font-size:11px;font-weight:700;color:rgba(255,255,255,.65);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px}
+.r-name{font-size:19px;font-weight:800;color:#fff;line-height:1.2}
+.r-tag{font-size:11px;color:var(--blue-l);margin-top:3px}
+.result-body{padding:16px 18px}
+
+.empty-state{text-align:center;padding:28px 16px;color:var(--grey)}
+.empty-icon{font-size:38px;margin-bottom:8px}
+.empty-txt{font-size:13px;line-height:1.55}
+
+/* feature list */
+.res-feats{list-style:none;margin-bottom:14px}
+.res-feat{font-size:12.5px;color:var(--grey);padding:4px 0;border-bottom:1px solid var(--grey-l);display:flex;align-items:flex-start;gap:7px}
+.res-feat:last-child{border-bottom:none}
+.res-feat::before{content:'✓';color:var(--blue-m);font-weight:700;flex-shrink:0;margin-top:1px;font-size:11px}
+
+/* specs */
+.res-specs{background:var(--grey-l);border-radius:8px;padding:10px 12px;margin-bottom:14px}
+.spec-row{display:flex;justify-content:space-between;font-size:12px;padding:4px 0;border-bottom:1px solid var(--border)}
+.spec-row:last-child{border-bottom:none}
+.spec-l{color:var(--grey)}
+.spec-v{font-weight:700;color:var(--blue)}
+
+/* addon tags */
+.res-addons{margin-bottom:14px}
+.res-add-lbl{font-size:11px;font-weight:700;color:var(--grey);text-transform:uppercase;letter-spacing:.4px;margin-bottom:7px}
+.add-tag{display:inline-flex;align-items:center;gap:5px;background:var(--blue-p);border:1.5px solid var(--blue-l);border-radius:6px;padding:4px 9px;font-size:11.5px;font-weight:600;color:var(--blue-m);margin:0 4px 5px 0}
+
+/* note */
+.res-note{background:var(--orange-p);border:1.5px solid #e8b07a;border-radius:7px;padding:9px 12px;font-size:12px;color:#7a4010;margin-bottom:12px;line-height:1.4}
+
+/* CTA */
+.res-cta{background:var(--orange);color:#fff;border:none;border-radius:8px;padding:12px 18px;width:100%;font-size:13.5px;font-weight:700;cursor:pointer;transition:all .16s;box-shadow:0 3px 10px rgba(197,90,17,.3)}
+.res-cta:hover{background:#a84a0e;transform:translateY(-1px)}
+.res-cta:disabled{background:#ccc;box-shadow:none;cursor:not-allowed;transform:none}
+.res-footer{font-size:11px;color:var(--grey);text-align:center;margin-top:10px;padding-top:10px;border-top:1px solid var(--border)}
+
+/* MODAL */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;align-items:center;justify-content:center;padding:20px}
+.modal-bg.on{display:flex}
+.modal{background:var(--white);border-radius:var(--r);max-width:540px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 8px 40px rgba(0,0,0,.25)}
+.modal-hd{background:var(--blue);padding:18px 22px;display:flex;justify-content:space-between;align-items:center}
+.modal-title{font-size:16px;font-weight:700;color:#fff}
+.modal-close{background:none;border:none;color:rgba(255,255,255,.7);font-size:22px;cursor:pointer;line-height:1}
+.modal-close:hover{color:#fff}
+.modal-body{padding:20px 22px}
+.modal-section{margin-bottom:16px}
+.modal-section-title{font-size:12px;font-weight:700;color:var(--grey);text-transform:uppercase;letter-spacing:.4px;margin-bottom:8px}
+.summary-table{width:100%;border-collapse:collapse;font-size:13px}
+.summary-table tr td{padding:6px 10px;border-bottom:1px solid var(--border)}
+.summary-table tr td:first-child{color:var(--grey);width:45%}
+.summary-table tr td:last-child{font-weight:600;color:var(--blue)}
+.form-row{margin-bottom:12px}
+.form-label{display:block;font-size:12px;font-weight:600;color:var(--blue);margin-bottom:4px}
+.form-input{width:100%;border:1.5px solid var(--border);border-radius:7px;padding:9px 12px;font-size:13px;font-family:inherit;outline:none;transition:border .15s}
+.form-input:focus{border-color:var(--blue-m)}
+.modal-footer{display:flex;gap:10px;padding:14px 22px;border-top:1.5px solid var(--border)}
+.btn-send{flex:1;background:var(--orange);color:#fff;border:none;border-radius:8px;padding:12px;font-size:14px;font-weight:700;cursor:pointer;transition:all .16s}
+.btn-send:hover{background:#a84a0e}
+.btn-cancel{background:transparent;color:var(--grey);border:1.5px solid var(--border);border-radius:8px;padding:12px 18px;font-size:13px;cursor:pointer;transition:all .16s}
+.btn-cancel:hover{border-color:var(--blue-m);color:var(--blue-m)}
+
+@media(max-width:760px){
+  .layout{grid-template-columns:1fr;padding:0 12px 40px}
+  .result-wrap{position:static}
+  .opts3,.prod-pills{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="hd">
+  <div>
+    <div class="hd-logo">Я<span>ФОР</span></div>
+    <div class="hd-sub">Конфигуратор термоформера</div>
+  </div>
+  <div class="hd-badge">Термоформование под ключ</div>
+</div>
+
+<div class="layout">
+
+  <!-- ══ ЛЕВАЯ КОЛОНКА ══ -->
+  <div>
+
+    <!-- 1. ТИП УПАКОВКИ (мультивыбор) -->
+    <div class="sect">
+      <div class="sect-title"><span class="sect-num">1</span>Тип упаковки</div>
+      <div class="sect-sub">Можно выбрать несколько — машина должна поддерживать все нужные режимы</div>
+      <div class="pills" id="pack-pills">
+        <div class="pill" data-val="vac" onclick="togPack(this)">
+          <span class="pill-icon">🫙</span>
+          <div class="pill-body">
+            <div class="pill-name">Вакуум</div>
+            <div class="pill-hint">Удаление воздуха, запайка</div>
+          </div>
+        </div>
+        <div class="pill" data-val="map" onclick="togPack(this)">
+          <span class="pill-icon">💨</span>
+          <div class="pill-body">
+            <div class="pill-name">MAP</div>
+            <div class="pill-hint">Модифицированная атмосфера</div>
+          </div>
+        </div>
+        <div class="pill" data-val="skin" onclick="togPack(this)">
+          <span class="pill-icon">✨</span>
+          <div class="pill-body">
+            <div class="pill-name">SKIN</div>
+            <div class="pill-hint">Плёнка облегает продукт</div>
+          </div>
+        </div>
+        <div class="pill" data-val="atm" onclick="togPack(this)">
+          <span class="pill-icon">🌫️</span>
+          <div class="pill-body">
+            <div class="pill-name">Атмосфера</div>
+            <div class="pill-hint">Стандартная запайка</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. ТИП ПРОДУКТА -->
+    <div class="sect">
+      <div class="sect-title"><span class="sect-num">2</span>Тип продукта</div>
+      <div class="sect-sub">Определяет требования к глубине формовки и защите от влаги</div>
+      <div class="prod-pills" id="prod-pills">
+        <div class="opt" data-val="meat" onclick="selOpt('prod','meat',this)">
+          <div class="opt-icon">🥩</div><div class="opt-val">Мясо / птица</div>
+        </div>
+        <div class="opt" data-val="fish" onclick="selOpt('prod','fish',this)">
+          <div class="opt-icon">🐟</div><div class="opt-val">Рыба / морепродукты</div>
+        </div>
+        <div class="opt" data-val="cheese" onclick="selOpt('prod','cheese',this)">
+          <div class="opt-icon">🧀</div><div class="opt-val">Сыр / деликатесы</div>
+        </div>
+        <div class="opt" data-val="ready" onclick="selOpt('prod','ready',this)">
+          <div class="opt-icon">🍱</div><div class="opt-val">Готовые блюда</div>
+        </div>
+        <div class="opt" data-val="veg" onclick="selOpt('prod','veg',this)">
+          <div class="opt-icon">🥗</div><div class="opt-val">Овощи / фрукты</div>
+        </div>
+        <div class="opt" data-val="other" onclick="selOpt('prod','other',this)">
+          <div class="opt-icon">📦</div><div class="opt-val">Другое</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. ШИРИНА ПЛЁНКИ -->
+    <div class="sect">
+      <div class="sect-title"><span class="sect-num">3</span>Ширина рулона плёнки</div>
+      <div class="sect-sub">Определяет ширину ленты машины и количество ячеек в ряду</div>
+      <div class="opts3" id="width-pills">
+        <div class="opt" data-val="narrow" onclick="selOpt('width','narrow',this)">
+          <div class="opt-icon">📏</div>
+          <div class="opt-val">до 320 мм</div>
+          <div class="opt-hint">1–2 ячейки в ряд</div>
+        </div>
+        <div class="opt" data-val="mid" onclick="selOpt('width','mid',this)">
+          <div class="opt-icon">📐</div>
+          <div class="opt-val">320 – 450 мм</div>
+          <div class="opt-hint">2–4 ячейки в ряд</div>
+        </div>
+        <div class="opt" data-val="wide" onclick="selOpt('width','wide',this)">
+          <div class="opt-icon">🗂️</div>
+          <div class="opt-val">более 450 мм</div>
+          <div class="opt-hint">4–6 ячеек в ряд</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. ГЛУБИНА ФОРМОВКИ -->
+    <div class="sect">
+      <div class="sect-title"><span class="sect-num">4</span>Глубина формовки</div>
+      <div class="sect-sub">Максимальная высота лотка / ячейки из нижней плёнки</div>
+      <div class="opts3" id="depth-pills">
+        <div class="opt" data-val="shallow" onclick="selOpt('depth','shallow',this)">
+          <div class="opt-icon">🥤</div>
+          <div class="opt-val">до 50 мм</div>
+          <div class="opt-hint">Нарезка, тонкие продукты</div>
+        </div>
+        <div class="opt" data-val="mid" onclick="selOpt('depth','mid',this)">
+          <div class="opt-icon">🥣</div>
+          <div class="opt-val">50 – 100 мм</div>
+          <div class="opt-hint">Порционное мясо, рыба</div>
+        </div>
+        <div class="opt" data-val="deep" onclick="selOpt('depth','deep',this)">
+          <div class="opt-icon">🫕</div>
+          <div class="opt-val">более 100 мм</div>
+          <div class="opt-hint">Целые куски, готовые блюда</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. ПРОИЗВОДИТЕЛЬНОСТЬ -->
+    <div class="sect">
+      <div class="sect-title"><span class="sect-num">5</span>Производительность</div>
+      <div class="sect-sub">Количество рабочих циклов в минуту (формовка → запайка → резка)</div>
+      <div class="opts3" id="speed-pills">
+        <div class="opt" data-val="low" onclick="selOpt('speed','low',this)">
+          <div class="opt-icon">🐢</div>
+          <div class="opt-val">до 6 цикл./мин</div>
+          <div class="opt-hint">Малый цех</div>
+        </div>
+        <div class="opt" data-val="mid" onclick="selOpt('speed','mid',this)">
+          <div class="opt-icon">⚡</div>
+          <div class="opt-val">6 – 12 цикл./мин</div>
+          <div class="opt-hint">Средняя линия</div>
+        </div>
+        <div class="opt" data-val="high" onclick="selOpt('speed','high',this)">
+          <div class="opt-icon">🚀</div>
+          <div class="opt-val">более 12 цикл./мин</div>
+          <div class="opt-hint">Высокоскоростная</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6. ДОПОЛНИТЕЛЬНЫЕ ОПЦИИ -->
+    <div class="sect">
+      <div class="sect-title"><span class="sect-num">6</span>Дополнительные опции</div>
+      <div class="sect-sub">Отметьте всё, что должно быть в комплектации</div>
+      <div class="extras">
+
+        <div class="extra" data-val="gas" onclick="togExtra(this)">
+          <div class="extra-row">
+            <div class="extra-cb" id="cb-gas"></div>
+            <span class="extra-icon">💨</span>
+            <div class="extra-info">
+              <div class="extra-name">Газовый блок MAP</div>
+              <div class="extra-desc">Подача газовой смеси в упаковку: CO₂ + N₂ + O₂ — увеличение срока хранения до 21 суток</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="extra" data-val="label" onclick="togExtra(this)">
+          <div class="extra-row">
+            <div class="extra-cb" id="cb-label"></div>
+            <span class="extra-icon">🏷️</span>
+            <div class="extra-info">
+              <div class="extra-name">Встроенный этикетировщик DIBAL</div>
+              <div class="extra-desc">Нанесение этикетки в потоке — вес, цена, «Честный знак», EAN-13. Без отдельного оператора</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="extra" data-val="perf" onclick="togExtra(this)">
+          <div class="extra-row">
+            <div class="extra-cb" id="cb-perf"></div>
+            <span class="extra-icon">🔧</span>
+            <div class="extra-info">
+              <div class="extra-name">Перфорация верхней плёнки</div>
+              <div class="extra-desc">Easy-open: покупатель легко вскрывает упаковку. Добавляется к любому инструменту</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="extra" data-val="print" onclick="togExtra(this)">
+          <div class="extra-row">
+            <div class="extra-cb" id="cb-print"></div>
+            <span class="extra-icon">🖨️</span>
+            <div class="extra-info">
+              <div class="extra-name">Датировщик / маркировка плёнки</div>
+              <div class="extra-desc">Нанесение даты, партии, срока годности непосредственно на верхнюю плёнку в потоке</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="extra" data-val="loader" onclick="togExtra(this)">
+          <div class="extra-row">
+            <div class="extra-cb" id="cb-loader"></div>
+            <span class="extra-icon">🤖</span>
+            <div class="extra-info">
+              <div class="extra-name">Автоматическая загрузка продукта</div>
+              <div class="extra-desc">Робот-укладчик или конвейер автоподачи из трейсилера / слайсера — исключает ручной труд</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="extra" data-val="metal" onclick="togExtra(this)">
+          <div class="extra-row">
+            <div class="extra-cb" id="cb-metal"></div>
+            <span class="extra-icon">🧲</span>
+            <div class="extra-info">
+              <div class="extra-name">Металлодетектор на выходе</div>
+              <div class="extra-desc">Контроль готовой упаковки: Fe ≥ 1,5 мм, SUS ≥ 2,5 мм. С отбраковщиком или без</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div><!-- /left -->
+
+  <!-- ══ ПРАВАЯ КОЛОНКА — РЕЗУЛЬТАТ ══ -->
+  <div class="result-wrap">
+    <div class="result">
+      <div class="result-hd">
+        <div class="result-hd-lbl">Рекомендуемая модель</div>
+        <div class="r-name" id="r-name">Выберите параметры</div>
+        <div class="r-tag" id="r-tag">← Заполните секции слева</div>
+      </div>
+      <div class="result-body" id="r-body">
+        <div class="empty-state">
+          <div class="empty-icon">⚙️</div>
+          <div class="empty-txt">Выберите тип упаковки и ширину плёнки — конфигурация обновится автоматически</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /layout -->
+
+<!-- MODAL -->
+<div class="modal-bg" id="modal">
+  <div class="modal">
+    <div class="modal-hd">
+      <div class="modal-title">Запрос на коммерческое предложение</div>
+      <button class="modal-close" onclick="closeModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-section">
+        <div class="modal-section-title">Выбранная конфигурация</div>
+        <table class="summary-table" id="summary-table"></table>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-title">Контактные данные</div>
+        <div class="form-row">
+          <label class="form-label">Имя и фамилия</label>
+          <input class="form-input" id="f-name" type="text" placeholder="Иван Иванов">
+        </div>
+        <div class="form-row">
+          <label class="form-label">Компания</label>
+          <input class="form-input" id="f-company" type="text" placeholder="ООО «Мясокомбинат»">
+        </div>
+        <div class="form-row">
+          <label class="form-label">Телефон</label>
+          <input class="form-input" id="f-phone" type="tel" placeholder="+7 (___) ___-__-__">
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-send" onclick="sendReq()">Отправить в ЯФОР</button>
+      <button class="btn-cancel" onclick="closeModal()">Отмена</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── STATE ──────────────────────────────────────────────────────────────
+const st = {
+  pack:  [],    // multi: ['vac','map','skin','atm']
+  prod:  '',
+  width: '',
+  depth: '',
+  speed: '',
+  extras: [],
+};
+
+// ── MODELS ─────────────────────────────────────────────────────────────
+const M = {
+  yaform280: {
+    name: 'YAFORM 280',
+    tag:  'Компактный термоформер — узкая лента',
+    feats: [
+      'Ширина ленты до 280 мм — компактные цеха',
+      'Вакуум и MAP в базовой комплектации',
+      'До 8 циклов/мин — оптимально для малых объёмов',
+      'Быстрая переналадка инструмента без ключей',
+      'Нержавеющая сталь AISI 304, пищевое исполнение',
+      'Простое техническое обслуживание',
+    ],
+    specs: [
+      ['Ширина ленты',   'до 280 мм'],
+      ['Скорость',       'до 8 цикл./мин'],
+      ['Глубина формовки','до 120 мм'],
+      ['Упаковка',       'вакуум, MAP'],
+    ],
+    skinOk: false,
+  },
+  yaform420: {
+    name: 'YAFORM 420',
+    tag:  'Стандартный термоформер — средняя лента',
+    feats: [
+      'Ширина ленты до 420 мм — 2–4 ячейки в ряд',
+      'Вакуум и MAP — весь спектр атмосферной упаковки',
+      'До 12 циклов/мин — средняя производительность',
+      'Сервоэлектрические приводы: точность и надёжность',
+      'Поддержка перфорации и датировщика',
+      'IP65, нержавеющая сталь, гигиеничная конструкция',
+    ],
+    specs: [
+      ['Ширина ленты',   'до 420 мм'],
+      ['Скорость',       'до 12 цикл./мин'],
+      ['Глубина формовки','до 130 мм'],
+      ['Упаковка',       'вакуум, MAP'],
+    ],
+    skinOk: false,
+  },
+  yaform420vsp: {
+    name: 'YAFORM 420 VSP',
+    tag:  'Термоформер SKIN — вакуумная кожа',
+    feats: [
+      'SKIN-упаковка: плёнка плотно облегает каждый продукт',
+      'Вакуум, MAP и SKIN в одной машине',
+      'Срок хранения мяса и рыбы до 21 суток',
+      'Ширина ленты до 420 мм, до 12 цикл./мин',
+      'Сервоприводы — высокая повторяемость результата',
+      'Эффектная презентация продукта в рознице',
+    ],
+    specs: [
+      ['Ширина ленты',   'до 420 мм'],
+      ['Скорость',       'до 12 цикл./мин'],
+      ['Глубина формовки','до 100 мм'],
+      ['Упаковка',       'вакуум, MAP, SKIN'],
+    ],
+    skinOk: true,
+  },
+  yaform550: {
+    name: 'YAFORM 550',
+    tag:  'Высокопроизводительный термоформер — широкая лента',
+    feats: [
+      'Ширина ленты до 550 мм — до 6 ячеек в ряд',
+      'До 18 циклов/мин — для крупных производств',
+      'Вакуум, MAP, SKIN — все режимы в одной линии',
+      'Двойные сервоприводы: высокая точность и скорость',
+      'Автоматическая смена рулонов плёнки',
+      'Полная интеграция с этикетировщиком и металлодетектором',
+    ],
+    specs: [
+      ['Ширина ленты',   'до 550 мм'],
+      ['Скорость',       'до 18 цикл./мин'],
+      ['Глубина формовки','до 130 мм'],
+      ['Упаковка',       'вакуум, MAP, SKIN'],
+    ],
+    skinOk: true,
+  },
+};
+
+const EXTRAS_INFO = {
+  gas:    { icon:'💨', name:'Газовый блок MAP' },
+  label:  { icon:'🏷️', name:'Этикетировщик DIBAL' },
+  perf:   { icon:'🔧', name:'Перфорация easy-open' },
+  print:  { icon:'🖨️', name:'Датировщик плёнки' },
+  loader: { icon:'🤖', name:'Автозагрузка продукта' },
+  metal:  { icon:'🧲', name:'Металлодетектор' },
+};
+
+// ── INTERACTION ────────────────────────────────────────────────────────
+function togPack(el) {
+  const val = el.dataset.val;
+  el.classList.toggle('multi-sel');
+  if (st.pack.includes(val)) {
+    st.pack = st.pack.filter(v => v !== val);
+  } else {
+    st.pack.push(val);
+  }
+  render();
+}
+
+function selOpt(key, val, el) {
+  const grp = el.closest('[id$="-pills"]');
+  if (grp) grp.querySelectorAll('[data-val]').forEach(e => e.classList.remove('sel'));
+  el.classList.add('sel');
+  st[key] = val;
+  render();
+}
+
+function togExtra(el) {
+  const val = el.dataset.val;
+  el.classList.toggle('sel');
+  const cb  = el.querySelector('.extra-cb');
+  const on  = el.classList.contains('sel');
+  cb.textContent = on ? '✓' : '';
+  if (on) { if (!st.extras.includes(val)) st.extras.push(val); }
+  else    { st.extras = st.extras.filter(v => v !== val); }
+  render();
+}
+
+// ── MODEL SELECTION ────────────────────────────────────────────────────
+function pickModel() {
+  const needSkin = st.pack.includes('skin');
+  const w = st.width;   // 'narrow' | 'mid' | 'wide'
+  const sp = st.speed;  // 'low' | 'mid' | 'high'
+
+  // wide web → YAFORM 550 (handles skin, high speed)
+  if (w === 'wide' || sp === 'high') return M.yaform550;
+
+  // mid web
+  if (w === 'mid') {
+    if (needSkin) return M.yaform420vsp;
+    return M.yaform420;
+  }
+
+  // narrow web
+  if (w === 'narrow') {
+    if (needSkin) return M.yaform420vsp; // VSP smallest is 420
+    return M.yaform280;
+  }
+
+  // fallback: pack type selected but no width yet
+  if (st.pack.length > 0) {
+    return needSkin ? M.yaform420vsp : M.yaform420;
+  }
+
+  return null;
+}
+
+// ── RENDER ─────────────────────────────────────────────────────────────
+function render() {
+  const model = pickModel();
+  const nameEl = document.getElementById('r-name');
+  const tagEl  = document.getElementById('r-tag');
+  const body   = document.getElementById('r-body');
+
+  if (!model) {
+    nameEl.textContent = 'Выберите параметры';
+    tagEl.textContent  = '← Заполните секции слева';
+    body.innerHTML = `<div class="empty-state">
+      <div class="empty-icon">⚙️</div>
+      <div class="empty-txt">Выберите тип упаковки и ширину плёнки — конфигурация обновится автоматически</div>
+    </div>`;
+    return;
+  }
+
+  nameEl.textContent = model.name;
+  tagEl.textContent  = model.tag;
+
+  // skin note
+  const needSkin = st.pack.includes('skin');
+  let note = '';
+  if (needSkin && !model.skinOk) {
+    note = `<div class="res-note">⚠ Для SKIN-упаковки рекомендуется YAFORM 420 VSP или YAFORM 550 — уточните у специалиста.</div>`;
+  }
+  if (st.speed === 'high' && st.width === 'narrow') {
+    note += `<div class="res-note">💡 Для узкой ленты при высокой скорости рекомендуем уточнить тип инструмента у инженера ЯФОР.</div>`;
+  }
+
+  // addons
+  const addons = st.extras.filter(v => EXTRAS_INFO[v]);
+  const addonsHtml = addons.length
+    ? `<div class="res-addons">
+        <div class="res-add-lbl">+ Опции в комплектацию</div>
+        ${addons.map(k => `<span class="add-tag">${EXTRAS_INFO[k].icon} ${EXTRAS_INFO[k].name}</span>`).join('')}
+      </div>`
+    : '';
+
+  // pack labels
+  const packNames = { vac:'Вакуум', map:'MAP', skin:'SKIN', atm:'Атмосфера' };
+  const packStr = st.pack.map(p => packNames[p]).join(', ') || '—';
+
+  // CTA active when pack + width + speed selected
+  const ctaReady = st.pack.length > 0 && st.width && st.speed;
+
+  body.innerHTML = `
+    ${note}
+    <ul class="res-feats">${model.feats.map(f => `<li class="res-feat">${f}</li>`).join('')}</ul>
+    <div class="res-specs">
+      ${model.specs.map(([l,v]) => `<div class="spec-row"><span class="spec-l">${l}</span><span class="spec-v">${v}</span></div>`).join('')}
+    </div>
+    ${addonsHtml}
+    <button class="res-cta" ${ctaReady ? '' : 'disabled'} onclick="openModal()">
+      ${ctaReady ? 'Сформировать запрос на КП' : 'Заполните основные параметры'}
+    </button>
+    <div class="res-footer">Без цен · Запрос обрабатывается за 1 рабочий день</div>
+  `;
+}
+
+// ── MODAL ──────────────────────────────────────────────────────────────
+function openModal() {
+  const model = pickModel();
+  if (!model) return;
+
+  const packNames  = { vac:'Вакуум', map:'MAP', skin:'SKIN', atm:'Атмосфера' };
+  const widthNames = { narrow:'до 320 мм', mid:'320–450 мм', wide:'более 450 мм' };
+  const depthNames = { shallow:'до 50 мм', mid:'50–100 мм', deep:'более 100 мм' };
+  const speedNames = { low:'до 6 цикл./мин', mid:'6–12 цикл./мин', high:'более 12 цикл./мин' };
+  const prodNames  = { meat:'Мясо / птица', fish:'Рыба / морепродукты', cheese:'Сыр / деликатесы', ready:'Готовые блюда', veg:'Овощи / фрукты', other:'Другое' };
+
+  const rows = [
+    ['Рекомендуемая модель', `<strong>${model.name}</strong>`],
+    ['Тип упаковки', st.pack.map(p => packNames[p]).join(', ') || '—'],
+    ['Тип продукта', prodNames[st.prod] || '—'],
+    ['Ширина плёнки', widthNames[st.width] || '—'],
+    ['Глубина формовки', depthNames[st.depth] || '—'],
+    ['Производительность', speedNames[st.speed] || '—'],
+    ['Дополнительные опции', st.extras.length ? st.extras.map(e => EXTRAS_INFO[e]?.name).join(', ') : 'Не выбраны'],
+  ];
+
+  document.getElementById('summary-table').innerHTML =
+    rows.map(([l,v]) => `<tr><td>${l}</td><td>${v}</td></tr>`).join('');
+
+  document.getElementById('modal').classList.add('on');
+}
+
+function closeModal() {
+  document.getElementById('modal').classList.remove('on');
+}
+
+function sendReq() {
+  const name    = document.getElementById('f-name').value.trim();
+  const company = document.getElementById('f-company').value.trim();
+  const phone   = document.getElementById('f-phone').value.trim();
+  if (!name || !phone) {
+    alert('Пожалуйста, укажите имя и телефон.');
+    return;
+  }
+  closeModal();
+  alert(`Запрос отправлен!\n\nМодель: ${pickModel().name}\nИмя: ${name}\nКомпания: ${company || '—'}\nТелефон: ${phone}\n\nСпециалист ЯФОР свяжется с вами в течение одного рабочего дня.`);
+}
+
+// close modal on bg click
+document.getElementById('modal').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+</script>
+</body>
+</html>

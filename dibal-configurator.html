@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Конфигуратор DIBAL — ЯФОР</title>
+<style>
+:root{
+  --blue:   #1F4E79; --blue-m: #2E75B6; --blue-l: #D6E4F0; --blue-p: #EEF4FB;
+  --orange: #C55A11; --orange-p:#FCE4D6;
+  --green:  #1E6B3C; --green-p: #E2EFDA;
+  --grey:   #505968; --grey-l: #F4F6F9;
+  --white:  #FFFFFF; --border: #D0DCE8;
+  --r: 10px; --sh: 0 3px 16px rgba(31,78,121,.09);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#ECF0F5;color:#1a2a3a;min-height:100vh}
+
+/* ─ HEADER ─ */
+.hd{background:var(--blue);padding:14px 28px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:100;box-shadow:0 2px 10px rgba(0,0,0,.25)}
+.hd-logo{font-size:22px;font-weight:900;color:#fff;letter-spacing:1px}
+.hd-logo span{color:var(--orange)}
+.hd-sub{font-size:12px;color:rgba(255,255,255,.6)}
+.hd-badge{margin-left:auto;background:rgba(255,255,255,.15);color:#fff;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px}
+
+/* ─ LAYOUT ─ */
+.layout{display:grid;grid-template-columns:1fr 340px;gap:20px;max-width:1080px;margin:24px auto;padding:0 20px 60px;align-items:start}
+
+/* ─ SECTION ─ */
+.sect{background:var(--white);border-radius:var(--r);border:1.5px solid var(--border);padding:20px 22px;box-shadow:var(--sh);margin-bottom:14px}
+.sect-title{font-size:14px;font-weight:700;color:var(--blue);margin-bottom:4px;display:flex;align-items:center;gap:8px}
+.sect-num{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:var(--blue);color:#fff;font-size:10px;font-weight:700;flex-shrink:0}
+.sect-sub{font-size:12px;color:var(--grey);margin-bottom:14px}
+
+/* ─ OPTION PILLS ─ */
+.pills{display:flex;flex-wrap:wrap;gap:8px}
+.pill{border:2px solid var(--border);border-radius:8px;padding:10px 14px;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:9px;min-width:130px;flex:1}
+.pill:hover{border-color:var(--blue-m);background:var(--blue-p)}
+.pill.sel{border-color:var(--blue-m);background:var(--blue-p)}
+.pill.disabled{opacity:.38;cursor:not-allowed;pointer-events:none}
+.pill-icon{font-size:22px;flex-shrink:0}
+.pill-body{flex:1}
+.pill-name{font-size:13px;font-weight:700;color:var(--blue);line-height:1.2}
+.pill-hint{font-size:11px;color:var(--grey);margin-top:2px}
+.pill.sel .pill-name{color:var(--blue)}
+
+/* label position — 3 equal cols */
+.pills-label{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.pill-label{border:2px solid var(--border);border-radius:8px;padding:14px 10px;cursor:pointer;transition:all .15s;text-align:center}
+.pill-label:hover{border-color:var(--blue-m);background:var(--blue-p)}
+.pill-label.sel{border-color:var(--blue-m);background:var(--blue-p)}
+.pill-label.disabled{opacity:.38;cursor:not-allowed;pointer-events:none}
+.pl-icon{font-size:26px;margin-bottom:6px}
+.pl-name{font-size:13px;font-weight:700;color:var(--blue);line-height:1.3}
+.pl-hint{font-size:11px;color:var(--grey);margin-top:3px}
+
+/* speed */
+.speed-btns{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.speed-btn{border:2px solid var(--border);border-radius:8px;padding:12px 8px;cursor:pointer;text-align:center;transition:all .15s}
+.speed-btn:hover{border-color:var(--blue-m);background:var(--blue-p)}
+.speed-btn.sel{border-color:var(--blue-m);background:var(--blue-p)}
+.sb-icon{font-size:22px;margin-bottom:4px}
+.sb-val{font-size:13px;font-weight:700;color:var(--blue)}
+.sb-hint{font-size:11px;color:var(--grey);margin-top:2px}
+
+/* extras */
+.extras{display:flex;flex-direction:column;gap:8px}
+.extra{border:2px solid var(--border);border-radius:8px;padding:12px 14px;cursor:pointer;transition:all .15s}
+.extra:hover{border-color:var(--blue-m);background:var(--blue-p)}
+.extra.sel{border-color:var(--blue-m);background:var(--blue-p)}
+.extra-row{display:flex;align-items:flex-start;gap:10px}
+.extra-cb{width:18px;height:18px;border-radius:4px;border:2px solid var(--border);flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;transition:all .15s}
+.extra.sel .extra-cb{background:var(--blue-m);border-color:var(--blue-m);color:#fff}
+.extra-icon{font-size:20px;flex-shrink:0}
+.extra-info{flex:1}
+.extra-name{font-size:13px;font-weight:700;color:var(--blue)}
+.extra-desc{font-size:11px;color:var(--grey);margin-top:2px;line-height:1.4}
+/* rejector sub-toggle */
+.rej-toggle{display:flex;gap:7px;margin-top:10px;margin-left:28px;display:none}
+.rej-opt{border:1.5px solid var(--border);border-radius:6px;padding:6px 12px;font-size:12px;font-weight:600;cursor:pointer;color:var(--grey);transition:all .14s}
+.rej-opt:hover{border-color:var(--blue-m);color:var(--blue-m)}
+.rej-opt.sel{border-color:var(--blue-m);background:var(--blue-l);color:var(--blue)}
+
+/* ─ RESULT PANEL (sticky) ─ */
+.result-wrap{position:sticky;top:72px}
+.result{background:var(--white);border-radius:var(--r);border:1.5px solid var(--border);box-shadow:var(--sh);overflow:hidden}
+.result-hd{background:var(--blue);padding:16px 18px}
+.result-hd-title{font-size:13px;font-weight:700;color:rgba(255,255,255,.7);text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px}
+.result-unit-name{font-size:18px;font-weight:800;color:#fff;line-height:1.2}
+.result-unit-tag{font-size:11px;color:var(--blue-l);margin-top:3px}
+.result-body{padding:16px 18px}
+
+/* empty state */
+.empty-state{text-align:center;padding:24px 16px;color:var(--grey)}
+.empty-icon{font-size:36px;margin-bottom:8px}
+.empty-txt{font-size:13px;line-height:1.5}
+
+/* feats */
+.res-feats{list-style:none;margin-bottom:14px}
+.res-feat{font-size:12.5px;color:var(--grey);padding:4px 0;border-bottom:1px solid var(--grey-l);display:flex;align-items:flex-start;gap:7px}
+.res-feat:last-child{border-bottom:none}
+.res-feat::before{content:'✓';color:var(--blue-m);font-weight:700;flex-shrink:0;margin-top:1px;font-size:11px}
+
+/* addons in result */
+.res-addons{margin-bottom:14px}
+.res-addons-title{font-size:11px;font-weight:700;color:var(--grey);text-transform:uppercase;letter-spacing:.4px;margin-bottom:8px}
+.res-addon-tag{display:inline-flex;align-items:center;gap:5px;background:var(--blue-p);border:1.5px solid var(--blue-l);border-radius:6px;padding:4px 9px;font-size:11.5px;font-weight:600;color:var(--blue-m);margin:0 4px 5px 0}
+.res-addon-tag .ta-icon{font-size:14px}
+
+/* specs mini */
+.res-specs{background:var(--grey-l);border-radius:8px;padding:10px 12px;margin-bottom:14px}
+.spec-row{display:flex;justify-content:space-between;font-size:12px;padding:3px 0;border-bottom:1px solid var(--border)}
+.spec-row:last-child{border-bottom:none}
+.spec-l{color:var(--grey)}
+.spec-v{font-weight:700;color:var(--blue)}
+
+/* alert note in result */
+.res-note{background:var(--orange-p);border:1.5px solid #e8b07a;border-radius:7px;padding:9px 12px;font-size:12px;color:#7a4010;margin-bottom:12px;line-height:1.4}
+
+/* CTA */
+.res-cta{background:var(--orange);color:#fff;border:none;border-radius:8px;padding:12px 18px;width:100%;font-size:13.5px;font-weight:700;cursor:pointer;transition:all .16s;box-shadow:0 3px 10px rgba(197,90,17,.3)}
+.res-cta:hover{background:#a84a0e;transform:translateY(-1px)}
+.res-cta:disabled{background:#ccc;box-shadow:none;cursor:not-allowed;transform:none}
+.res-footer{font-size:11px;color:var(--grey);text-align:center;margin-top:10px;padding-top:10px;border-top:1px solid var(--border)}
+
+/* flow-pack special */
+.flow-note{background:#FFF8E7;border:1.5px solid #F0D070;border-radius:8px;padding:12px 14px;font-size:12.5px;color:#5a4500;margin-bottom:10px;display:none}
+
+@media(max-width:720px){
+  .layout{grid-template-columns:1fr;padding:0 12px 40px}
+  .result-wrap{position:static}
+  .pills-label,.speed-btns{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="hd">
+  <div>
+    <div class="hd-logo">Я<span>ФОР</span></div>
+    <div class="hd-sub">Конфигуратор весовой маркировки DIBAL</div>
+  </div>
+  <div class="hd-badge">Без перехода на другие страницы</div>
+</div>
+
+<div class="layout">
+
+  <!-- ══ LEFT: CONFIG ══ -->
+  <div class="config">
+
+    <!-- 1. ТИП УПАКОВКИ -->
+    <div class="sect">
+      <div class="sect-title"><span class="sect-num">1</span>Тип упаковки продукта</div>
+      <div class="sect-sub">Определяет базовую модель этикетировщика</div>
+      <div class="pills" id="pack-pills">
+        <div class="pill" data-val="tray" onclick="sel('pack','tray',this)">
+          <span class="pill-icon">🫙</span>
+          <div class="pill-body">
+            <div class="pill-name">Лоток</div>
+            <div class="pill-hint">MAP, вакуум, skin-упаковка</div>
+          </div>
+        </div>
+        <div class="pill" data-val="thermo" onclick="sel('pack','thermo',this)">
+          <span class="pill-icon">♨️</span>
+          <div class="pill-body">
+            <div class="pill-name">Термоформер</div>
+            <div class="pill-hint">Формовка и запайка в потоке</div>
+          </div>
+        </div>
+        <div class="pill" data-val="bag" onclick="sel('pack','bag',this)">
+          <span class="pill-icon">🛍️</span>
+          <div class="pill-body">
+            <div class="pill-name">Пакет</div>
+            <div class="pill-hint">Готовая мягкая упаковка</div>
+          </div>
+        </div>
+        <div class="pill" data-val="flow" onclick="sel('pack','flow',this)">
+          <span class="pill-icon">🌯</span>
+          <div class="pill-body">
+            <div class="pill-name">Флоу-пак</div>
+            <div class="pill-hint">Горизонтальная термоусадка</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. РАСПОЛОЖЕНИЕ ЭТИКЕТКИ -->
+    <div class="sect" id="sect-label">
+      <div class="sect-title"><span class="sect-num">2</span>Расположение этикетки</div>
+      <div class="sect-sub">Выберите способ нанесения</div>
+
+      <!-- flow-pack note -->
+      <div class="flow-note" id="flow-note">
+        💡 Для флоу-пака доступно нанесение этикетки сверху или снизу. C-WRAP для данного типа упаковки не применяется. Дополнительно можно подключить суммирующий принтер <strong>LP5000</strong> для продукции фиксированного веса.
+      </div>
+
+      <div class="pills-label" id="label-pills">
+        <div class="pill-label" data-val="top" onclick="sel('label','top',this)">
+          <div class="pl-icon">⬆️</div>
+          <div class="pl-name">Сверху (TOP)</div>
+          <div class="pl-hint">Стандартное нанесение. До 150 уп./мин</div>
+        </div>
+        <div class="pill-label" data-val="bottom" onclick="sel('label','bottom',this)">
+          <div class="pl-icon">⬇️</div>
+          <div class="pl-name">Снизу (BOTTOM)</div>
+          <div class="pl-hint">Без переворота. Требование сетей</div>
+        </div>
+        <div class="pill-label" data-val="cwrap" onclick="sel('label','cwrap',this)">
+          <div class="pl-icon">🔄</div>
+          <div class="pl-name">Обёртка C-WRAP</div>
+          <div class="pl-hint">Вокруг продукта. CLS5000</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. ПРОИЗВОДИТЕЛЬНОСТЬ -->
+    <div class="sect">
+      <div class="sect-title"><span class="sect-num">3</span>Производительность линии</div>
+      <div class="sect-sub">Требуемая скорость этикетирования</div>
+      <div class="speed-btns" id="speed-pills">
+        <div class="speed-btn" data-val="low" onclick="sel('speed','low',this)">
+          <div class="sb-icon">🐢</div>
+          <div class="sb-val">до 30 уп./мин</div>
+          <div class="sb-hint">Малый цех, ручная подача</div>
+        </div>
+        <div class="speed-btn" data-val="mid" onclick="sel('speed','mid',this)">
+          <div class="sb-icon">⚡</div>
+          <div class="sb-val">30 – 80 уп./мин</div>
+          <div class="sb-hint">Средняя линия</div>
+        </div>
+        <div class="speed-btn" data-val="high" onclick="sel('speed','high',this)">
+          <div class="sb-icon">🚀</div>
+          <div class="sb-val">80 – 150 уп./мин</div>
+          <div class="sb-hint">Высокоскоростная линия</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. ДОПОБОРУДОВАНИЕ -->
+    <div class="sect">
+      <div class="sect-title"><span class="sect-num">4</span>Дополнительное оборудование</div>
+      <div class="sect-sub">Можно выбрать несколько позиций</div>
+      <div class="extras">
+
+        <div class="extra" data-val="combiner" onclick="togExtra(this)">
+          <div class="extra-row">
+            <div class="extra-cb" id="cb-combiner"></div>
+            <span class="extra-icon">🔀</span>
+            <div class="extra-info">
+              <div class="extra-name">Объединитель потоков GS5000</div>
+              <div class="extra-desc">Сводит два входных конвейера в один — для линий с несколькими форматами упаковки, подаваемыми на один этикетировщик</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="extra" data-val="metal" onclick="togExtra(this)">
+          <div class="extra-row">
+            <div class="extra-cb" id="cb-metal"></div>
+            <span class="extra-icon">🧲</span>
+            <div class="extra-info">
+              <div class="extra-name">Металлодетектор MD5700S</div>
+              <div class="extra-desc">Встроен в раму этикетировщика. Fe ≥ 1,5 мм / SUS ≥ 2,5 мм. IP65, сертификат ХАССП. Единый интерфейс управления с весовым этикетировщиком</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="extra" id="extra-rej" data-val="rejector" onclick="togExtra(this)">
+          <div class="extra-row">
+            <div class="extra-cb" id="cb-rejector"></div>
+            <span class="extra-icon">🗑️</span>
+            <div class="extra-info">
+              <div class="extra-name">Отбраковщик</div>
+              <div class="extra-desc">Автоматическое удаление продуктов вне допустимых параметров веса или с обнаруженным металлом</div>
+            </div>
+          </div>
+          <div class="rej-toggle" id="rej-toggle">
+            <div class="rej-opt sel" data-rej="basket" onclick="selRej(event,'basket',this)">С корзиной</div>
+            <div class="rej-opt" data-rej="nobasket" onclick="selRej(event,'nobasket',this)">Без корзины</div>
+          </div>
+        </div>
+
+        <div class="extra" data-val="lp5000" onclick="togExtra(this)">
+          <div class="extra-row">
+            <div class="extra-cb" id="cb-lp5000"></div>
+            <span class="extra-icon">🖨️</span>
+            <div class="extra-info">
+              <div class="extra-name">Суммирующий принтер LP5000</div>
+              <div class="extra-desc">Печать и нанесение этикетки для фасованного товара фиксированного веса — без весового контроля. Идеален для флоу-пака и пакетов с постоянным весом</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div><!-- /config -->
+
+  <!-- ══ RIGHT: RESULT ══ -->
+  <div class="result-wrap">
+    <div class="result">
+      <div class="result-hd">
+        <div class="result-hd-title">Ваша конфигурация</div>
+        <div class="result-unit-name" id="r-name">Выберите параметры</div>
+        <div class="result-unit-tag" id="r-tag">← Заполните разделы слева</div>
+      </div>
+      <div class="result-body" id="r-body">
+        <div class="empty-state">
+          <div class="empty-icon">⚙️</div>
+          <div class="empty-txt">Начните выбор типа упаковки — конфигурация обновится автоматически</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /layout -->
+
+<script>
+// ── STATE ──────────────────────────────────────────────────────────────
+const st = {
+  pack:'', label:'', speed:'',
+  combiner:false, metal:false,
+  rejector:'', // 'basket' | 'nobasket' | ''
+  lp5000:false
+};
+
+// ── MODELS ─────────────────────────────────────────────────────────────
+const M = {
+  ls5000_top: {
+    name:'DIBAL LS5000 TOP',
+    tag:'Весовое этикетирование — этикетка сверху',
+    feats:[
+      'До 150 уп./мин — штамп-аппликатор',
+      'Динамическое взвешивание ±1 г',
+      '«Честный знак», EAN-13, DataMatrix, QR',
+      '15" сенсор, до 5 000 PLU в памяти',
+      'Прямая термопечать 300 dpi',
+      'Нержавеющая сталь AISI 304L, IP54',
+    ],
+    specs:[['Скорость','до 150 уп./мин'],['Взвешивание','0–3 кг / ±1 г'],['Этикетка','30×30—150×102 мм'],['Защита','IP54']],
+  },
+  ls5000_bot: {
+    name:'DIBAL LS5000 BOTTOM',
+    tag:'Весовое этикетирование — этикетка снизу',
+    feats:[
+      'До 120 уп./мин — нанесение под лоток',
+      'Без переворота продукта — сохраняется форма',
+      '«Честный знак», EAN-13, DataMatrix, QR',
+      'IP65 — полная защита, пищевой цех с мойкой',
+      'CWRAP-аппликатор: боковой клапан этикетки',
+      'Опция TOP+BOTTOM: обе стороны в одной линии',
+    ],
+    specs:[['Скорость','до 120 уп./мин'],['Взвешивание','0–3 кг / ±1 г'],['Этикетка','30×30—150×102 мм'],['Защита','IP65']],
+  },
+  cls5000: {
+    name:'DIBAL CLS5000 C-WRAP',
+    tag:'Полная обёртка этикеткой вокруг продукта',
+    feats:[
+      'До 50 уп./мин — этикетка огибает продукт со всех сторон',
+      'Этикетка до 240×75 мм — вся информация видна',
+      '«Честный знак», EAN, DataMatrix — в стандарте',
+      'IP65, ХАССП — пищевое исполнение',
+      'Нержавеющая сталь AISI 304L',
+      'Идеально для стейков, рыбы, нестандартных форм',
+    ],
+    specs:[['Скорость','до 50 уп./мин'],['Взвешивание','0–3 кг / ±1 г'],['Этикетка','до 240×75 мм (C-WRAP)'],['Защита','IP65, ХАССП']],
+  },
+  lp5000_main: {
+    name:'DIBAL LP5000 / LT5000',
+    tag:'Суммирующий принтер-аппликатор (фикс. вес)',
+    feats:[
+      'Нанесение этикетки без взвешивания',
+      'Фиксированный вес / цена — флоу-пак, батончики',
+      '«Честный знак», EAN-13, DataMatrix, QR',
+      'Встраивается в любую конвейерную линию',
+      'Смена формата за 2 мин по PLU',
+      'Подключение к 1С / ERP по Ethernet',
+    ],
+    specs:[['Тип','Без весового контроля'],['Этикетка','до 150×102 мм'],['Интерфейс','Ethernet, USB'],['Применение','флоу-пак, пакеты']],
+  },
+};
+
+const ADDONS_INFO = {
+  combiner:  { icon:'🔀', name:'Объединитель потоков GS5000',      desc:'Два входных конвейера → один поток к этикетировщику' },
+  metal:     { icon:'🧲', name:'Металлодетектор MD5700S',           desc:'Fe ≥ 1,5 мм, SUS ≥ 2,5 мм. ХАССП. В раме этикетировщика' },
+  rej_basket:{ icon:'🗑️', name:'Отбраковщик с корзиной',           desc:'Автосброс нестандартных продуктов в накопительную корзину' },
+  rej_no:    { icon:'↩️', name:'Отбраковщик без корзины',           desc:'Толкатель — сброс на боковой конвейер или по линии' },
+  lp5000:    { icon:'🖨️', name:'Суммирующий принтер LP5000',        desc:'Этикетка для фиксированного веса в дополнение к весовому' },
+};
+
+// ── SELECTION ───────────────────────────────────────────────────────────
+function sel(key, val, el) {
+  const grp = el.closest('[id$="-pills"]') || el.closest('.pills-label') || el.closest('.speed-btns');
+  if(grp) grp.querySelectorAll('[data-val]').forEach(e=>e.classList.remove('sel'));
+  el.classList.add('sel');
+  st[key] = val;
+
+  // pack change: управляем доступностью вариантов этикетки
+  if(key==='pack') {
+    const flowNote  = document.getElementById('flow-note');
+    const labelPills = document.getElementById('label-pills');
+    const cwrapPill  = labelPills.querySelector('[data-val="cwrap"]');
+
+    // сброс выбора и состояния всех пилюль этикетки
+    st.label = '';
+    labelPills.querySelectorAll('[data-val]').forEach(e => e.classList.remove('sel','disabled'));
+
+    if(val === 'tray') {
+      // Лоток: все три варианта доступны (TOP, BOTTOM, C-WRAP)
+      flowNote.style.display = 'none';
+    } else if(val === 'flow') {
+      // Флоу-пак: TOP и BOTTOM доступны, C-WRAP недоступен
+      flowNote.style.display = 'block';
+      cwrapPill.classList.add('disabled');
+    } else {
+      // Термоформер / пакет: TOP и BOTTOM, C-WRAP недоступен
+      flowNote.style.display = 'none';
+      cwrapPill.classList.add('disabled');
+    }
+  }
+
+  render();
+}
+
+function togExtra(el) {
+  const val = el.dataset.val;
+  el.classList.toggle('sel');
+  const cb = el.querySelector('.extra-cb');
+  const on = el.classList.contains('sel');
+  cb.textContent = on ? '✓' : '';
+
+  if(val==='rejector') {
+    const tog = document.getElementById('rej-toggle');
+    tog.style.display = on ? 'flex' : 'none';
+    if(on && !st.rejector) st.rejector='basket';
+    if(!on) st.rejector='';
+  } else {
+    st[val] = on;
+  }
+  render();
+}
+
+function selRej(e, val, el) {
+  e.stopPropagation();
+  document.getElementById('rej-toggle').querySelectorAll('.rej-opt').forEach(o=>o.classList.remove('sel'));
+  el.classList.add('sel');
+  st.rejector = val;
+  render();
+}
+
+// ── RENDER RESULT ───────────────────────────────────────────────────────
+function render() {
+  const nameEl = document.getElementById('r-name');
+  const tagEl  = document.getElementById('r-tag');
+  const body   = document.getElementById('r-body');
+
+  // pick main model
+  // C-WRAP только для лотка; флоу-пак — TOP или BOTTOM как обычно
+  let model = null;
+  if(st.label==='cwrap') {
+    model = M.cls5000;                          // только лоток → CLS5000
+  } else if(st.label==='bottom') {
+    model = M.ls5000_bot;                       // любой тип → LS5000 BOTTOM
+  } else if(st.label==='top') {
+    model = M.ls5000_top;                       // любой тип → LS5000 TOP
+  } else if(st.pack) {
+    model = M.ls5000_top;                       // тип выбран, этикетка ещё нет — показываем TOP как дефолт
+  }
+
+  if(!model) {
+    nameEl.textContent = 'Выберите параметры';
+    tagEl.textContent  = '← Заполните разделы слева';
+    body.innerHTML = `<div class="empty-state">
+      <div class="empty-icon">⚙️</div>
+      <div class="empty-txt">Начните выбор типа упаковки — конфигурация обновится автоматически</div>
+    </div>`;
+    return;
+  }
+
+  nameEl.textContent = model.name;
+  tagEl.textContent  = model.tag;
+
+  // speed warning for CLS5000
+  let speedNote = '';
+  if(st.speed==='high' && model===M.cls5000) {
+    speedNote=`<div class="res-note">⚠ CLS5000 рассчитан до 50 уп./мин. Для более высоких скоростей рекомендуем обсудить конфигурацию с инженером ЯФОР.</div>`;
+  }
+  if(st.speed==='high' && model===M.lp5000_main) {
+    speedNote=`<div class="res-note">⚠ Уточните производительность LP5000 у специалиста — зависит от конкретной линии.</div>`;
+  }
+
+  // addons list
+  const addons=[];
+  if(st.combiner) addons.push('combiner');
+  if(st.metal)    addons.push('metal');
+  if(st.rejector==='basket')   addons.push('rej_basket');
+  if(st.rejector==='nobasket') addons.push('rej_no');
+  if(st.lp5000 && model!==M.lp5000_main) addons.push('lp5000');
+
+  const addonHtml = addons.length
+    ? `<div class="res-addons">
+        <div class="res-addons-title">+ Дополнительно</div>
+        ${addons.map(k=>`<span class="res-addon-tag"><span class="ta-icon">${ADDONS_INFO[k].icon}</span>${ADDONS_INFO[k].name}</span>`).join('')}
+      </div>`
+    : '';
+
+  // specs
+  const specsHtml=`<div class="res-specs">${model.specs.map(([l,v])=>`
+    <div class="spec-row"><span class="spec-l">${l}</span><span class="spec-v">${v}</span></div>`).join('')}
+  </div>`;
+
+  // cta active only if main params filled
+  const ctaReady = st.pack && (st.label || st.pack==='flow') && st.speed;
+  const ctaLabel = ctaReady ? 'Запросить коммерческое предложение' : 'Заполните все параметры';
+
+  body.innerHTML = `
+    ${speedNote}
+    <ul class="res-feats">${model.feats.map(f=>`<li class="res-feat">${f}</li>`).join('')}</ul>
+    ${addonHtml}
+    ${specsHtml}
+    <button class="res-cta" ${ctaReady?'':'disabled'} onclick="sendReq()">${ctaLabel}</button>
+    <div class="res-footer">Цены рассчитываются индивидуально · ЯФОР · yafor.ru</div>
+  `;
+}
+
+function sendReq() {
+  const m = document.getElementById('r-name').textContent;
+  alert(`Заявка на конфигурацию "${m}" отправлена.\nСпециалист ЯФОР свяжется с вами в течение одного рабочего дня.`);
+}
+</script>
+</body>
+</html>

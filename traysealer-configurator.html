@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Конфигуратор запайщика лотков — ЯФОР</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --blue: #1F4E79;
+      --blue-m: #2E75B6;
+      --blue-l: #D6E4F0;
+      --blue-p: #EEF4FB;
+      --orange: #C55A11;
+      --orange-p: #FCE4D6;
+      --green: #1E6B3C;
+      --green-p: #E2EFDA;
+      --gray: #f5f5f5;
+      --text: #333;
+      --border: #ddd;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--gray);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    /* Header */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--blue);
+      color: white;
+      padding: 1rem 2rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .header-content {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .logo {
+      font-size: 1.8rem;
+      font-weight: bold;
+      letter-spacing: 0.05em;
+    }
+
+    .logo .orange {
+      color: var(--orange);
+    }
+
+    .header-subtitle {
+      font-size: 0.9rem;
+      opacity: 0.9;
+      margin-left: auto;
+    }
+
+    /* Main layout */
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 2rem;
+      display: grid;
+      grid-template-columns: 1fr 420px;
+      gap: 2rem;
+    }
+
+    @media (max-width: 1024px) {
+      .container {
+        grid-template-columns: 1fr;
+        padding: 1rem;
+      }
+      .right-panel {
+        position: relative;
+        top: auto;
+      }
+    }
+
+    /* Sections */
+    .section {
+      background: white;
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      border-left: 4px solid var(--blue-m);
+    }
+
+    .section-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      color: var(--blue);
+    }
+
+    /* Pills / Buttons */
+    .pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .pill, .btn-group button {
+      padding: 0.6rem 1rem;
+      border: 2px solid var(--blue-l);
+      background: white;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 0.95rem;
+      transition: all 0.2s ease;
+      color: var(--blue);
+      font-weight: 500;
+    }
+
+    .pill:hover, .btn-group button:hover {
+      background: var(--blue-p);
+      border-color: var(--blue-m);
+    }
+
+    .pill.active, .btn-group button.active {
+      background: var(--blue-m);
+      color: white;
+      border-color: var(--blue-m);
+    }
+
+    /* Button groups */
+    .btn-group {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-group button {
+      flex: 1;
+      min-width: 150px;
+    }
+
+    /* Checkboxes */
+    .checkbox-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .checkbox-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .checkbox-item input {
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+      accent-color: var(--blue-m);
+    }
+
+    .checkbox-item label {
+      cursor: pointer;
+      flex: 1;
+    }
+
+    /* Right panel */
+    .right-panel {
+      position: sticky;
+      top: 80px;
+      height: fit-content;
+    }
+
+    .result-card {
+      background: white;
+      border-radius: 8px;
+      padding: 1.5rem;
+      border: 2px solid var(--blue-l);
+    }
+
+    .model-header {
+      margin-bottom: 1rem;
+      border-bottom: 2px solid var(--blue-p);
+      padding-bottom: 1rem;
+    }
+
+    .model-name {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--blue);
+      margin-bottom: 0.25rem;
+    }
+
+    .model-tag {
+      font-size: 0.85rem;
+      color: var(--orange);
+      font-weight: 600;
+    }
+
+    .features {
+      margin: 1rem 0;
+      font-size: 0.9rem;
+      line-height: 1.8;
+    }
+
+    .feature-item {
+      margin-bottom: 0.6rem;
+      color: var(--text);
+      padding-left: 1.5rem;
+      position: relative;
+    }
+
+    .feature-item:before {
+      content: '✓';
+      position: absolute;
+      left: 0;
+      color: var(--green);
+      font-weight: bold;
+    }
+
+    .specs-table {
+      width: 100%;
+      margin: 1rem 0;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+    }
+
+    .specs-table td {
+      padding: 0.6rem;
+      border: 1px solid var(--blue-l);
+    }
+
+    .specs-table td:first-child {
+      background: var(--blue-p);
+      font-weight: 600;
+      color: var(--blue);
+      width: 40%;
+    }
+
+    .extras-tags {
+      margin: 1rem 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .tag {
+      background: var(--orange-p);
+      color: var(--orange);
+      padding: 0.4rem 0.8rem;
+      border-radius: 12px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .tag.addon {
+      background: var(--green-p);
+      color: var(--green);
+    }
+
+    .btn-cta {
+      width: 100%;
+      padding: 0.8rem;
+      background: var(--blue-m);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      margin-top: 1rem;
+    }
+
+    .btn-cta:hover:not(:disabled) {
+      background: var(--blue);
+      box-shadow: 0 4px 12px rgba(31,78,121,0.3);
+    }
+
+    .btn-cta:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .empty-state {
+      color: #999;
+      font-size: 0.9rem;
+      text-align: center;
+      padding: 2rem 1rem;
+    }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: white;
+      border-radius: 8px;
+      padding: 2rem;
+      max-width: 500px;
+      width: 90%;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    }
+
+    .modal-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--blue);
+      margin-bottom: 1.5rem;
+      border-bottom: 2px solid var(--blue-p);
+      padding-bottom: 1rem;
+    }
+
+    .modal-section {
+      margin-bottom: 1.5rem;
+    }
+
+    .modal-label {
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+      display: block;
+      font-size: 0.95rem;
+    }
+
+    .modal-value {
+      color: var(--orange);
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+
+    .params-table {
+      width: 100%;
+      margin-bottom: 1.5rem;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+
+    .params-table td {
+      padding: 0.6rem;
+      border: 1px solid var(--blue-l);
+    }
+
+    .params-table td:first-child {
+      background: var(--blue-p);
+      font-weight: 600;
+      color: var(--blue);
+      width: 40%;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 0.8rem;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      font-size: 0.95rem;
+      font-family: inherit;
+    }
+
+    .form-group input:focus {
+      outline: none;
+      border-color: var(--blue-m);
+      box-shadow: 0 0 0 3px var(--blue-p);
+    }
+
+    .btn-submit {
+      width: 100%;
+      padding: 0.8rem;
+      background: var(--green);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-submit:hover {
+      background: #155a2f;
+      box-shadow: 0 4px 12px rgba(30,107,60,0.3);
+    }
+
+    .close-modal {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #999;
+    }
+
+    .close-modal:hover {
+      color: var(--text);
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-content">
+    <div class="logo">ЯФО<span class="orange">Р</span></div>
+    <div class="header-subtitle">Конфигуратор запайщика лотков</div>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- LEFT COLUMN -->
+  <div class="left-column">
+
+    <!-- Section 1: Type of packaging -->
+    <div class="section">
+      <h3 class="section-title">Тип упаковки</h3>
+      <div class="pills" id="pack-group">
+        <button class="pill" data-pack="vacuum">Вакуум</button>
+        <button class="pill" data-pack="map">MAP</button>
+        <button class="pill" data-pack="skin">SKIN</button>
+        <button class="pill" data-pack="atmos">Атмосфера</button>
+      </div>
+    </div>
+
+    <!-- Section 2: Product type -->
+    <div class="section">
+      <h3 class="section-title">Тип продукта</h3>
+      <div class="pills" id="product-group">
+        <button class="pill" data-product="meat">🥩 Мясо / птица</button>
+        <button class="pill" data-product="fish">🐟 Рыба / морепродукты</button>
+        <button class="pill" data-product="cheese">🧀 Сыр / деликатесы</button>
+        <button class="pill" data-product="ready">🥗 Готовые блюда</button>
+        <button class="pill" data-product="veggies">🥬 Овощи / фрукты</button>
+        <button class="pill" data-product="other">🍱 Другое</button>
+      </div>
+    </div>
+
+    <!-- Section 3: Performance -->
+    <div class="section">
+      <h3 class="section-title">Производительность</h3>
+      <div class="btn-group" id="speed-group">
+        <button data-speed="low">До 15 лотков/мин<br><small>(малый цех)</small></button>
+        <button data-speed="mid">15 – 40 лотков/мин<br><small>(средняя линия)</small></button>
+        <button data-speed="high">40 – 72 лотков/мин<br><small>(высокоскоростная)</small></button>
+      </div>
+    </div>
+
+    <!-- Section 4: Work mode -->
+    <div class="section">
+      <h3 class="section-title">Режим работы</h3>
+      <div class="btn-group" id="mode-group">
+        <button data-mode="semi">Полуавтомат<br><small>(ручная укладка)</small></button>
+        <button data-mode="inline">Inline автомат<br><small>(конвейерная подача)</small></button>
+      </div>
+    </div>
+
+    <!-- Section 5: Additional options -->
+    <div class="section">
+      <h3 class="section-title">Дополнительные опции</h3>
+      <div class="checkbox-group">
+        <div class="checkbox-item">
+          <input type="checkbox" id="opt-map" data-opt="map-block">
+          <label for="opt-map">Газовая смесь MAP (газовый блок)</label>
+        </div>
+        <div class="checkbox-item">
+          <input type="checkbox" id="opt-label" data-opt="labeler">
+          <label for="opt-label">Встроенный этикетировщик</label>
+        </div>
+        <div class="checkbox-item">
+          <input type="checkbox" id="opt-perf" data-opt="perf">
+          <label for="opt-perf">Перфорация крышки</label>
+        </div>
+        <div class="checkbox-item">
+          <input type="checkbox" id="opt-date" data-opt="dater">
+          <label for="opt-date">Датировщик / нанесение даты</label>
+        </div>
+        <div class="checkbox-item">
+          <input type="checkbox" id="opt-film" data-opt="auto-film">
+          <label for="opt-film">Автоматическая подача плёнки</label>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- RIGHT COLUMN -->
+  <div class="right-panel">
+    <div class="result-card">
+      <div id="result-content">
+        <div class="empty-state">
+          Выберите параметры<br>слева, чтобы увидеть<br>рекомендуемую модель
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- КП Request Modal -->
+<div class="modal" id="kp-modal">
+  <div class="modal-content">
+    <button class="close-modal" onclick="closeModal()">&times;</button>
+    <h2 class="modal-title">Ваш запрос на коммерческое предложение</h2>
+
+    <div class="modal-section">
+      <div class="modal-label">Рекомендуемая модель:</div>
+      <div class="modal-value" id="modal-model"></div>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-label">Выбранные параметры:</div>
+      <table class="params-table">
+        <tr><td>Тип упаковки</td><td id="modal-pack">—</td></tr>
+        <tr><td>Тип продукта</td><td id="modal-product">—</td></tr>
+        <tr><td>Скорость</td><td id="modal-speed">—</td></tr>
+        <tr><td>Режим работы</td><td id="modal-mode">—</td></tr>
+        <tr><td>Дополнительно</td><td id="modal-extras">—</td></tr>
+      </table>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-label">Ваши контакты:</div>
+      <div class="form-group">
+        <input type="text" id="contact-name" placeholder="Имя" required>
+      </div>
+      <div class="form-group">
+        <input type="text" id="contact-company" placeholder="Компания" required>
+      </div>
+      <div class="form-group">
+        <input type="tel" id="contact-phone" placeholder="Телефон" required>
+      </div>
+    </div>
+
+    <button class="btn-submit" onclick="submitRequest()">Отправить запрос</button>
+  </div>
+</div>
+
+<script>
+const MODELS = {
+  YAFOR_450SKM: {
+    name: 'YAFOR 450SKM',
+    tag: 'Полуавтоматический запайщик лотков',
+    feats: [
+      'Формат лотка до 410×280 мм',
+      'Вакуум и MAP — в базовой комплектации',
+      'Ручная укладка продукта оператором',
+      'Термоусадочная и барьерная плёнка',
+      'Механическая и вакуумная запайка',
+      'Нержавеющая сталь, пищевое исполнение',
+    ],
+    specs: [['Скорость','до 6 циклов/мин'],['Формат лотка','до 410×280 мм'],['Упаковка','вакуум, MAP'],['Тип','полуавтомат']],
+  },
+  YAFOR_450VSP: {
+    name: 'YAFOR 450VSP',
+    tag: 'Полуавтомат — вакуумная кожа (SKIN)',
+    feats: [
+      'SKIN-упаковка: плёнка плотно облегает продукт',
+      'Вакуум, MAP и SKIN в одной машине',
+      'Улучшенная презентация мяса и рыбы',
+      'Формат лотка до 410×280 мм',
+      'Барьерная SKIN-плёнка',
+      'Увеличенный срок хранения до 21 суток',
+    ],
+    specs: [['Скорость','до 6 циклов/мин'],['Формат лотка','до 410×280 мм'],['Упаковка','вакуум, MAP, SKIN'],['Тип','полуавтомат']],
+  },
+  YATRAY500: {
+    name: 'YATRAY500',
+    tag: 'Полуавтомат расширенного формата',
+    feats: [
+      'Увеличенный формат лотка до 500×400 мм',
+      'Вакуум и MAP',
+      'Подходит для крупных порций и ГП',
+      'Быстрая смена инструмента',
+      'Нержавеющая сталь AISI 304',
+      'Простое обслуживание',
+    ],
+    specs: [['Скорость','до 8 циклов/мин'],['Формат лотка','до 500×400 мм'],['Упаковка','вакуум, MAP'],['Тип','полуавтомат']],
+  },
+  TSA620VG: {
+    name: 'TSA620VG',
+    tag: 'Inline автомат — средняя производительность',
+    feats: [
+      'Конвейерная подача — непрерывный поток лотков',
+      'Вакуум, MAP и SKIN в одной машине',
+      'Ширина ленты 620 мм — до 4 лотков в ряд',
+      'Автоматическая подача и рез плёнки',
+      'Интеграция с этикетировщиком DIBAL',
+      'IP65 — полная мойка в цеху',
+    ],
+    specs: [['Скорость','до 30 лотков/мин'],['Ширина ленты','620 мм'],['Упаковка','вакуум, MAP, SKIN'],['Тип','inline автомат']],
+  },
+  TSA1000VG: {
+    name: 'TSA1000VG',
+    tag: 'Inline автомат — высокая производительность',
+    feats: [
+      'До 72 лотков/мин — для крупных производств',
+      'Ширина ленты 1000 мм — до 6 лотков в ряд',
+      'Вакуум, MAP, SKIN — полный спектр упаковки',
+      'Автоматическая подача лотков и плёнки',
+      'Интеграция с линией этикетирования DIBAL',
+      'Централизованный сенсорный HMI',
+    ],
+    specs: [['Скорость','до 72 лотков/мин'],['Ширина ленты','1000 мм'],['Упаковка','вакуум, MAP, SKIN'],['Тип','inline автомат']],
+  }
+};
+
+const PRODUCT_LABELS = {
+  meat: 'Мясо / птица',
+  fish: 'Рыба / морепродукты',
+  cheese: 'Сыр / деликатесы',
+  ready: 'Готовые блюда',
+  veggies: 'Овощи / фрукты',
+  other: 'Другое',
+};
+
+const SPEED_LABELS = {
+  low: 'До 15 лотков/мин',
+  mid: '15 – 40 лотков/мин',
+  high: '40 – 72 лотков/мин',
+};
+
+const MODE_LABELS = {
+  semi: 'Полуавтомат',
+  inline: 'Inline автомат',
+};
+
+const OPTION_LABELS = {
+  'map-block': 'Газовая смесь MAP',
+  'labeler': 'Встроенный этикетировщик',
+  'perf': 'Перфорация крышки',
+  'dater': 'Датировщик',
+  'auto-film': 'Автоматическая подача плёнки',
+};
+
+let state = {
+  packs: [],
+  product: null,
+  speed: null,
+  mode: null,
+  options: [],
+};
+
+// Event listeners
+document.querySelectorAll('#pack-group .pill').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const pack = btn.dataset.pack;
+    if (state.packs.includes(pack)) {
+      state.packs = state.packs.filter(p => p !== pack);
+    } else {
+      state.packs.push(pack);
+    }
+    updatePackPills();
+    updateResult();
+  });
+});
+
+document.querySelectorAll('#product-group .pill').forEach(btn => {
+  btn.addEventListener('click', () => {
+    state.product = state.product === btn.dataset.product ? null : btn.dataset.product;
+    updateProductPills();
+    updateResult();
+  });
+});
+
+document.querySelectorAll('#speed-group button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    state.speed = state.speed === btn.dataset.speed ? null : btn.dataset.speed;
+    updateSpeedButtons();
+    updateResult();
+  });
+});
+
+document.querySelectorAll('#mode-group button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    state.mode = state.mode === btn.dataset.mode ? null : btn.dataset.mode;
+    updateModeButtons();
+    updateResult();
+  });
+});
+
+document.querySelectorAll('.checkbox-item input').forEach(checkbox => {
+  checkbox.addEventListener('change', () => {
+    const opt = checkbox.dataset.opt;
+    if (checkbox.checked) {
+      state.options.push(opt);
+    } else {
+      state.options = state.options.filter(o => o !== opt);
+    }
+    updateResult();
+  });
+});
+
+function updatePackPills() {
+  document.querySelectorAll('#pack-group .pill').forEach(btn => {
+    if (state.packs.includes(btn.dataset.pack)) {
+      btn.classList.add('active');
+    } else {
+      btn.classList.remove('active');
+    }
+  });
+}
+
+function updateProductPills() {
+  document.querySelectorAll('#product-group .pill').forEach(btn => {
+    btn.classList.toggle('active', state.product === btn.dataset.product);
+  });
+}
+
+function updateSpeedButtons() {
+  document.querySelectorAll('#speed-group button').forEach(btn => {
+    btn.classList.toggle('active', state.speed === btn.dataset.speed);
+  });
+}
+
+function updateModeButtons() {
+  document.querySelectorAll('#mode-group button').forEach(btn => {
+    btn.classList.toggle('active', state.mode === btn.dataset.mode);
+  });
+}
+
+function selectModel() {
+  if (!state.mode || !state.speed) {
+    return null;
+  }
+
+  if (state.mode === 'semi' || state.speed === 'low') {
+    if (state.packs.includes('skin')) {
+      return 'YAFOR_450VSP';
+    }
+    if (state.product === 'cheese' || state.product === 'ready') {
+      return 'YATRAY500';
+    }
+    return 'YAFOR_450SKM';
+  }
+
+  if (state.mode === 'inline' && state.speed === 'mid') {
+    return 'TSA620VG';
+  }
+
+  if (state.mode === 'inline' && state.speed === 'high') {
+    return 'TSA1000VG';
+  }
+
+  if (state.mode === 'inline' && state.speed === 'low') {
+    return 'TSA620VG';
+  }
+
+  return null;
+}
+
+function updateResult() {
+  const modelKey = selectModel();
+  const resultDiv = document.getElementById('result-content');
+
+  if (!modelKey) {
+    resultDiv.innerHTML = `
+      <div class="empty-state">
+        Выберите параметры<br>слева, чтобы увидеть<br>рекомендуемую модель
+      </div>
+    `;
+    return;
+  }
+
+  const model = MODELS[modelKey];
+
+  let extrasHtml = '';
+  if (state.options.length > 0) {
+    extrasHtml = `
+      <div class="extras-tags">
+        ${state.options.map(opt => `<span class="tag addon">${OPTION_LABELS[opt]}</span>`).join('')}
+      </div>
+    `;
+  }
+
+  const html = `
+    <div class="model-header">
+      <div class="model-name">${model.name}</div>
+      <div class="model-tag">${model.tag}</div>
+    </div>
+    <div class="features">
+      ${model.feats.map(f => `<div class="feature-item">${f}</div>`).join('')}
+    </div>
+    <table class="specs-table">
+      ${model.specs.map(([key, val]) => `<tr><td>${key}</td><td>${val}</td></tr>`).join('')}
+    </table>
+    ${extrasHtml}
+    <button class="btn-cta" onclick="openModal('${modelKey}')">Сформировать запрос на КП</button>
+  `;
+
+  resultDiv.innerHTML = html;
+}
+
+function openModal(modelKey) {
+  const model = MODELS[modelKey];
+
+  document.getElementById('modal-model').textContent = model.name;
+
+  const packLabels = state.packs.join(', ');
+  document.getElementById('modal-pack').textContent = packLabels || '—';
+  document.getElementById('modal-product').textContent = PRODUCT_LABELS[state.product] || '—';
+  document.getElementById('modal-speed').textContent = SPEED_LABELS[state.speed] || '—';
+  document.getElementById('modal-mode').textContent = MODE_LABELS[state.mode] || '—';
+
+  const extrasLabel = state.options.length > 0 ? state.options.map(o => OPTION_LABELS[o]).join(', ') : '—';
+  document.getElementById('modal-extras').textContent = extrasLabel;
+
+  document.getElementById('kp-modal').classList.add('active');
+}
+
+function closeModal() {
+  document.getElementById('kp-modal').classList.remove('active');
+  document.getElementById('contact-name').value = '';
+  document.getElementById('contact-company').value = '';
+  document.getElementById('contact-phone').value = '';
+}
+
+function submitRequest() {
+  const name = document.getElementById('contact-name').value.trim();
+  const company = document.getElementById('contact-company').value.trim();
+  const phone = document.getElementById('contact-phone').value.trim();
+
+  if (!name || !company || !phone) {
+    alert('Пожалуйста, заполните все поля контактной информации');
+    return;
+  }
+
+  const modelKey = selectModel();
+  const model = MODELS[modelKey];
+
+  const message = `Запрос на КП:
+Модель: ${model.name}
+Имя: ${name}
+Компания: ${company}
+Телефон: ${phone}
+Тип упаковки: ${state.packs.join(', ')}
+Продукт: ${PRODUCT_LABELS[state.product]}
+Скорость: ${SPEED_LABELS[state.speed]}
+Режим: ${MODE_LABELS[state.mode]}
+Опции: ${state.options.map(o => OPTION_LABELS[o]).join(', ') || '—'}`;
+
+  alert('Ваш запрос принят!\n\n' + message);
+  closeModal();
+}
+
+// Close modal when clicking outside
+document.getElementById('kp-modal').addEventListener('click', (e) => {
+  if (e.target.id === 'kp-modal') {
+    closeModal();
+  }
+});
+
+updateResult();
+</script>
+
+</body>
+</html>
