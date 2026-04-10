@@ -33,39 +33,6 @@
     }
 
     /* Header */
-    header {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      background: var(--blue);
-      color: white;
-      padding: 1rem 2rem;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    }
-
-    .header-content {
-      max-width: 1400px;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-    }
-
-    .logo {
-      font-size: 1.8rem;
-      font-weight: bold;
-      letter-spacing: 0.05em;
-    }
-
-    .logo .orange {
-      color: var(--orange);
-    }
-
-    .header-subtitle {
-      font-size: 0.9rem;
-      opacity: 0.9;
-      margin-left: auto;
-    }
 
     /* Main layout */
     .container {
@@ -185,11 +152,7 @@
       border: 2px solid var(--blue-l);
     }
 
-    .model-header {
-      margin-bottom: 1rem;
-      border-bottom: 2px solid var(--blue-p);
-      padding-bottom: 1rem;
-    }
+    .model-
 
     .model-name {
       font-size: 1.4rem;
@@ -422,14 +385,56 @@
     .close-modal:hover {
       color: var(--text);
     }
+      header {
+      background: var(--blue, #1F4E79);
+      color: white;
+      padding: 18px 32px;
+      box-shadow: 0 2px 8px rgba(0,0,0,.15);
+    }
+    .header-content {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .header-subtitle {
+      font-size: 1rem;
+      font-weight: 600;
+      opacity: 0.95;
+    }
+    .header-badge {
+      margin-left: auto;
+      font-size: 0.78rem;
+      opacity: 0.65;
+      font-style: italic;
+    }
   </style>
 </head>
 <body>
 
+<div style="position:sticky;top:0;z-index:9999;background:#1F4E79;padding:7px 20px;display:flex;align-items:center;gap:14px;font-family:'Segoe UI',Arial,sans-serif;box-shadow:0 2px 8px rgba(0,0,0,.25);">
+  <img src="logo-mini.png" alt="ЯФОР" style="height:36px;width:auto;flex-shrink:0;filter:brightness(0) invert(1);">
+  <a href="index.html"
+     style="display:inline-flex;align-items:center;gap:7px;color:rgba(255,255,255,.88);font-size:.84rem;font-weight:700;text-decoration:none;padding:6px 14px;border-radius:7px;border:1.5px solid rgba(255,255,255,.28);transition:all .2s;"
+     onmouseover="this.style.background='rgba(255,255,255,.14)';this.style.color='#fff';this.style.borderColor='rgba(255,255,255,.6)'"
+     onmouseout="this.style.background='transparent';this.style.color='rgba(255,255,255,.88)';this.style.borderColor='rgba(255,255,255,.28)'">
+    ← На главную
+  </a>
+  <span style="color:rgba(255,255,255,.3);font-size:.9rem;user-select:none;">|</span>
+  <span style="color:rgba(255,255,255,.55);font-size:.82rem;font-weight:500;letter-spacing:.2px;">www.yaforys.ru</span>
+  <div style="flex:1;"></div>
+  <a href="index.html#calculators"
+     style="color:rgba(255,255,255,.55);font-size:.78rem;text-decoration:none;"
+     onmouseover="this.style.color='rgba(255,255,255,.9)'"
+     onmouseout="this.style.color='rgba(255,255,255,.55)'">
+    Все конфигураторы
+  </a>
+</div>
 <header>
   <div class="header-content">
-    <div class="logo">ЯФО<span class="orange">Р</span></div>
     <div class="header-subtitle">Конфигуратор запайщика лотков</div>
+    <div class="header-badge">Подбор оборудования · Запрос КП</div>
   </div>
 </header>
 
