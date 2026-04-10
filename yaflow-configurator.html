@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Конфигуратор флоу-пак ЯFLOW — ЯФОР</title>
+<link rel="icon" type="image/png" href="icon.png">
+<style>
+  :root {
+    --blue:    #1F4E79;
+    --blue-m:  #2E75B6;
+    --blue-l:  #D6E4F0;
+    --blue-p:  #EEF4FB;
+    --orange:  #C55A11;
+    --orange-p:#FCE4D6;
+    --green:   #1E6B3C;
+    --green-p: #E2EFDA;
+    --grey:    #444;
+    --grey-l:  #F5F7FA;
+    --white:   #fff;
+    --shadow:  0 2px 12px rgba(31,78,121,.10);
+    --r: 10px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; background: #EBF2FA; color: var(--grey); min-height: 100vh; }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--blue);
+    color: #fff;
+    padding: 18px 32px;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.18);
+  }
+  header .title-block h1 { font-size: 18px; font-weight: 700; }
+  header .title-block p  { font-size: 13px; opacity: .75; margin-top: 2px; }
+
+  /* ── LAYOUT ── */
+  .wrap {
+    max-width: 1120px;
+    margin: 28px auto;
+    padding: 0 16px;
+    display: grid;
+    grid-template-columns: 1fr 360px;
+    gap: 22px;
+    align-items: start;
+  }
+
+  /* ── CARDS ── */
+  .card {
+    background: var(--white);
+    border-radius: var(--r);
+    padding: 20px 24px;
+    box-shadow: var(--shadow);
+    margin-bottom: 16px;
+    border: 1.5px solid transparent;
+    transition: border-color .2s;
+  }
+  .card.answered { border-color: var(--blue-l); }
+  .card-title {
+    font-size: 14px; font-weight: 700; color: var(--blue);
+    display: flex; align-items: center; gap: 10px; margin-bottom: 14px;
+  }
+  .step-badge {
+    background: var(--blue); color: #fff;
+    border-radius: 50%; width: 24px; height: 24px;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700; flex-shrink: 0;
+  }
+  .card.answered .step-badge { background: var(--green); }
+  .card-sub { font-size: 12px; color: #888; margin-top: -10px; margin-bottom: 14px; margin-left: 34px; }
+
+  /* ── PILLS ── */
+  .pill-grid { display: flex; flex-wrap: wrap; gap: 10px; }
+  .pill {
+    display: flex; align-items: center; gap: 9px;
+    border: 2px solid var(--blue-l); border-radius: 8px;
+    padding: 10px 14px; cursor: pointer; transition: all .15s;
+    background: var(--white); flex: 1; min-width: 140px;
+  }
+  .pill:hover { border-color: var(--blue-m); background: var(--blue-p); }
+  .pill.active { border-color: var(--blue); background: var(--blue-p); }
+  .pill-icon { font-size: 20px; flex-shrink: 0; }
+  .pill-name { font-size: 13px; font-weight: 700; color: var(--blue); }
+  .pill-hint { font-size: 11px; color: #888; margin-top: 2px; }
+
+  /* ── SIZE BUTTONS ── */
+  .size-btn-grid { display: flex; gap: 10px; flex-wrap: wrap; }
+  .size-btn {
+    border: 2px solid var(--blue-l); border-radius: 8px;
+    padding: 10px 18px; cursor: pointer; background: var(--white);
+    font-size: 13px; font-weight: 600; color: var(--blue);
+    transition: all .15s; text-align: center;
+  }
+  .size-btn:hover { border-color: var(--blue-m); background: var(--blue-p); }
+  .size-btn.active { border-color: var(--blue); background: var(--blue-p); }
+  .size-hint { font-size: 11px; color: #888; margin-top: 3px; }
+
+  /* ── EXTRAS ── */
+  .extra-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .extra {
+    display: flex; align-items: center; gap: 10px;
+    border: 2px solid var(--blue-l); border-radius: 8px;
+    padding: 10px 12px; cursor: pointer; transition: all .15s; background: var(--white);
+  }
+  .extra:hover { border-color: var(--blue-m); background: var(--blue-p); }
+  .extra.active { border-color: var(--blue); background: var(--blue-p); }
+  .extra-check {
+    width: 18px; height: 18px; border: 2px solid #bbb; border-radius: 4px;
+    flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+    transition: all .15s;
+  }
+  .extra.active .extra-check { background: var(--blue); border-color: var(--blue); }
+  .extra.active .extra-check::after { content: '✓'; color: #fff; font-size: 11px; font-weight: 700; }
+  .extra-icon { font-size: 18px; }
+  .extra-name { font-size: 12px; font-weight: 700; color: var(--blue); }
+  .extra-desc { font-size: 11px; color: #888; margin-top: 2px; }
+
+  /* ── RIGHT PANEL ── */
+  .right-wrap { position: sticky; top: 120px; }
+  .result-panel {
+    background: var(--blue);
+    border-radius: var(--r);
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(31,78,121,.2);
+  }
+  .result-head {
+    padding: 16px 18px;
+    border-bottom: 1px solid rgba(255,255,255,.15);
+  }
+  .result-label {
+    font-size: 10px; font-weight: 700; letter-spacing: 1px;
+    color: rgba(255,255,255,.6); text-transform: uppercase; margin-bottom: 4px;
+  }
+  .result-model {
+    font-size: 22px; font-weight: 900; color: #fff;
+  }
+  .result-model.empty { font-size: 15px; font-weight: 600; color: rgba(255,255,255,.7); }
+  .result-body { padding: 16px 18px; }
+  .result-desc { font-size: 12.5px; color: rgba(255,255,255,.8); margin-bottom: 14px; line-height: 1.5; }
+
+  .spec-row {
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 12px; padding: 5px 0; border-bottom: 1px solid rgba(255,255,255,.1);
+    color: rgba(255,255,255,.75);
+  }
+  .spec-row b { color: #fff; font-weight: 600; }
+  .spec-row:last-child { border-bottom: none; }
+
+  .extras-row { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 5px; }
+  .extra-tag {
+    background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.2);
+    border-radius: 5px; padding: 3px 8px; font-size: 11px; color: rgba(255,255,255,.85);
+  }
+
+  .why-box {
+    background: rgba(30,107,60,.3); border: 1px solid rgba(30,107,60,.5);
+    border-radius: 7px; padding: 8px 12px; font-size: 11.5px;
+    color: #a8e6c0; margin-top: 12px; line-height: 1.4;
+  }
+  .why-box::before { content: '✓ '; font-weight: 700; }
+
+  .empty-state { text-align: center; padding: 28px 16px; }
+  .empty-icon { font-size: 36px; margin-bottom: 8px; }
+  .empty-text { font-size: 13px; color: rgba(255,255,255,.65); line-height: 1.5; }
+
+  .btn-kp {
+    width: 100%; padding: 14px;
+    background: var(--orange); color: #fff; border: none;
+    border-radius: 8px; font-size: 14px; font-weight: 700;
+    cursor: pointer; margin-top: 16px;
+    transition: background .2s; box-shadow: 0 3px 10px rgba(197,90,17,.35);
+  }
+  .btn-kp:hover { background: #a84a0f; }
+  .btn-kp:disabled { background: rgba(255,255,255,.2); color: rgba(255,255,255,.4); cursor: not-allowed; box-shadow: none; }
+  .btn-footer { font-size: 11px; color: rgba(255,255,255,.4); text-align: center; margin-top: 8px; }
+
+  /* ── MODAL ── */
+  .modal-bg {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,.5); z-index: 500;
+    align-items: center; justify-content: center; padding: 20px;
+  }
+  .modal-bg.open { display: flex; }
+  .modal {
+    background: #fff; border-radius: 12px;
+    width: 100%; max-width: 520px;
+    overflow: hidden; box-shadow: 0 8px 40px rgba(0,0,0,.25);
+  }
+  .modal-hd {
+    background: var(--blue); padding: 18px 22px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .modal-hd h3 { color: #fff; font-size: 16px; font-weight: 700; }
+  .modal-close { color: rgba(255,255,255,.7); font-size: 20px; cursor: pointer; background: none; border: none; }
+  .modal-body { padding: 20px 22px; }
+  .summary-tbl { width: 100%; border-collapse: collapse; margin-bottom: 16px; font-size: 13px; }
+  .summary-tbl td { padding: 6px 10px; border-bottom: 1px solid var(--blue-l); }
+  .summary-tbl td:first-child { color: #888; width: 50%; }
+  .summary-tbl td:last-child { font-weight: 600; color: var(--blue); }
+  .form-label { font-size: 12px; font-weight: 600; color: var(--grey); margin-bottom: 4px; }
+  .form-input {
+    width: 100%; border: 1.5px solid var(--blue-l); border-radius: 7px;
+    padding: 9px 12px; font-size: 13px; font-family: inherit;
+    outline: none; transition: border .15s; margin-bottom: 10px;
+  }
+  .form-input:focus { border-color: var(--blue-m); }
+  .modal-footer {
+    display: flex; gap: 10px; padding: 14px 22px;
+    border-top: 1.5px solid var(--blue-l);
+  }
+  .btn-send {
+    flex: 1; background: var(--orange); color: #fff; border: none;
+    border-radius: 8px; padding: 12px; font-size: 14px; font-weight: 700; cursor: pointer;
+  }
+  .btn-cancel {
+    background: transparent; color: var(--grey);
+    border: 1.5px solid var(--blue-l); border-radius: 8px;
+    padding: 12px 18px; font-size: 13px; cursor: pointer;
+  }
+  .modal-success { text-align: center; padding: 32px 22px; }
+  .modal-success .s-icon { font-size: 48px; margin-bottom: 12px; }
+  .modal-success h3 { font-size: 18px; font-weight: 700; color: var(--blue); margin-bottom: 8px; }
+  .modal-success p { font-size: 13px; color: #666; }
+
+  @media (max-width: 800px) {
+    .wrap { grid-template-columns: 1fr; }
+    .right-wrap { position: static; }
+    .extra-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── TOPBAR ─────────────────────────────── -->
+<div style="position:sticky;top:0;z-index:9999;background:#1F4E79;padding:7px 20px;display:flex;align-items:center;gap:14px;font-family:'Segoe UI',Arial,sans-serif;box-shadow:0 2px 8px rgba(0,0,0,.25);">
+  <img src="logo-mini.png" alt="ЯФОР" style="height:36px;width:auto;flex-shrink:0;filter:brightness(0) invert(1);">
+  <a href="index.html"
+     style="display:inline-flex;align-items:center;gap:7px;color:rgba(255,255,255,.88);font-size:.84rem;font-weight:700;text-decoration:none;padding:6px 14px;border-radius:7px;border:1.5px solid rgba(255,255,255,.28);transition:all .2s;"
+     onmouseover="this.style.background='rgba(255,255,255,.14)';this.style.color='#fff';this.style.borderColor='rgba(255,255,255,.6)'"
+     onmouseout="this.style.background='transparent';this.style.color='rgba(255,255,255,.88)';this.style.borderColor='rgba(255,255,255,.28)'">
+    ← На главную
+  </a>
+  <span style="color:rgba(255,255,255,.3);font-size:.9rem;user-select:none;">|</span>
+  <span style="color:rgba(255,255,255,.55);font-size:.82rem;font-weight:500;letter-spacing:.2px;">www.yaforys.ru</span>
+  <div style="flex:1;"></div>
+  <a href="index.html#calculators"
+     style="color:rgba(255,255,255,.55);font-size:.78rem;text-decoration:none;"
+     onmouseover="this.style.color='rgba(255,255,255,.9)'"
+     onmouseout="this.style.color='rgba(255,255,255,.55)'">
+    Все конфигураторы
+  </a>
+</div>
+
+<header>
+  <div class="title-block">
+    <h1>Конфигуратор флоу-пак ЯFLOW</h1>
+    <p>Настройте параметры — получите рекомендацию</p>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- ═══ ЛЕВАЯ КОЛОНКА ═══ -->
+  <div>
+
+    <!-- 1. ТИП ПРОДУКТА -->
+    <div class="card" id="c1">
+      <div class="card-title"><span class="step-badge">1</span>Тип упаковываемого продукта</div>
+      <div class="pill-grid" id="pills-type">
+        <div class="pill" data-val="tray" onclick="sel('type',this)">
+          <span class="pill-icon">🥗</span>
+          <div><div class="pill-name">Лоток с продуктом</div><div class="pill-hint">Овощи, зелень, салаты в подложке</div></div>
+        </div>
+        <div class="pill" data-val="snack" onclick="sel('type',this)">
+          <span class="pill-icon">🍫</span>
+          <div><div class="pill-name">Штучный / снэк</div><div class="pill-hint">Кондитерские изделия, батончики</div></div>
+        </div>
+        <div class="pill" data-val="sandwich" onclick="sel('type',this)">
+          <span class="pill-icon">🥪</span>
+          <div><div class="pill-name">Готовые блюда / сэндвичи</div><div class="pill-hint">Роллы, бургеры, выпечка</div></div>
+        </div>
+        <div class="pill" data-val="bulk" onclick="sel('type',this)">
+          <span class="pill-icon">🥬</span>
+          <div><div class="pill-name">Пучок / навал</div><div class="pill-hint">Зелень без подложки, нарезка</div></div>
+        </div>
+        <div class="pill" data-val="group" onclick="sel('type',this)">
+          <span class="pill-icon">📦</span>
+          <div><div class="pill-name">Групповая упаковка</div><div class="pill-hint">Несколько единиц в одном пакете</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. ШИРИНА ПЛЁНКИ (=ширина продукта) -->
+    <div class="card" id="c2">
+      <div class="card-title"><span class="step-badge">2</span>Максимальная ширина продукта</div>
+      <div class="card-sub">Определяет требуемую ширину сварки плёнки</div>
+      <div class="size-btn-grid" id="pills-width">
+        <div class="size-btn" data-val="narrow" onclick="sel('width',this)">
+          <div>до 210 мм</div><div class="size-hint">Снэки, батончики, маленькие лотки</div>
+        </div>
+        <div class="size-btn" data-val="mid" onclick="sel('width',this)">
+          <div>210–310 мм</div><div class="size-hint">Стандартные лотки, зелень</div>
+        </div>
+        <div class="size-btn" data-val="wide" onclick="sel('width',this)">
+          <div>310–430 мм</div><div class="size-hint">Крупные лотки, сэндвичи</div>
+        </div>
+        <div class="size-btn" data-val="xwide" onclick="sel('width',this)">
+          <div>430–480 мм</div><div class="size-hint">Широкий формат, BOX-MOTION</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. ПРОИЗВОДИТЕЛЬНОСТЬ -->
+    <div class="card" id="c3">
+      <div class="card-title"><span class="step-badge">3</span>Требуемая производительность</div>
+      <div class="pill-grid" id="pills-speed">
+        <div class="pill" data-val="low" onclick="sel('speed',this)">
+          <span class="pill-icon">🐢</span>
+          <div><div class="pill-name">до 30 уп/мин</div><div class="pill-hint">Малый объём, опытный участок</div></div>
+        </div>
+        <div class="pill" data-val="med" onclick="sel('speed',this)">
+          <span class="pill-icon">⚡</span>
+          <div><div class="pill-name">30–80 уп/мин</div><div class="pill-hint">Серийное производство</div></div>
+        </div>
+        <div class="pill" data-val="high" onclick="sel('speed',this)">
+          <span class="pill-icon">🚀</span>
+          <div><div class="pill-name">80–150 уп/мин</div><div class="pill-hint">Высокий темп, поточная линия</div></div>
+        </div>
+        <div class="pill" data-val="ultra" onclick="sel('speed',this)">
+          <span class="pill-icon">🏎️</span>
+          <div><div class="pill-name">Свыше 150 уп/мин</div><div class="pill-hint">Высокоскоростная линия</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. ПОДАЧА ПРОДУКТА -->
+    <div class="card" id="c4">
+      <div class="card-title"><span class="step-badge">4</span>Способ подачи продукта</div>
+      <div class="pill-grid" id="pills-feed">
+        <div class="pill" data-val="manual" onclick="sel('feed',this)">
+          <span class="pill-icon">🙋</span>
+          <div><div class="pill-name">Ручная загрузка</div><div class="pill-hint">Операторы раскладывают на конвейер</div></div>
+        </div>
+        <div class="pill" data-val="auto1" onclick="sel('feed',this)">
+          <span class="pill-icon">🤖</span>
+          <div><div class="pill-name">Автоподача AF</div><div class="pill-hint">1-лентовая, стабильный поток</div></div>
+        </div>
+        <div class="pill" data-val="auto5" onclick="sel('feed',this)">
+          <span class="pill-icon">🦾</span>
+          <div><div class="pill-name">Автоподача AFS</div><div class="pill-hint">5-лентовая, нестабильный поток</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. ДОПОБОРУДОВАНИЕ -->
+    <div class="card" id="c5">
+      <div class="card-title"><span class="step-badge">5</span>Дополнительное оборудование</div>
+      <div class="card-sub">Можно выбрать несколько</div>
+      <div class="extra-grid">
+        <div class="extra" id="ex-map" onclick="togExtra('map',this)">
+          <div class="extra-check"></div>
+          <span class="extra-icon">🌿</span>
+          <div><div class="extra-name">MAP-атмосфера</div><div class="extra-desc">CO₂ / N₂ — продление срока хранения</div></div>
+        </div>
+        <div class="extra" id="ex-printer" onclick="togExtra('printer',this)">
+          <div class="extra-check"></div>
+          <span class="extra-icon">🖨️</span>
+          <div><div class="extra-name">ТТ-принтер</div><div class="extra-desc">Печать даты, ШК, логотипа на плёнке</div></div>
+        </div>
+        <div class="extra" id="ex-label" onclick="togExtra('label',this)">
+          <div class="extra-check"></div>
+          <span class="extra-icon">🏷️</span>
+          <div><div class="extra-name">Принтер-аппликатор</div><div class="extra-desc">Этикетка с весом, ценой, ШК</div></div>
+        </div>
+        <div class="extra" id="ex-metal" onclick="togExtra('metal',this)">
+          <div class="extra-check"></div>
+          <span class="extra-icon">🔍</span>
+          <div><div class="extra-name">Металлодетектор</div><div class="extra-desc">Обязателен для сетевой розницы</div></div>
+        </div>
+        <div class="extra" id="ex-vacuum" onclick="togExtra('vacuum',this)">
+          <div class="extra-check"></div>
+          <span class="extra-icon">💨</span>
+          <div><div class="extra-name">Вакуумная упаковка</div><div class="extra-desc">Только для YAFLOW-500</div></div>
+        </div>
+        <div class="extra" id="ex-shrink" onclick="togExtra('shrink',this)">
+          <div class="extra-check"></div>
+          <span class="extra-icon">♨️</span>
+          <div><div class="extra-name">Термоусадка</div><div class="extra-desc">Для широких форматов 450TR / 500</div></div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /left -->
+
+  <!-- ═══ ПРАВАЯ КОЛОНКА ═══ -->
+  <div class="right-wrap">
+    <div class="result-panel">
+      <div class="result-head">
+        <div class="result-label">Рекомендуемая модель</div>
+        <div class="result-model empty" id="res-model">Выберите параметры</div>
+      </div>
+      <div class="result-body" id="res-body">
+        <div class="empty-state">
+          <div class="empty-icon">⚙️</div>
+          <div class="empty-text">Укажите тип продукта, ширину и производительность — конфигурация обновится автоматически</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /wrap -->
+
+<!-- ── MODAL КП ── -->
+<div class="modal-bg" id="modalBg">
+  <div class="modal">
+    <div class="modal-hd">
+      <h3>Запрос коммерческого предложения</h3>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body" id="modalBody">
+      <table class="summary-tbl" id="summaryTbl"></table>
+      <div class="form-label">Ваше имя *</div>
+      <input class="form-input" id="inp-name" placeholder="Иван Иванов">
+      <div class="form-label">Компания *</div>
+      <input class="form-input" id="inp-company" placeholder="ООО Мясокомбинат">
+      <div class="form-label">Телефон *</div>
+      <input class="form-input" id="inp-phone" placeholder="+7 (___) ___-__-__">
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeModal()">Отмена</button>
+      <button class="btn-send" onclick="sendKP()">Получить КП →</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── MODELS ──
+const MODELS = [
+  { id:'Y26',    name:'YAFLOW-26',    maxW:'narrow', speed:['low','med','high','ultra'], feed:['manual'],              map:false, vacuum:false, shrink:false, desc:'Высокоскоростная роторная машина до 220 уп/мин', sealing:'260 мм', display:'5.7"', best:['snack','group'] },
+  { id:'Y30',    name:'YAFLOW-30',    maxW:'mid',    speed:['low','med'],                feed:['manual'],              map:false, vacuum:false, shrink:false, desc:'Ручная загрузка, конвейер 6 м — оптимальная точка входа', sealing:'300 мм', display:'5.7"', best:['tray','bulk'] },
+  { id:'Y10P',   name:'YAFLOW-10P',   maxW:'mid',    speed:['low','med','high','ultra'], feed:['manual'],              map:false, vacuum:false, shrink:false, desc:'Расширенный конвейер 7 м, SINCRO-синхронизация', sealing:'300 мм', display:'5.7"', best:['tray','bulk'] },
+  { id:'Y30AF',  name:'YAFLOW-30AF',  maxW:'mid',    speed:['low','med','high','ultra'], feed:['manual','auto1'],      map:false, vacuum:false, shrink:false, desc:'1-лентовая автоподача, 12" дисплей, 100+ рецептур', sealing:'300 мм', display:'12"', best:['tray','bulk'] },
+  { id:'Y30AFS', name:'YAFLOW-30AFS', maxW:'mid',    speed:['low','med','high','ultra'], feed:['manual','auto1','auto5'], map:false, vacuum:false, shrink:false, desc:'5-лентовая автоподача для нестабильного потока', sealing:'300 мм', display:'12"', best:['tray','bulk'] },
+  { id:'Y450TR', name:'YAFLOW-450TR', maxW:'wide',   speed:['low','med'],               feed:['manual'],              map:true,  vacuum:false, shrink:true,  desc:'Широкий формат до 430 мм, MAP, BOX-MOTION, термоусадка', sealing:'450 мм', display:'10"', best:['sandwich','tray'] },
+  { id:'Y500',   name:'YAFLOW-500',   maxW:'xwide',  speed:['low','med'],               feed:['manual'],              map:true,  vacuum:true,  shrink:true,  desc:'Максимальный формат 480 мм — вакуум, MAP, термоусадка', sealing:'500 мм', display:'10"', best:['bulk','tray','sandwich'] },
+];
+
+const WIDTH_ORDER = ['narrow','mid','wide','xwide'];
+
+const A = { type:null, width:null, speed:null, feed:null, extras: new Set() };
+
+function sel(key, el) {
+  const grid = el.closest('[id^="pills-"]');
+  grid.querySelectorAll('.pill, .size-btn').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  A[key] = el.dataset.val;
+  el.closest('.card').classList.add('answered');
+  render();
+}
+
+function togExtra(key, el) {
+  el.classList.toggle('active');
+  if (A.extras.has(key)) A.extras.delete(key); else A.extras.add(key);
+  document.getElementById('c5').classList.add('answered');
+  render();
+}
+
+const EXTRA_NAMES = { map:'MAP-атмосфера', printer:'ТТ-принтер', label:'Принтер-аппликатор', metal:'Металлодетектор', vacuum:'Вакуумный модуль', shrink:'Термоусадка' };
+const SPEED_LABEL = { low:'до 30 уп/мин', med:'30–80 уп/мин', high:'80–150 уп/мин', ultra:'свыше 150 уп/мин' };
+const WIDTH_LABEL  = { narrow:'до 210 мм', mid:'210–310 мм', wide:'310–430 мм', xwide:'430–480 мм' };
+const FEED_LABEL   = { manual:'Ручная загрузка', auto1:'Автоподача AF (1-лентовая)', auto5:'Автоподача AFS (5-лентовая)' };
+const TYPE_LABEL   = { tray:'Лоток с продуктом', snack:'Штучный / снэк', sandwich:'Готовые блюда / сэндвичи', bulk:'Пучок / навал', group:'Групповая упаковка' };
+
+function render() {
+  if (!A.width && !A.speed && !A.type) return;
+
+  let candidates = MODELS.filter(m => {
+    if (A.width  && WIDTH_ORDER.indexOf(m.maxW) < WIDTH_ORDER.indexOf(A.width)) return false;
+    if (A.speed  && !m.speed.includes(A.speed))  return false;
+    if (A.feed   && !m.feed.includes(A.feed))     return false;
+    if (A.extras.has('vacuum') && !m.vacuum)       return false;
+    return true;
+  });
+
+  if (!candidates.length) {
+    document.getElementById('res-model').className = 'result-model empty';
+    document.getElementById('res-model').textContent = 'Уточните параметры';
+    document.getElementById('res-body').innerHTML = '<div class="empty-state"><div class="empty-icon">⚠️</div><div class="empty-text">Нет модели, удовлетворяющей всем требованиям. Попробуйте изменить параметры или запросите КП — менеджер подберёт решение.</div></div>';
+    return;
+  }
+
+  // Sort: prefer best-match type first, then narrowest suitable width
+  candidates.sort((a, b) => {
+    const aB = A.type && a.best.includes(A.type) ? 0 : 1;
+    const bB = A.type && b.best.includes(A.type) ? 0 : 1;
+    if (aB !== bB) return aB - bB;
+    return WIDTH_ORDER.indexOf(a.maxW) - WIDTH_ORDER.indexOf(b.maxW);
+  });
+
+  const m = candidates[0];
+  document.getElementById('res-model').className = 'result-model';
+  document.getElementById('res-model').textContent = m.name;
+
+  const extraTags = [...A.extras].map(e => `<span class="extra-tag">${EXTRA_NAMES[e]}</span>`).join('');
+
+  let specRows = `
+    <div class="spec-row"><span>Ширина сварки</span><b>${m.sealing}</b></div>
+    <div class="spec-row"><span>Дисплей</span><b>${m.display}</b></div>
+    <div class="spec-row"><span>Подача</span><b>${m.feed.map(f=>FEED_LABEL[f]).join(' / ')}</b></div>
+  `;
+  if (m.map)    specRows += `<div class="spec-row"><span>MAP-атмосфера</span><b>✓</b></div>`;
+  if (m.vacuum) specRows += `<div class="spec-row"><span>Вакуум</span><b>✓</b></div>`;
+  if (m.shrink) specRows += `<div class="spec-row"><span>Термоусадка</span><b>✓</b></div>`;
+
+  document.getElementById('res-body').innerHTML = `
+    <div class="result-desc">${m.desc}</div>
+    ${specRows}
+    ${extraTags ? `<div class="extras-row">${extraTags}</div>` : ''}
+    <div class="why-box">${m.desc}</div>
+    <button class="btn-kp" onclick="openModal()">Запросить КП →</button>
+    <div class="btn-footer">Менеджер свяжется в течение 2 часов</div>
+  `;
+}
+
+function openModal() {
+  const rows = [
+    ['Модель', document.getElementById('res-model').textContent],
+    A.type  ? ['Тип продукта', TYPE_LABEL[A.type]]   : null,
+    A.width ? ['Ширина продукта', WIDTH_LABEL[A.width]] : null,
+    A.speed ? ['Производительность', SPEED_LABEL[A.speed]] : null,
+    A.feed  ? ['Подача', FEED_LABEL[A.feed]]            : null,
+    A.extras.size ? ['Допоборудование', [...A.extras].map(e=>EXTRA_NAMES[e]).join(', ')] : null,
+  ].filter(Boolean);
+  document.getElementById('summaryTbl').innerHTML = rows.map(([k,v]) =>
+    `<tr><td>${k}</td><td>${v}</td></tr>`).join('');
+  document.getElementById('modalBg').classList.add('open');
+}
+
+function closeModal() { document.getElementById('modalBg').classList.remove('open'); }
+
+function sendKP() {
+  const name = document.getElementById('inp-name').value.trim();
+  const company = document.getElementById('inp-company').value.trim();
+  const phone = document.getElementById('inp-phone').value.trim();
+  if (!name || !phone) { alert('Пожалуйста, укажите имя и телефон'); return; }
+  document.querySelector('.modal-body').innerHTML = '';
+  document.querySelector('.modal-footer').innerHTML = '';
+  document.querySelector('.modal-hd h3').textContent = 'Заявка отправлена';
+  document.querySelector('.modal-body').innerHTML = `
+    <div class="modal-success">
+      <div class="s-icon">✅</div>
+      <h3>Спасибо, ${name}!</h3>
+      <p>Менеджер ЯФОР свяжется с вами в течение 2 рабочих часов по номеру <b>${phone}</b>.</p>
+    </div>`;
+  setTimeout(closeModal, 4000);
+}
+
+document.getElementById('modalBg').addEventListener('click', e => { if(e.target === e.currentTarget) closeModal(); });
+</script>
+</body>
+</html>
