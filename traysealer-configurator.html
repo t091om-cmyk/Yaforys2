@@ -36,9 +36,9 @@
 
     /* Main layout */
     .container {
-      max-width: 1200px;
+      max-width:1200px;
       margin: 0 auto;
-      padding: 2rem;
+      padding:0 24px;
       display: grid;
       grid-template-columns: 1fr 420px;
       gap: 2rem;
@@ -387,47 +387,28 @@
     }
   
   /* ── HEADER ── */
-  header {
-    background: #1F4E79;
-    color: #fff;
-    padding: 27px 32px;
-    display: flex;
-    align-items: center;
-    gap: 18px;
-    box-shadow: 0 2px 8px rgba(0,0,0,.18);
-  }
-  header .title-block h1 { font-size: 18px; font-weight: 700; }
-  header .title-block p  { font-size: 13px; opacity: .75; margin-top: 4px; }
+  
+  header { background:#1F4E79; color:#fff; padding:18px 32px; box-shadow:0 2px 8px rgba(0,0,0,.18); }
+  header .title-block h1 { font-size:18px; font-weight:700; }
+  header .title-block p  { font-size:13px; opacity:.75; margin-top:2px; }
   </style>
 </head>
 <body>
-<!-- ── TOPBAR ─────────────────────────────── -->
+<!-- TOPBAR -->
 <div style="position:sticky;top:0;z-index:9999;background:#1F4E79;padding:7px 20px;display:flex;align-items:center;gap:14px;font-family:'Segoe UI',Arial,sans-serif;box-shadow:0 2px 8px rgba(0,0,0,.25);">
   <img src="logo-mini.png" alt="ЯФОР" style="height:36px;width:auto;flex-shrink:0;filter:brightness(0) invert(1);">
-  <a href="index.html"
-     style="display:inline-flex;align-items:center;gap:7px;color:rgba(255,255,255,.88);font-size:.84rem;font-weight:700;text-decoration:none;padding:6px 14px;border-radius:7px;border:1.5px solid rgba(255,255,255,.28);transition:all .2s;"
-     onmouseover="this.style.background='rgba(255,255,255,.14)';this.style.color='#fff';this.style.borderColor='rgba(255,255,255,.6)'"
-     onmouseout="this.style.background='transparent';this.style.color='rgba(255,255,255,.88)';this.style.borderColor='rgba(255,255,255,.28)'">
-    ← На главную
-  </a>
-  <span style="color:rgba(255,255,255,.3);font-size:.9rem;user-select:none;">|</span>
-  <span style="color:rgba(255,255,255,.55);font-size:.82rem;font-weight:500;letter-spacing:.2px;">www.yaforys.ru</span>
-  <div style="flex:1;"></div>
-  <a href="index.html#calculators"
-     style="color:rgba(255,255,255,.55);font-size:.78rem;text-decoration:none;"
-     onmouseover="this.style.color='rgba(255,255,255,.9)'"
-     onmouseout="this.style.color='rgba(255,255,255,.55)'">
-    Все конфигураторы
-  </a>
+  <a href="index.html" style="display:inline-flex;align-items:center;gap:7px;color:rgba(255,255,255,.88);font-size:.84rem;font-weight:700;text-decoration:none;padding:6px 14px;border-radius:7px;border:1.5px solid rgba(255,255,255,.28);transition:all .2s;" onmouseover="this.style.background='rgba(255,255,255,.14)';this.style.color='#fff'" onmouseout="this.style.background='transparent';this.style.color='rgba(255,255,255,.88)'">← На главную</a>
+  <span style="color:rgba(255,255,255,.3);user-select:none;">|</span>
+  <span style="color:rgba(255,255,255,.55);font-size:.82rem;">www.yaforys.ru</span>
+  <div style="flex:1"></div>
+  <a href="index.html#calculators" style="color:rgba(255,255,255,.55);font-size:.78rem;text-decoration:none;" onmouseover="this.style.color='rgba(255,255,255,.9)'" onmouseout="this.style.color='rgba(255,255,255,.55)'">Все конфигураторы</a>
 </div>
-
 <header>
   <div class="title-block">
     <h1>Конфигуратор трейсилера</h1>
     <p>Настройте параметры — получите рекомендацию</p>
   </div>
 </header>
-</div>
 
 <a href="index.html#calculators"
      style="color:rgba(255,255,255,.55);font-size:.78rem;text-decoration:none;"
@@ -435,8 +416,13 @@
      onmouseout="this.style.color='rgba(255,255,255,.55)'">
     Все конфигураторы
   </a>
-</div>
 
+<a href="index.html#calculators"
+     style="color:rgba(255,255,255,.55);font-size:.78rem;text-decoration:none;"
+     onmouseover="this.style.color='rgba(255,255,255,.9)'"
+     onmouseout="this.style.color='rgba(255,255,255,.55)'">
+    Все конфигураторы
+  </a>
 
 <div class="container">
 
@@ -451,8 +437,7 @@
         <button class="pill" data-pack="map">MAP</button>
         <button class="pill" data-pack="skin">SKIN</button>
         <button class="pill" data-pack="atmos">Атмосфера</button>
-      </div>
-    </div>
+
 
     <!-- Section 2: Product type -->
     <div class="section">
@@ -464,8 +449,7 @@
         <button class="pill" data-product="ready">🥗 Готовые блюда</button>
         <button class="pill" data-product="veggies">🥬 Овощи / фрукты</button>
         <button class="pill" data-product="other">🍱 Другое</button>
-      </div>
-    </div>
+
 
     <!-- Section 3: Performance -->
     <div class="section">
@@ -474,8 +458,7 @@
         <button data-speed="low">До 15 лотков/мин<br><small>(малый цех)</small></button>
         <button data-speed="mid">15 – 40 лотков/мин<br><small>(средняя линия)</small></button>
         <button data-speed="high">40 – 72 лотков/мин<br><small>(высокоскоростная)</small></button>
-      </div>
-    </div>
+
 
     <!-- Section 4: Work mode -->
     <div class="section">
@@ -483,8 +466,7 @@
       <div class="btn-group" id="mode-group">
         <button data-mode="semi">Полуавтомат<br><small>(ручная укладка)</small></button>
         <button data-mode="inline">Inline автомат<br><small>(конвейерная подача)</small></button>
-      </div>
-    </div>
+
 
     <!-- Section 5: Additional options -->
     <div class="section">
@@ -493,27 +475,24 @@
         <div class="checkbox-item">
           <input type="checkbox" id="opt-map" data-opt="map-block">
           <label for="opt-map">Газовая смесь MAP (газовый блок)</label>
-        </div>
+
         <div class="checkbox-item">
           <input type="checkbox" id="opt-label" data-opt="labeler">
           <label for="opt-label">Встроенный этикетировщик</label>
-        </div>
+
         <div class="checkbox-item">
           <input type="checkbox" id="opt-perf" data-opt="perf">
           <label for="opt-perf">Перфорация крышки</label>
-        </div>
+
         <div class="checkbox-item">
           <input type="checkbox" id="opt-date" data-opt="dater">
           <label for="opt-date">Датировщик / нанесение даты</label>
-        </div>
+
         <div class="checkbox-item">
           <input type="checkbox" id="opt-film" data-opt="auto-film">
           <label for="opt-film">Автоматическая подача плёнки</label>
-        </div>
-      </div>
-    </div>
 
-  </div>
+
 
   <!-- RIGHT COLUMN -->
   <div class="right-panel">
@@ -521,12 +500,9 @@
       <div id="result-content">
         <div class="empty-state">
           Выберите параметры<br>слева, чтобы увидеть<br>рекомендуемую модель
-        </div>
-      </div>
-    </div>
-  </div>
 
-</div>
+
+
 
 <!-- КП Request Modal -->
 <div class="modal" id="kp-modal">
@@ -537,7 +513,6 @@
     <div class="modal-section">
       <div class="modal-label">Рекомендуемая модель:</div>
       <div class="modal-value" id="modal-model"></div>
-    </div>
 
     <div class="modal-section">
       <div class="modal-label">Выбранные параметры:</div>
@@ -548,24 +523,21 @@
         <tr><td>Режим работы</td><td id="modal-mode">—</td></tr>
         <tr><td>Дополнительно</td><td id="modal-extras">—</td></tr>
       </table>
-    </div>
 
     <div class="modal-section">
       <div class="modal-label">Ваши контакты:</div>
       <div class="form-group">
         <input type="text" id="contact-name" placeholder="Имя" required>
-      </div>
+
       <div class="form-group">
         <input type="text" id="contact-company" placeholder="Компания" required>
-      </div>
+
       <div class="form-group">
         <input type="tel" id="contact-phone" placeholder="Телефон" required>
-      </div>
-    </div>
+
 
     <button class="btn-submit" onclick="submitRequest()">Отправить запрос</button>
-  </div>
-</div>
+
 
 <script>
 const MODELS = {
@@ -788,7 +760,7 @@ function updateResult() {
     resultDiv.innerHTML = `
       <div class="empty-state">
         Выберите параметры<br>слева, чтобы увидеть<br>рекомендуемую модель
-      </div>
+
     `;
     return;
   }
@@ -800,7 +772,7 @@ function updateResult() {
     extrasHtml = `
       <div class="extras-tags">
         ${state.options.map(opt => `<span class="tag addon">${OPTION_LABELS[opt]}</span>`).join('')}
-      </div>
+
     `;
   }
 
@@ -808,10 +780,10 @@ function updateResult() {
     <div class="model-header">
       <div class="model-name">${model.name}</div>
       <div class="model-tag">${model.tag}</div>
-    </div>
+
     <div class="features">
       ${model.feats.map(f => `<div class="feature-item">${f}</div>`).join('')}
-    </div>
+
     <table class="specs-table">
       ${model.specs.map(([key, val]) => `<tr><td>${key}</td><td>${val}</td></tr>`).join('')}
     </table>

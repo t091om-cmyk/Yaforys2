@@ -65,7 +65,7 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#ECF0F5;color:#1a2a3a;mi
 .extra-info .extra-desc{font-size:11px;color:var(--grey);margin-top:2px;line-height:1.4}
 
 /* RESULT PANEL */
-.result-wrap{position:sticky;top: 120px}
+.result-wrap{position:sticky;top:88px}
 .result{background:var(--white);border-radius:var(--r);border:1.5px solid var(--border);box-shadow:var(--sh);overflow:hidden}
 .result-hd{background:var(--blue);padding:16px 18px}
 .result-hd-lbl{font-size:11px;font-weight:700;color:rgba(255,255,255,.65);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px}
@@ -136,47 +136,28 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#ECF0F5;color:#1a2a3a;mi
 }
   
   /* ── HEADER ── */
-  header {
-    background: #1F4E79;
-    color: #fff;
-    padding: 27px 32px;
-    display: flex;
-    align-items: center;
-    gap: 18px;
-    box-shadow: 0 2px 8px rgba(0,0,0,.18);
-  }
-  header .title-block h1 { font-size: 18px; font-weight: 700; }
-  header .title-block p  { font-size: 13px; opacity: .75; margin-top: 4px; }
+  
+  header { background:#1F4E79; color:#fff; padding:18px 32px; box-shadow:0 2px 8px rgba(0,0,0,.18); }
+  header .title-block h1 { font-size:18px; font-weight:700; }
+  header .title-block p  { font-size:13px; opacity:.75; margin-top:2px; }
   </style>
 </head>
 <body>
-<!-- ── TOPBAR ─────────────────────────────── -->
+<!-- TOPBAR -->
 <div style="position:sticky;top:0;z-index:9999;background:#1F4E79;padding:7px 20px;display:flex;align-items:center;gap:14px;font-family:'Segoe UI',Arial,sans-serif;box-shadow:0 2px 8px rgba(0,0,0,.25);">
   <img src="logo-mini.png" alt="ЯФОР" style="height:36px;width:auto;flex-shrink:0;filter:brightness(0) invert(1);">
-  <a href="index.html"
-     style="display:inline-flex;align-items:center;gap:7px;color:rgba(255,255,255,.88);font-size:.84rem;font-weight:700;text-decoration:none;padding:6px 14px;border-radius:7px;border:1.5px solid rgba(255,255,255,.28);transition:all .2s;"
-     onmouseover="this.style.background='rgba(255,255,255,.14)';this.style.color='#fff';this.style.borderColor='rgba(255,255,255,.6)'"
-     onmouseout="this.style.background='transparent';this.style.color='rgba(255,255,255,.88)';this.style.borderColor='rgba(255,255,255,.28)'">
-    ← На главную
-  </a>
-  <span style="color:rgba(255,255,255,.3);font-size:.9rem;user-select:none;">|</span>
-  <span style="color:rgba(255,255,255,.55);font-size:.82rem;font-weight:500;letter-spacing:.2px;">www.yaforys.ru</span>
-  <div style="flex:1;"></div>
-  <a href="index.html#calculators"
-     style="color:rgba(255,255,255,.55);font-size:.78rem;text-decoration:none;"
-     onmouseover="this.style.color='rgba(255,255,255,.9)'"
-     onmouseout="this.style.color='rgba(255,255,255,.55)'">
-    Все конфигураторы
-  </a>
+  <a href="index.html" style="display:inline-flex;align-items:center;gap:7px;color:rgba(255,255,255,.88);font-size:.84rem;font-weight:700;text-decoration:none;padding:6px 14px;border-radius:7px;border:1.5px solid rgba(255,255,255,.28);transition:all .2s;" onmouseover="this.style.background='rgba(255,255,255,.14)';this.style.color='#fff'" onmouseout="this.style.background='transparent';this.style.color='rgba(255,255,255,.88)'">← На главную</a>
+  <span style="color:rgba(255,255,255,.3);user-select:none;">|</span>
+  <span style="color:rgba(255,255,255,.55);font-size:.82rem;">www.yaforys.ru</span>
+  <div style="flex:1"></div>
+  <a href="index.html#calculators" style="color:rgba(255,255,255,.55);font-size:.78rem;text-decoration:none;" onmouseover="this.style.color='rgba(255,255,255,.9)'" onmouseout="this.style.color='rgba(255,255,255,.55)'">Все конфигураторы</a>
 </div>
-
 <header>
   <div class="title-block">
     <h1>Конфигуратор термоформера</h1>
-    <p>Соберите параметры — получите рекомендацию по модели и запросите КП</p>
+    <p>Настройте параметры — получите рекомендацию</p>
   </div>
 </header>
-</div>
 
 <a href="index.html#calculators"
      style="color:rgba(255,255,255,.55);font-size:.78rem;text-decoration:none;"
@@ -184,11 +165,6 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#ECF0F5;color:#1a2a3a;mi
      onmouseout="this.style.color='rgba(255,255,255,.55)'">
     Все конфигураторы
   </a>
-</div>
-
-
-</div>
-</div>
 
 <div class="layout">
 
@@ -205,31 +181,30 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#ECF0F5;color:#1a2a3a;mi
           <div class="pill-body">
             <div class="pill-name">Вакуум</div>
             <div class="pill-hint">Удаление воздуха, запайка</div>
-          </div>
-        </div>
+
+
         <div class="pill" data-val="map" onclick="togPack(this)">
           <span class="pill-icon">💨</span>
           <div class="pill-body">
             <div class="pill-name">MAP</div>
             <div class="pill-hint">Модифицированная атмосфера</div>
-          </div>
-        </div>
+
+
         <div class="pill" data-val="skin" onclick="togPack(this)">
           <span class="pill-icon">✨</span>
           <div class="pill-body">
             <div class="pill-name">SKIN</div>
             <div class="pill-hint">Плёнка облегает продукт</div>
-          </div>
-        </div>
+
+
         <div class="pill" data-val="atm" onclick="togPack(this)">
           <span class="pill-icon">🌫️</span>
           <div class="pill-body">
             <div class="pill-name">Атмосфера</div>
             <div class="pill-hint">Стандартная запайка</div>
-          </div>
-        </div>
-      </div>
-    </div>
+
+
+
 
     <!-- 2. ТИП ПРОДУКТА -->
     <div class="sect">
@@ -238,24 +213,23 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#ECF0F5;color:#1a2a3a;mi
       <div class="prod-pills" id="prod-pills">
         <div class="opt" data-val="meat" onclick="selOpt('prod','meat',this)">
           <div class="opt-icon">🥩</div><div class="opt-val">Мясо / птица</div>
-        </div>
+
         <div class="opt" data-val="fish" onclick="selOpt('prod','fish',this)">
           <div class="opt-icon">🐟</div><div class="opt-val">Рыба / морепродукты</div>
-        </div>
+
         <div class="opt" data-val="cheese" onclick="selOpt('prod','cheese',this)">
           <div class="opt-icon">🧀</div><div class="opt-val">Сыр / деликатесы</div>
-        </div>
+
         <div class="opt" data-val="ready" onclick="selOpt('prod','ready',this)">
           <div class="opt-icon">🍱</div><div class="opt-val">Готовые блюда</div>
-        </div>
+
         <div class="opt" data-val="veg" onclick="selOpt('prod','veg',this)">
           <div class="opt-icon">🥗</div><div class="opt-val">Овощи / фрукты</div>
-        </div>
+
         <div class="opt" data-val="other" onclick="selOpt('prod','other',this)">
           <div class="opt-icon">📦</div><div class="opt-val">Другое</div>
-        </div>
-      </div>
-    </div>
+
+
 
     <!-- 3. ШИРИНА ПЛЁНКИ -->
     <div class="sect">
@@ -266,19 +240,18 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#ECF0F5;color:#1a2a3a;mi
           <div class="opt-icon">📏</div>
           <div class="opt-val">до 320 мм</div>
           <div class="opt-hint">1–2 ячейки в ряд</div>
-        </div>
+
         <div class="opt" data-val="mid" onclick="selOpt('width','mid',this)">
           <div class="opt-icon">📐</div>
           <div class="opt-val">320 – 450 мм</div>
           <div class="opt-hint">2–4 ячейки в ряд</div>
-        </div>
+
         <div class="opt" data-val="wide" onclick="selOpt('width','wide',this)">
           <div class="opt-icon">🗂️</div>
           <div class="opt-val">более 450 мм</div>
           <div class="opt-hint">4–6 ячеек в ряд</div>
-        </div>
-      </div>
-    </div>
+
+
 
     <!-- 4. ГЛУБИНА ФОРМОВКИ -->
     <div class="sect">
@@ -289,19 +262,18 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#ECF0F5;color:#1a2a3a;mi
           <div class="opt-icon">🥤</div>
           <div class="opt-val">до 50 мм</div>
           <div class="opt-hint">Нарезка, тонкие продукты</div>
-        </div>
+
         <div class="opt" data-val="mid" onclick="selOpt('depth','mid',this)">
           <div class="opt-icon">🥣</div>
           <div class="opt-val">50 – 100 мм</div>
           <div class="opt-hint">Порционное мясо, рыба</div>
-        </div>
+
         <div class="opt" data-val="deep" onclick="selOpt('depth','deep',this)">
           <div class="opt-icon">🫕</div>
           <div class="opt-val">более 100 мм</div>
           <div class="opt-hint">Целые куски, готовые блюда</div>
-        </div>
-      </div>
-    </div>
+
+
 
     <!-- 5. ПРОИЗВОДИТЕЛЬНОСТЬ -->
     <div class="sect">
@@ -312,19 +284,18 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#ECF0F5;color:#1a2a3a;mi
           <div class="opt-icon">🐢</div>
           <div class="opt-val">до 6 цикл./мин</div>
           <div class="opt-hint">Малый цех</div>
-        </div>
+
         <div class="opt" data-val="mid" onclick="selOpt('speed','mid',this)">
           <div class="opt-icon">⚡</div>
           <div class="opt-val">6 – 12 цикл./мин</div>
           <div class="opt-hint">Средняя линия</div>
-        </div>
+
         <div class="opt" data-val="high" onclick="selOpt('speed','high',this)">
           <div class="opt-icon">🚀</div>
           <div class="opt-val">более 12 цикл./мин</div>
           <div class="opt-hint">Высокоскоростная</div>
-        </div>
-      </div>
-    </div>
+
+
 
     <!-- 6. ДОПОЛНИТЕЛЬНЫЕ ОПЦИИ -->
     <div class="sect">
@@ -339,9 +310,8 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#ECF0F5;color:#1a2a3a;mi
             <div class="extra-info">
               <div class="extra-name">Газовый блок MAP</div>
               <div class="extra-desc">Подача газовой смеси в упаковку: CO₂ + N₂ + O₂ — увеличение срока хранения до 21 суток</div>
-            </div>
-          </div>
-        </div>
+
+
 
         <div class="extra" data-val="label" onclick="togExtra(this)">
           <div class="extra-row">
@@ -350,9 +320,8 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#ECF0F5;color:#1a2a3a;mi
             <div class="extra-info">
               <div class="extra-name">Встроенный этикетировщик DIBAL</div>
               <div class="extra-desc">Нанесение этикетки в потоке — вес, цена, «Честный знак», EAN-13. Без отдельного оператора</div>
-            </div>
-          </div>
-        </div>
+
+
 
         <div class="extra" data-val="perf" onclick="togExtra(this)">
           <div class="extra-row">
@@ -361,9 +330,8 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#ECF0F5;color:#1a2a3a;mi
             <div class="extra-info">
               <div class="extra-name">Перфорация верхней плёнки</div>
               <div class="extra-desc">Easy-open: покупатель легко вскрывает упаковку. Добавляется к любому инструменту</div>
-            </div>
-          </div>
-        </div>
+
+
 
         <div class="extra" data-val="print" onclick="togExtra(this)">
           <div class="extra-row">
@@ -372,9 +340,8 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#ECF0F5;color:#1a2a3a;mi
             <div class="extra-info">
               <div class="extra-name">Датировщик / маркировка плёнки</div>
               <div class="extra-desc">Нанесение даты, партии, срока годности непосредственно на верхнюю плёнку в потоке</div>
-            </div>
-          </div>
-        </div>
+
+
 
         <div class="extra" data-val="loader" onclick="togExtra(this)">
           <div class="extra-row">
@@ -383,9 +350,8 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#ECF0F5;color:#1a2a3a;mi
             <div class="extra-info">
               <div class="extra-name">Автоматическая загрузка продукта</div>
               <div class="extra-desc">Робот-укладчик или конвейер автоподачи из трейсилера / слайсера — исключает ручной труд</div>
-            </div>
-          </div>
-        </div>
+
+
 
         <div class="extra" data-val="metal" onclick="togExtra(this)">
           <div class="extra-row">
@@ -394,12 +360,9 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#ECF0F5;color:#1a2a3a;mi
             <div class="extra-info">
               <div class="extra-name">Металлодетектор на выходе</div>
               <div class="extra-desc">Контроль готовой упаковки: Fe ≥ 1,5 мм, SUS ≥ 2,5 мм. С отбраковщиком или без</div>
-            </div>
-          </div>
-        </div>
 
-      </div>
-    </div>
+
+
 
   </div><!-- /left -->
 
@@ -410,15 +373,14 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#ECF0F5;color:#1a2a3a;mi
         <div class="result-hd-lbl">Рекомендуемая модель</div>
         <div class="r-name" id="r-name">Выберите параметры</div>
         <div class="r-tag" id="r-tag">← Заполните секции слева</div>
-      </div>
+
       <div class="result-body" id="r-body">
         <div class="empty-state">
           <div class="empty-icon">⚙️</div>
           <div class="empty-txt">Выберите тип упаковки и ширину плёнки — конфигурация обновится автоматически</div>
-        </div>
-      </div>
-    </div>
-  </div>
+
+
+
 
 </div><!-- /layout -->
 
@@ -428,34 +390,33 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#ECF0F5;color:#1a2a3a;mi
     <div class="modal-hd">
       <div class="modal-title">Запрос на коммерческое предложение</div>
       <button class="modal-close" onclick="closeModal()">×</button>
-    </div>
+
     <div class="modal-body">
       <div class="modal-section">
         <div class="modal-section-title">Выбранная конфигурация</div>
         <table class="summary-table" id="summary-table"></table>
-      </div>
+
       <div class="modal-section">
         <div class="modal-section-title">Контактные данные</div>
         <div class="form-row">
           <label class="form-label">Имя и фамилия</label>
           <input class="form-input" id="f-name" type="text" placeholder="Иван Иванов">
-        </div>
+
         <div class="form-row">
           <label class="form-label">Компания</label>
           <input class="form-input" id="f-company" type="text" placeholder="ООО «Мясокомбинат»">
-        </div>
+
         <div class="form-row">
           <label class="form-label">Телефон</label>
           <input class="form-input" id="f-phone" type="tel" placeholder="+7 (___) ___-__-__">
-        </div>
-      </div>
-    </div>
+
+
+
     <div class="modal-footer">
       <button class="btn-send" onclick="sendReq()">Отправить в ЯФОР</button>
       <button class="btn-cancel" onclick="closeModal()">Отмена</button>
-    </div>
-  </div>
-</div>
+
+
 
 <script>
 // ── STATE ──────────────────────────────────────────────────────────────
@@ -668,7 +629,7 @@ function render() {
     <ul class="res-feats">${model.feats.map(f => `<li class="res-feat">${f}</li>`).join('')}</ul>
     <div class="res-specs">
       ${model.specs.map(([l,v]) => `<div class="spec-row"><span class="spec-l">${l}</span><span class="spec-v">${v}</span></div>`).join('')}
-    </div>
+
     ${addonsHtml}
     <button class="res-cta" ${ctaReady ? '' : 'disabled'} onclick="openModal()">
       ${ctaReady ? 'Сформировать запрос на КП' : 'Заполните основные параметры'}
