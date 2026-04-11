@@ -17,9 +17,14 @@
 body{font-family:'Segoe UI',Arial,sans-serif;background:#ECF0F5;color:#1a2a3a;min-height:100vh}
 
 /* ─ HEADER ─ */
+.hd{background:var(--blue);padding:14px 28px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:100;box-shadow:0 2px 10px rgba(0,0,0,.25)}
+.hd-logo{font-size:22px;font-weight:900;color:#fff;letter-spacing:1px}
+.hd-logo span{color:var(--orange)}
+.hd-sub{font-size:12px;color:rgba(255,255,255,.6)}
+.hd-badge{margin-left:auto;background:rgba(255,255,255,.15);color:#fff;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px}
 
 /* ─ LAYOUT ─ */
-.layout{display:grid;grid-template-columns:1fr 340px;gap:20px;max-width:1200px;margin:24px auto;padding: 0 24px 60px;align-items:start}
+.layout{display:grid;grid-template-columns:1fr 340px;gap:20px;max-width:1200px;margin:24px auto;padding:0 24px 60px;align-items:start}
 
 /* ─ SECTION ─ */
 .sect{background:var(--white);border-radius:var(--r);border:1.5px solid var(--border);padding:20px 22px;box-shadow:var(--sh);margin-bottom:14px}
@@ -126,13 +131,7 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#ECF0F5;color:#1a2a3a;mi
   .result-wrap{position:static}
   .pills-label,.speed-btns{grid-template-columns:1fr 1fr}
 }
-  
-  /* ── HEADER ── */
-  
-  header { background:#1F4E79; color:#fff; padding:18px 32px; box-shadow:0 2px 8px rgba(0,0,0,.18); }
-  header .title-block h1 { font-size:18px; font-weight:700; }
-  header .title-block p  { font-size:13px; opacity:.75; margin-top:2px; }
-  </style>
+</style>
 </head>
 <body>
 <!-- TOPBAR -->
@@ -144,19 +143,12 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#ECF0F5;color:#1a2a3a;mi
   <div style="flex:1"></div>
   <a href="index.html#calculators" style="color:rgba(255,255,255,.55);font-size:.78rem;text-decoration:none;" onmouseover="this.style.color='rgba(255,255,255,.9)'" onmouseout="this.style.color='rgba(255,255,255,.55)'">Все конфигураторы</a>
 </div>
-<header>
-  <div class="title-block">
-    <h1>Конфигуратор этикетировщика DIBAL</h1>
-    <p>Настройте параметры — получите рекомендацию</p>
-  </div>
-</header>
+<header style="background:#1F4E79;color:#fff;padding:18px 32px;box-shadow:0 2px 8px rgba(0,0,0,.18);"><h1 style="font-size:18px;font-weight:700;">Конфигуратор этикетировщика DIBAL</h1><p style="font-size:13px;opacity:.75;margin-top:2px;">Настройте параметры — получите рекомендацию</p></header>
 
-<a href="index.html#calculators"
-     style="color:rgba(255,255,255,.55);font-size:.78rem;text-decoration:none;"
-     onmouseover="this.style.color='rgba(255,255,255,.9)'"
-     onmouseout="this.style.color='rgba(255,255,255,.55)'">
-    Все конфигураторы
-  </a>
+<div class="hd-sub">Конфигуратор весовой маркировки DIBAL</div>
+  </div>
+  
+</div>
 
 <div class="layout">
 
@@ -173,30 +165,31 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#ECF0F5;color:#1a2a3a;mi
           <div class="pill-body">
             <div class="pill-name">Лоток</div>
             <div class="pill-hint">MAP, вакуум, skin-упаковка</div>
-
-
+          </div>
+        </div>
         <div class="pill" data-val="thermo" onclick="sel('pack','thermo',this)">
           <span class="pill-icon">♨️</span>
           <div class="pill-body">
             <div class="pill-name">Термоформер</div>
             <div class="pill-hint">Формовка и запайка в потоке</div>
-
-
+          </div>
+        </div>
         <div class="pill" data-val="bag" onclick="sel('pack','bag',this)">
           <span class="pill-icon">🛍️</span>
           <div class="pill-body">
             <div class="pill-name">Пакет</div>
             <div class="pill-hint">Готовая мягкая упаковка</div>
-
-
+          </div>
+        </div>
         <div class="pill" data-val="flow" onclick="sel('pack','flow',this)">
           <span class="pill-icon">🌯</span>
           <div class="pill-body">
             <div class="pill-name">Флоу-пак</div>
             <div class="pill-hint">Горизонтальная термоусадка</div>
-
-
-
+          </div>
+        </div>
+      </div>
+    </div>
 
     <!-- 2. РАСПОЛОЖЕНИЕ ЭТИКЕТКИ -->
     <div class="sect" id="sect-label">
@@ -206,24 +199,26 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#ECF0F5;color:#1a2a3a;mi
       <!-- flow-pack note -->
       <div class="flow-note" id="flow-note">
         💡 Для флоу-пака доступно нанесение этикетки сверху или снизу. C-WRAP для данного типа упаковки не применяется. Дополнительно можно подключить суммирующий принтер <strong>LP5000</strong> для продукции фиксированного веса.
+      </div>
 
       <div class="pills-label" id="label-pills">
         <div class="pill-label" data-val="top" onclick="sel('label','top',this)">
           <div class="pl-icon">⬆️</div>
           <div class="pl-name">Сверху (TOP)</div>
           <div class="pl-hint">Стандартное нанесение. До 150 уп./мин</div>
-
+        </div>
         <div class="pill-label" data-val="bottom" onclick="sel('label','bottom',this)">
           <div class="pl-icon">⬇️</div>
           <div class="pl-name">Снизу (BOTTOM)</div>
           <div class="pl-hint">Без переворота. Требование сетей</div>
-
+        </div>
         <div class="pill-label" data-val="cwrap" onclick="sel('label','cwrap',this)">
           <div class="pl-icon">🔄</div>
           <div class="pl-name">Обёртка C-WRAP</div>
           <div class="pl-hint">Вокруг продукта. CLS5000</div>
-
-
+        </div>
+      </div>
+    </div>
 
     <!-- 3. ПРОИЗВОДИТЕЛЬНОСТЬ -->
     <div class="sect">
@@ -234,18 +229,19 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#ECF0F5;color:#1a2a3a;mi
           <div class="sb-icon">🐢</div>
           <div class="sb-val">до 30 уп./мин</div>
           <div class="sb-hint">Малый цех, ручная подача</div>
-
+        </div>
         <div class="speed-btn" data-val="mid" onclick="sel('speed','mid',this)">
           <div class="sb-icon">⚡</div>
           <div class="sb-val">30 – 80 уп./мин</div>
           <div class="sb-hint">Средняя линия</div>
-
+        </div>
         <div class="speed-btn" data-val="high" onclick="sel('speed','high',this)">
           <div class="sb-icon">🚀</div>
           <div class="sb-val">80 – 150 уп./мин</div>
           <div class="sb-hint">Высокоскоростная линия</div>
-
-
+        </div>
+      </div>
+    </div>
 
     <!-- 4. ДОПОБОРУДОВАНИЕ -->
     <div class="sect">
@@ -260,8 +256,9 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#ECF0F5;color:#1a2a3a;mi
             <div class="extra-info">
               <div class="extra-name">Объединитель потоков GS5000</div>
               <div class="extra-desc">Сводит два входных конвейера в один — для линий с несколькими форматами упаковки, подаваемыми на один этикетировщик</div>
-
-
+            </div>
+          </div>
+        </div>
 
         <div class="extra" data-val="metal" onclick="togExtra(this)">
           <div class="extra-row">
@@ -270,8 +267,9 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#ECF0F5;color:#1a2a3a;mi
             <div class="extra-info">
               <div class="extra-name">Металлодетектор MD5700S</div>
               <div class="extra-desc">Встроен в раму этикетировщика. Fe ≥ 1,5 мм / SUS ≥ 2,5 мм. IP65, сертификат ХАССП. Единый интерфейс управления с весовым этикетировщиком</div>
-
-
+            </div>
+          </div>
+        </div>
 
         <div class="extra" id="extra-rej" data-val="rejector" onclick="togExtra(this)">
           <div class="extra-row">
@@ -280,12 +278,13 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#ECF0F5;color:#1a2a3a;mi
             <div class="extra-info">
               <div class="extra-name">Отбраковщик</div>
               <div class="extra-desc">Автоматическое удаление продуктов вне допустимых параметров веса или с обнаруженным металлом</div>
-
-
+            </div>
+          </div>
           <div class="rej-toggle" id="rej-toggle">
             <div class="rej-opt sel" data-rej="basket" onclick="selRej(event,'basket',this)">С корзиной</div>
             <div class="rej-opt" data-rej="nobasket" onclick="selRej(event,'nobasket',this)">Без корзины</div>
-
+          </div>
+        </div>
 
         <div class="extra" data-val="lp5000" onclick="togExtra(this)">
           <div class="extra-row">
@@ -294,9 +293,12 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#ECF0F5;color:#1a2a3a;mi
             <div class="extra-info">
               <div class="extra-name">Суммирующий принтер LP5000</div>
               <div class="extra-desc">Печать и нанесение этикетки для фасованного товара фиксированного веса — без весового контроля. Идеален для флоу-пака и пакетов с постоянным весом</div>
+            </div>
+          </div>
+        </div>
 
-
-
+      </div>
+    </div>
 
   </div><!-- /config -->
 
@@ -307,14 +309,15 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#ECF0F5;color:#1a2a3a;mi
         <div class="result-hd-title">Ваша конфигурация</div>
         <div class="result-unit-name" id="r-name">Выберите параметры</div>
         <div class="result-unit-tag" id="r-tag">← Заполните разделы слева</div>
-
+      </div>
       <div class="result-body" id="r-body">
         <div class="empty-state">
           <div class="empty-icon">⚙️</div>
           <div class="empty-txt">Начните выбор типа упаковки — конфигурация обновится автоматически</div>
-
-
-
+        </div>
+      </div>
+    </div>
+  </div>
 
 </div><!-- /layout -->
 

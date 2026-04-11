@@ -33,11 +33,48 @@
         }
 
         /* Header */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: var(--blue);
+            color: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
+
+        .logo-r {
+            color: var(--orange);
+        }
 
         .header-title {
             font-size: 0.9rem;
             font-weight: 400;
             opacity: 0.9;
+        }
+
+        .header-badge {
+            background: var(--red);
+            color: white;
+            padding: 0.4rem 0.8rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            white-space: nowrap;
         }
 
         /* Alert for urgent deadlines */
@@ -60,9 +97,9 @@
 
         /* Main container */
         .container {
-            max-width:1200px;
+            max-width: 1200px;
             margin: 0 auto;
-            padding:0 24px;
+            padding: 0 24px;
             display: grid;
             grid-template-columns: 1fr 400px;
             gap: 3rem;
@@ -261,7 +298,7 @@
             background: white;
             border: 1px solid #ddd;
             border-radius: 8px;
-            padding: 2rem;
+            padding: 0 24px;
             max-height: calc(100vh - 100px);
             overflow-y: auto;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
@@ -281,7 +318,7 @@
         .result-empty {
             color: var(--grey);
             font-size: 0.9rem;
-            padding: 2rem 0;
+            padding: 0 24px 0;
             text-align: center;
         }
 
@@ -294,7 +331,11 @@
             display: block;
         }
 
-        .package-
+        .package-header {
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid var(--blue-l);
+            padding-bottom: 1rem;
+        }
 
         .package-name {
             font-size: 1.3rem;
@@ -450,7 +491,7 @@
         .modal {
             background: white;
             border-radius: 8px;
-            padding: 2rem;
+            padding: 0 24px;
             max-width: 500px;
             width: 90%;
             max-height: 90vh;
@@ -458,7 +499,12 @@
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
         }
 
-        .modal-
+        .modal-header {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--blue);
+            margin-bottom: 1.5rem;
+        }
 
         .modal-section {
             margin-bottom: 1.5rem;
@@ -577,13 +623,7 @@
         .result-panel::-webkit-scrollbar-thumb:hover {
             background: var(--blue-m);
         }
-  
-  /* ── HEADER ── */
-  
-  header { background:#1F4E79; color:#fff; padding:18px 32px; box-shadow:0 2px 8px rgba(0,0,0,.18); }
-  header .title-block h1 { font-size:18px; font-weight:700; }
-  header .title-block p  { font-size:13px; opacity:.75; margin-top:2px; }
-  </style>
+    </style>
 </head>
 <body>
 <!-- TOPBAR -->
@@ -595,27 +635,10 @@
   <div style="flex:1"></div>
   <a href="index.html#calculators" style="color:rgba(255,255,255,.55);font-size:.78rem;text-decoration:none;" onmouseover="this.style.color='rgba(255,255,255,.9)'" onmouseout="this.style.color='rgba(255,255,255,.55)'">Все конфигураторы</a>
 </div>
-<header>
-  <div class="title-block">
-    <h1>Конфигуратор внедрения Честного знака</h1>
-    <p>Настройте параметры — подготовьте запрос на КП</p>
-  </div>
-</header>
-
-<a href="index.html#calculators"
-     style="color:rgba(255,255,255,.55);font-size:.78rem;text-decoration:none;"
-     onmouseover="this.style.color='rgba(255,255,255,.9)'"
-     onmouseout="this.style.color='rgba(255,255,255,.55)'">
-    Все конфигураторы
-  </a>
+<header style="background:#1F4E79;color:#fff;padding:18px 32px;box-shadow:0 2px 8px rgba(0,0,0,.18);"><h1 style="font-size:18px;font-weight:700;">Конфигуратор внедрения Честного знака</h1><p style="font-size:13px;opacity:.75;margin-top:2px;">Настройте параметры — подготовьте запрос на КП</p></header>
 
 <!-- Header -->
-    <a href="index.html#calculators"
-     style="color:rgba(255,255,255,.55);font-size:.78rem;text-decoration:none;"
-     onmouseover="this.style.color='rgba(255,255,255,.9)'"
-     onmouseout="this.style.color='rgba(255,255,255,.55)'">
-    Все конфигураторы
-  </a>
+    
 
     <!-- Urgent alert -->
     <div class="urgent-alert" id="urgentAlert"></div>
@@ -628,11 +651,13 @@
             <div class="config-section">
                 <div class="section-title">Категории продукции</div>
                 <div class="pills" id="categoriesContainer"></div>
+            </div>
 
             <!-- Section 2: Volume -->
             <div class="config-section">
                 <div class="section-title">Суточный объём производства</div>
                 <div class="volume-buttons" id="volumeContainer"></div>
+            </div>
 
             <!-- Section 3: Lines -->
             <div class="config-section">
@@ -641,18 +666,21 @@
                     <button class="stepper-btn" id="linesDecrement">−</button>
                     <div class="stepper-display" id="linesDisplay">1 линия</div>
                     <button class="stepper-btn" id="linesIncrement">+</button>
-
+                </div>
+            </div>
 
             <!-- Section 4: Current Infrastructure -->
             <div class="config-section">
                 <div class="section-title">Текущая инфраструктура</div>
                 <div class="checkbox-group" id="infrastructureContainer"></div>
+            </div>
 
             <!-- Section 5: What they need -->
             <div class="config-section">
                 <div class="section-title">Что нужно в пакете</div>
                 <div class="checkbox-group" id="needsContainer"></div>
-
+            </div>
+        </div>
 
         <!-- Right column: Result panel -->
         <aside class="result-panel">
@@ -663,6 +691,7 @@
 
             <button class="cta-button" id="ctaButton" disabled>Сформировать запрос на КП</button>
         </aside>
+    </div>
 
     <!-- Modal -->
     <div class="modal-overlay" id="modalOverlay">
@@ -673,34 +702,39 @@
             <div class="modal-section">
                 <div class="modal-section-title">Выбранное решение</div>
                 <div class="modal-summary" id="modalSummary"></div>
+            </div>
 
             <div class="modal-section">
                 <div class="modal-section-title">Параметры производства</div>
                 <div class="modal-summary" id="modalParams"></div>
+            </div>
 
             <div class="modal-section">
                 <div class="modal-section-title">Ваши контакты</div>
                 <div class="form-group">
                     <label>Имя</label>
                     <input type="text" id="modalName" placeholder="Иван Петров">
-
+                </div>
                 <div class="form-group">
                     <label>Компания</label>
                     <input type="text" id="modalCompany" placeholder="ООО Мясокомбинат">
-
+                </div>
                 <div class="form-group">
                     <label>Телефон / Email</label>
                     <input type="text" id="modalContact" placeholder="+7 (999) 123-45-67">
-
+                </div>
+            </div>
 
             <div class="modal-note">
                 ✓ Ответим в течение 1 рабочего дня. Бесплатный аудит готовности к маркировке.
+            </div>
 
             <div class="modal-buttons">
                 <button class="modal-btn modal-btn-secondary" id="modalCancel">Отменить</button>
                 <button class="modal-btn modal-btn-primary" id="modalSubmit">Отправить в ЯФОР</button>
-
-
+            </div>
+        </div>
+    </div>
 
     <script>
         // Data
@@ -818,7 +852,7 @@
                             ${cat.required ? '✓ Обязательно сейчас' : `с ${formatDate(cat.date)}`}
                         </span>
                     </label>
-
+                </div>
             `).join('');
         }
 
@@ -841,7 +875,7 @@
                     <input type="checkbox" id="infra-${item.id}" value="${item.id}"
                         onchange="toggleInfra('${item.id}')">
                     <label for="infra-${item.id}">${item.label}</label>
-
+                </div>
             `).join('');
         }
 
@@ -853,7 +887,7 @@
                     <input type="checkbox" id="needs-${item.id}" value="${item.id}"
                         onchange="toggleNeeds('${item.id}')">
                     <label for="needs-${item.id}">${item.label}</label>
-
+                </div>
             `).join('');
         }
 
@@ -978,16 +1012,18 @@
                         <div class="package-name">${pkg.name}</div>
                         <div class="package-badge">${pkg.badge}</div>
                         <div class="package-tag">${pkg.tag}</div>
+                    </div>
 
                     <div class="timeline">${pkg.timeline}</div>
 
                     <div class="features-list">
                         ${pkg.features.map(f => `<div class="feature-item">${f}</div>`).join('')}
+                    </div>
 
                     <div class="result-block">
                         <div class="result-block-title">Результат реализации</div>
                         <div style="font-size: 0.9rem; color: var(--green); font-weight: 500;">${pkg.result}</div>
-
+                    </div>
             `;
 
             // Deadlines block
@@ -1003,8 +1039,8 @@
                             ${selectedCats.map(cat =>
                                 `<div class="deadline-item">${cat.name} — ${formatDate(cat.date)}</div>`
                             ).join('')}
-
-
+                        </div>
+                    </div>
                 `;
             }
 
@@ -1019,8 +1055,8 @@
                         <div class="result-block-title">В пакет включено</div>
                         <div class="tags-list">
                             ${needLabels.map(label => `<div class="tag">${label}</div>`).join('')}
-
-
+                        </div>
+                    </div>
                 `;
             }
 
