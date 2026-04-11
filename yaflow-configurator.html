@@ -237,19 +237,12 @@
     <a href="index.html#calculators" style="color:rgba(255,255,255,.55);font-size:.78rem;text-decoration:none;" onmouseover="this.style.color='rgba(255,255,255,.9)'" onmouseout="this.style.color='rgba(255,255,255,.55)'">Все конфигураторы</a>
   </div>
 </div>
-  <a href="index.html#calculators" style="color:rgba(255,255,255,.55);font-size:.78rem;text-decoration:none;" onmouseover="this.style.color='rgba(255,255,255,.9)'" onmouseout="this.style.color='rgba(255,255,255,.55)'">Все конфигураторы</a>
-</div>
-<header><div style="max-width:1200px;margin:0 auto;padding:0 24px;"><div class="title-block">
-    <h1>Конфигуратор флоу-пак ЯFLOW</h1>
-    <p>Настройте параметры — получите рекомендацию</p>
-  </div></div></header>
-
-<a href="index.html#calculators"
-     style="color:rgba(255,255,255,.55);font-size:.78rem;text-decoration:none;"
-     onmouseover="this.style.color='rgba(255,255,255,.9)'"
-     onmouseout="this.style.color='rgba(255,255,255,.55)'">
-    Все конфигураторы
-  </a>
+<header style="background:#1F4E79;color:#fff;padding:18px 32px;box-shadow:0 2px 8px rgba(0,0,0,.18);">
+  <div style="max-width:1200px;margin:0 auto;padding:0 24px;">
+    <h1 style="font-size:18px;font-weight:700;">Конфигуратор флоу-пак ЯFLOW</h1>
+    <p style="font-size:13px;opacity:.75;margin-top:2px;">Настройте параметры — получите рекомендацию</p>
+  </div>
+</header>
 
 <div class="wrap">
 
@@ -263,24 +256,29 @@
         <div class="pill" data-val="tray" onclick="sel('type',this)">
           <span class="pill-icon">🥗</span>
           <div><div class="pill-name">Лоток с продуктом</div><div class="pill-hint">Овощи, зелень, салаты в подложке</div></div>
+        </div>
 
         <div class="pill" data-val="snack" onclick="sel('type',this)">
           <span class="pill-icon">🍫</span>
           <div><div class="pill-name">Штучный / снэк</div><div class="pill-hint">Кондитерские изделия, батончики</div></div>
+        </div>
 
         <div class="pill" data-val="sandwich" onclick="sel('type',this)">
           <span class="pill-icon">🥪</span>
           <div><div class="pill-name">Готовые блюда / сэндвичи</div><div class="pill-hint">Роллы, бургеры, выпечка</div></div>
+        </div>
 
         <div class="pill" data-val="bulk" onclick="sel('type',this)">
           <span class="pill-icon">🥬</span>
           <div><div class="pill-name">Пучок / навал</div><div class="pill-hint">Зелень без подложки, нарезка</div></div>
+        </div>
 
         <div class="pill" data-val="group" onclick="sel('type',this)">
           <span class="pill-icon">📦</span>
           <div><div class="pill-name">Групповая упаковка</div><div class="pill-hint">Несколько единиц в одном пакете</div></div>
-
-
+        </div>
+      </div>
+    </div>
 
     <!-- 2. ШИРИНА ПЛЁНКИ (=ширина продукта) -->
     <div class="card" id="c2">
@@ -289,17 +287,21 @@
       <div class="size-btn-grid" id="pills-width">
         <div class="size-btn" data-val="narrow" onclick="sel('width',this)">
           <div>до 210 мм</div><div class="size-hint">Снэки, батончики, маленькие лотки</div>
+        </div>
 
         <div class="size-btn" data-val="mid" onclick="sel('width',this)">
           <div>210–310 мм</div><div class="size-hint">Стандартные лотки, зелень</div>
+        </div>
 
         <div class="size-btn" data-val="wide" onclick="sel('width',this)">
           <div>310–430 мм</div><div class="size-hint">Крупные лотки, сэндвичи</div>
+        </div>
 
         <div class="size-btn" data-val="xwide" onclick="sel('width',this)">
           <div>430–480 мм</div><div class="size-hint">Широкий формат, BOX-MOTION</div>
-
-
+        </div>
+      </div>
+    </div>
 
     <!-- 3. ПРОИЗВОДИТЕЛЬНОСТЬ -->
     <div class="card" id="c3">
@@ -308,20 +310,24 @@
         <div class="pill" data-val="low" onclick="sel('speed',this)">
           <span class="pill-icon">🐢</span>
           <div><div class="pill-name">до 30 уп/мин</div><div class="pill-hint">Малый объём, опытный участок</div></div>
+        </div>
 
         <div class="pill" data-val="med" onclick="sel('speed',this)">
           <span class="pill-icon">⚡</span>
           <div><div class="pill-name">30–80 уп/мин</div><div class="pill-hint">Серийное производство</div></div>
+        </div>
 
         <div class="pill" data-val="high" onclick="sel('speed',this)">
           <span class="pill-icon">🚀</span>
           <div><div class="pill-name">80–150 уп/мин</div><div class="pill-hint">Высокий темп, поточная линия</div></div>
+        </div>
 
         <div class="pill" data-val="ultra" onclick="sel('speed',this)">
           <span class="pill-icon">🏎️</span>
           <div><div class="pill-name">Свыше 150 уп/мин</div><div class="pill-hint">Высокоскоростная линия</div></div>
-
-
+        </div>
+      </div>
+    </div>
 
     <!-- 4. ПОДАЧА ПРОДУКТА -->
     <div class="card" id="c4">
@@ -330,16 +336,19 @@
         <div class="pill" data-val="manual" onclick="sel('feed',this)">
           <span class="pill-icon">🙋</span>
           <div><div class="pill-name">Ручная загрузка</div><div class="pill-hint">Операторы раскладывают на конвейер</div></div>
+        </div>
 
         <div class="pill" data-val="auto1" onclick="sel('feed',this)">
           <span class="pill-icon">🤖</span>
           <div><div class="pill-name">Автоподача AF</div><div class="pill-hint">1-лентовая, стабильный поток</div></div>
+        </div>
 
         <div class="pill" data-val="auto5" onclick="sel('feed',this)">
           <span class="pill-icon">🦾</span>
           <div><div class="pill-name">Автоподача AFS</div><div class="pill-hint">5-лентовая, нестабильный поток</div></div>
-
-
+        </div>
+      </div>
+    </div>
 
     <!-- 5. ДОПОБОРУДОВАНИЕ -->
     <div class="card" id="c5">
@@ -350,33 +359,39 @@
           <div class="extra-check"></div>
           <span class="extra-icon">🌿</span>
           <div><div class="extra-name">MAP-атмосфера</div><div class="extra-desc">CO₂ / N₂ — продление срока хранения</div></div>
+        </div>
 
         <div class="extra" id="ex-printer" onclick="togExtra('printer',this)">
           <div class="extra-check"></div>
           <span class="extra-icon">🖨️</span>
           <div><div class="extra-name">ТТ-принтер</div><div class="extra-desc">Печать даты, ШК, логотипа на плёнке</div></div>
+        </div>
 
         <div class="extra" id="ex-label" onclick="togExtra('label',this)">
           <div class="extra-check"></div>
           <span class="extra-icon">🏷️</span>
           <div><div class="extra-name">Принтер-аппликатор</div><div class="extra-desc">Этикетка с весом, ценой, ШК</div></div>
+        </div>
 
         <div class="extra" id="ex-metal" onclick="togExtra('metal',this)">
           <div class="extra-check"></div>
           <span class="extra-icon">🔍</span>
           <div><div class="extra-name">Металлодетектор</div><div class="extra-desc">Обязателен для сетевой розницы</div></div>
+        </div>
 
         <div class="extra" id="ex-vacuum" onclick="togExtra('vacuum',this)">
           <div class="extra-check"></div>
           <span class="extra-icon">💨</span>
           <div><div class="extra-name">Вакуумная упаковка</div><div class="extra-desc">Только для YAFLOW-500</div></div>
+        </div>
 
         <div class="extra" id="ex-shrink" onclick="togExtra('shrink',this)">
           <div class="extra-check"></div>
           <span class="extra-icon">♨️</span>
           <div><div class="extra-name">Термоусадка</div><div class="extra-desc">Для широких форматов 450TR / 500</div></div>
-
-
+        </div>
+      </div>
+    </div>
 
   </div><!-- /left -->
 
@@ -386,15 +401,16 @@
       <div class="result-head">
         <div class="result-label">Рекомендуемая модель</div>
         <div class="result-model empty" id="res-model">Выберите параметры</div>
+      </div>
 
       <div class="result-body" id="res-body">
         <div class="empty-state">
           <div class="empty-icon">⚙️</div>
           <div class="empty-text">Укажите тип продукта, ширину и производительность — конфигурация обновится автоматически</div>
-
-
-
-
+        </div>
+      </div>
+    </div>
+  </div>
 </div><!-- /wrap -->
 
 <!-- ── MODAL КП ── -->
@@ -403,7 +419,7 @@
     <div class="modal-hd">
       <h3>Запрос коммерческого предложения</h3>
       <button class="modal-close" onclick="closeModal()">✕</button>
-
+    </div>
     <div class="modal-body" id="modalBody">
       <table class="summary-tbl" id="summaryTbl"></table>
       <div class="form-label">Ваше имя *</div>
@@ -412,12 +428,13 @@
       <input class="form-input" id="inp-company" placeholder="ООО Мясокомбинат">
       <div class="form-label">Телефон *</div>
       <input class="form-input" id="inp-phone" placeholder="+7 (___) ___-__-__">
-
+    </div>
     <div class="modal-footer">
       <button class="btn-cancel" onclick="closeModal()">Отмена</button>
       <button class="btn-send" onclick="sendKP()">Получить КП →</button>
-
-
+    </div>
+  </div>
+</div><!-- /modal-bg -->
 
 <script>
 // ── MODELS ──
