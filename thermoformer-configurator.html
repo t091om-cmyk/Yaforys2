@@ -690,7 +690,6 @@ function sendReq() {
   }
   sendToCRM({ source: 'Конфигуратор термоформеров', name, company, phone, equip: pickModel().name });
   closeModal();
-  alert(`Запрос отправлен!\n\nМодель: ${pickModel().name}\nИмя: ${name}\nКомпания: ${company || '—'}\nТелефон: ${phone}\n\nСпециалист ЯФОР свяжется с вами в течение одного рабочего дня.`);
 }
 
 // close modal on bg click

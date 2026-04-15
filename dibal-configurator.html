@@ -546,7 +546,6 @@ function dibalSubmit() {
   if (\!name || \!phone) { alert('Пожалуйста, укажите имя и телефон'); return; }
   sendToCRM({ source: 'Конфигуратор этикетировщиков Dibal', name, company, phone, equip: m });
   document.getElementById('dibal-modal-overlay').style.display = 'none';
-  alert(`Заявка на конфигурацию "${m}" отправлена.\nСпециалист ЯФОР свяжется с вами в течение одного рабочего дня.`);
 }
 </script>
 

@@ -876,7 +876,6 @@ function submitRequest() {
 Опции: ${state.options.map(o => OPTION_LABELS[o]).join(', ') || '—'}`;
 
   sendToCRM({ source: 'Конфигуратор трейсилеров', name, company, phone, equip: model.name, comment: message });
-  alert('Ваш запрос принят!\n\n' + message);
   closeModal();
 }
 
