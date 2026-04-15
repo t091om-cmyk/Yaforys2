@@ -1129,11 +1129,6 @@ const CRM_URL = 'https://script.google.com/macros/s/AKfycbz9V3FzFaBYVFXjpnylrmQz
             const company = document.getElementById('modalCompany').value.trim();
             const contact = document.getElementById('modalContact').value.trim();
 
-            if (!name || !company || !contact) {
-                alert('Пожалуйста, заполните все поля контактов.');
-                return;
-            }
-
             sendToCRM({ source: 'Конфигуратор Честного знака', name, company, phone: contact, equip: packages[state.currentPackage].name });
             closeModal();
             document.getElementById('modalName').value = '';

@@ -684,10 +684,6 @@ function sendReq() {
   const name    = document.getElementById('f-name').value.trim();
   const company = document.getElementById('f-company').value.trim();
   const phone   = document.getElementById('f-phone').value.trim();
-  if (!name || !phone) {
-    alert('Пожалуйста, укажите имя и телефон.');
-    return;
-  }
   sendToCRM({ source: 'Конфигуратор термоформеров', name, company, phone, equip: pickModel().name });
   closeModal();
 }
