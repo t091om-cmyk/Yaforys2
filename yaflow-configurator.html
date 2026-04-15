@@ -541,6 +541,11 @@ function openModal() {
 
 function closeModal() { document.getElementById('modalBg').classList.remove('open'); }
 
+const CRM_URL = 'SCRIPT_URL_HERE';
+function sendToCRM(data) {
+  fetch(CRM_URL, { method:'POST', mode:'no-cors', headers:{'Content-Type':'application/json'}, body:JSON.stringify(data) }).catch(()=>{});
+}
+
 function sendKP() {
   const name = document.getElementById('inp-name').value.trim();
   const company = document.getElementById('inp-company').value.trim();
