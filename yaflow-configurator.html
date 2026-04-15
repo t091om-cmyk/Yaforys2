@@ -551,6 +551,7 @@ function sendKP() {
   const company = document.getElementById('inp-company').value.trim();
   const phone = document.getElementById('inp-phone').value.trim();
   if (!name || !phone) { alert('Пожалуйста, укажите имя и телефон'); return; }
+  sendToCRM({ source: 'Конфигуратор флоу-пак', name, company, phone, equip: document.getElementById('res-model').textContent });
   document.querySelector('.modal-body').innerHTML = '';
   document.querySelector('.modal-footer').innerHTML = '';
   document.querySelector('.modal-hd h3').textContent = 'Заявка отправлена';

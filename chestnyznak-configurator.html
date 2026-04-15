@@ -1134,6 +1134,7 @@ const CRM_URL = 'https://script.google.com/macros/s/AKfycbz9V3FzFaBYVFXjpnylrmQz
                 return;
             }
 
+            sendToCRM({ source: 'Конфигуратор Честного знака', name, company, phone: contact, equip: packages[state.currentPackage].name });
             alert(`Спасибо! Ваш запрос на КП отправлен в ЯФОР.\n\nПакет: ${packages[state.currentPackage].name}\nКомпания: ${company}\n\nОтветим в течение 1 рабочего дня.`);
             closeModal();
             document.getElementById('modalName').value = '';
