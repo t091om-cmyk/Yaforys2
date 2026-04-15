@@ -961,11 +961,11 @@
 
             let pkg = null;
 
-            if (state.volume === 'low' && state.lines <= 1) {
-                pkg = 'START';
-            } else if (state.volume === 'mid' && state.lines <= 3) {
-                pkg = 'PROF';
-            } else if (state.volume === 'high' || state.lines > 3) {
+            if (state.volume === 'low') {
+                pkg = state.lines <= 2 ? 'START' : 'PROF';
+            } else if (state.volume === 'mid') {
+                pkg = state.lines <= 3 ? 'PROF' : 'PLANT';
+            } else if (state.volume === 'high') {
                 pkg = 'PLANT';
             }
 
@@ -990,7 +990,7 @@
 
             // Update CTA button
             const ctaBtn = document.getElementById('ctaButton');
-            ctaBtn.disabled = !state.volume || !state.lines;
+            ctaBtn.disabled = !state.volume || !state.lines || !state.currentPackage;
 
             if (!pkg) {
                 empty.style.display = 'block';
@@ -1087,7 +1087,7 @@
 
         // Modal functions
         function openModal() {
-            if (!state.volume || !state.lines) return;
+            if (!state.volume || !state.lines || !state.currentPackage) return;
 
             const pkg = packages[state.currentPackage];
             const modalSummary = document.getElementById('modalSummary');
