@@ -680,7 +680,32 @@ function sendToCRM(data) {
   fetch(CRM_URL, { method:'POST', headers:{'Content-Type':'text/plain'}, body:JSON.stringify(data) }).catch(()=>{});
 }
 
+
+function validateCfgField(id, msg) {
+  const el = document.getElementById(id);
+  if (!el || !el.value.trim()) {
+    el.style.border = '2px solid #e53e3e';
+    el.style.boxShadow = '0 0 0 2px rgba(229,62,62,.25)';
+    let err = el.parentNode.querySelector('.cfg-field-error');
+    if (!err) {
+      err = document.createElement('div');
+      err.className = 'cfg-field-error';
+      err.style.cssText = 'color:#e53e3e;font-size:.75rem;margin-top:3px;';
+      el.parentNode.appendChild(err);
+    }
+    err.textContent = msg;
+    el.addEventListener('input', function f() {
+      el.style.border = ''; el.style.boxShadow = '';
+      if (err) err.textContent = '';
+      el.removeEventListener('input', f);
+    });
+    return false;
+  }
+  return true;
+}
 function sendReq() {
+  if (!validateCfgField('f-name',  'Укажите ваше имя')) return;
+  if (!validateCfgField('f-phone', 'Укажите способ связи')) return;
   const name    = document.getElementById('f-name').value.trim();
   const company = document.getElementById('f-company').value.trim();
   const phone   = document.getElementById('f-phone').value.trim();
