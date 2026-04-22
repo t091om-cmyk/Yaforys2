@@ -97,6 +97,11 @@
                                  color: var(--blue-mid); font-weight: 700; }
 
     /* CTA SECTION — explicit dark bg, protected from nth-child(even) */
+
+    /* Hero two-column with image */
+    .hero-inner { display: grid; grid-template-columns: 1fr auto; gap: 40px; align-items: center; }
+    .hero-img { width: 340px; max-width: 100%; border-radius: 14px; box-shadow: 0 8px 32px rgba(0,0,0,.35); object-fit: cover; height: 230px; }
+    @media(max-width:700px) { .hero-inner { grid-template-columns: 1fr; } .hero-img { display:none; } }
     section.cta-section { background: #1F4E79 !important; color: #fff; padding: 52px 0; text-align: center; }
     .cta-section h2 { font-size: 1.7rem; font-weight: 800; margin-bottom: 12px; }
     .cta-section p { opacity: .85; max-width: 520px; margin: 0 auto 28px; }
@@ -140,6 +145,7 @@
   <!-- HERO -->
   <section class="hero">
     <div class="container">
+      <div class="hero-inner">
       <h1>Термоформеры ЯFORM для пищевой промышленности</h1>
       <p class="subtitle">Автоматическая упаковка мяса, птицы, колбасных изделий и молочной продукции — в вакуум и MAP-атмосфере, без ручного труда, без потерь.</p>
       <div style="margin-top:28px;">
@@ -151,6 +157,9 @@
         </a>
         <p style="margin-top:10px;font-size:.82rem;opacity:.7;">Займёт 2 минуты · Бесплатно · Без регистрации</p>
       </div>
+      </div>
+      <img src="thermoformer.png" alt="Термоформер ЯFORM" class="hero-img">
+    </div>
     </div>
   </section>
 

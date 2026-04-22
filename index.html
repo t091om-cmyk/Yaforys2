@@ -417,6 +417,21 @@ nav a.active { color: var(--blue-mid); font-weight: 600; }
   transition: var(--transition);
 }
 .product-card:hover .product-icon { transform: scale(1.08); }
+/* Product card image */
+.product-img-wrap {
+  margin: -32px -24px 20px -24px;
+  height: 190px;
+  overflow: hidden;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+}
+.product-img-wrap img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform .4s ease;
+}
+.product-card:hover .product-img-wrap img { transform: scale(1.04); }
+
 .product-name { font-size: 1.12rem; font-weight: 700; color: var(--blue-dark); margin-bottom: 8px; }
 .product-desc { font-size: .88rem; color: var(--gray-mid); line-height: 1.6; margin-bottom: 18px; }
 .product-specs { display: flex; flex-direction: column; gap: 6px; margin-bottom: 22px; }
@@ -1261,11 +1276,18 @@ nav a.active { color: var(--blue-mid); font-weight: 600; }
       </div>
     </div>
 
-    <!-- Hero Form -->
-    <div class="hero-form-card">
-      <div class="hero-form-title">Получить коммерческое предложение</div>
-      <div class="hero-form-desc">Подберём модель под ваш продукт и производительность. КП — за 24 часа.</div>
-      <form onsubmit="submitHeroForm(event)">
+    <!-- Hero Form (compact collapsible) -->
+    <div class="hero-form-card" id="hero-form-card">
+      <div class="hero-form-title">Получить КП за 24 часа</div>
+      <div class="hero-form-desc">Термоформер, трейсилер, флоу-пак или этикетировщик — подберём под ваш продукт.</div>
+      <!-- collapsed state: just the CTA button -->
+      <div id="hero-cta-btn" style="margin-top:16px;">
+        <button type="button" class="btn-form-submit" onclick="expandHeroForm()" style="width:100%;font-size:1rem;">
+          📋 Оставить заявку →
+        </button>
+      </div>
+      <!-- expanded form (hidden by default) -->
+      <form onsubmit="submitHeroForm(event)" id="hero-expand-form" style="display:none;margin-top:4px;">
         <div class="form-group">
           <label>Тип оборудования</label>
           <select id="hero-eq" required>
@@ -1371,8 +1393,8 @@ nav a.active { color: var(--blue-mid); font-weight: 600; }
     <div class="products-grid">
 
       <div class="product-card featured">
+        <div class="product-img-wrap"><img src="thermoformer.png" alt="Термоформер ЯFORM"></div>
         <span class="product-badge badge-orange">🔥 Хит продаж</span>
-        <div class="product-icon">🔲</div>
         <div class="product-name">Термоформер ЯFORM</div>
         <div class="product-desc">Вакуумная и MAP-упаковка для мяса и молочной продукции. До 420 упаковок в цикл. 7+ форматов на одной машине.</div>
         <div class="product-specs">
@@ -1385,8 +1407,8 @@ nav a.active { color: var(--blue-mid); font-weight: 600; }
       </div>
 
       <div class="product-card">
+        <div class="product-img-wrap"><img src="traysealer.png" alt="Трейсилер ЯTRAY"></div>
         <span class="product-badge badge-blue">Птица и мясо</span>
-        <div class="product-icon">🗂️</div>
         <div class="product-name">Трейсилер ЯTRAY</div>
         <div class="product-desc">Автоматическая запайка лотков. Вакуум, MAP, SKIN-плёнка. Для птицеводства и мясопереработки.</div>
         <div class="product-specs">
@@ -1398,8 +1420,9 @@ nav a.active { color: var(--blue-mid); font-weight: 600; }
       </div>
 
       <div class="product-card">
+        <div class="product-img-wrap"><img src="flowpack.png" alt="Флоу-пак ЯFLOW"></div>
         <span class="product-badge badge-blue">Хлебобулочные / сыр</span>
-        <div class="product-icon"><svg viewBox="0 0 120 80" width="38" height="26" fill="none" stroke="white" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><path d="M18 40 Q18 14 40 12 L80 12 Q102 14 102 40 Q102 66 80 68 L40 68 Q18 66 18 40 Z"/><path d="M18 40 Q22 28 28 40 Q22 52 18 40 Z" stroke-width="3.5"/><path d="M102 40 Q98 28 92 40 Q98 52 102 40 Z" stroke-width="3.5"/><line x1="28" y1="40" x2="92" y2="40" stroke-width="3"/><path d="M32 32 Q38 36 32 40" stroke-width="3"/><path d="M32 40 Q38 44 32 48" stroke-width="3"/></svg></div>
+        <div class="product-icon" style="display:none"><svg viewBox="0 0 120 80" width="38" height="26" fill="none" stroke="white" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><path d="M18 40 Q18 14 40 12 L80 12 Q102 14 102 40 Q102 66 80 68 L40 68 Q18 66 18 40 Z"/><path d="M18 40 Q22 28 28 40 Q22 52 18 40 Z" stroke-width="3.5"/><path d="M102 40 Q98 28 92 40 Q98 52 102 40 Z" stroke-width="3.5"/><line x1="28" y1="40" x2="92" y2="40" stroke-width="3"/><path d="M32 32 Q38 36 32 40" stroke-width="3"/><path d="M32 40 Q38 44 32 48" stroke-width="3"/></svg></div>
         <div class="product-name">Флоу-пак ЯFLOW</div>
         <div class="product-desc">Горизонтальная упаковка в плёнку. Сыр, выпечка, кондитерка, полуфабрикаты. Переналадка 10 минут.</div>
         <div class="product-specs">
@@ -2375,6 +2398,15 @@ function submitModal(e) {
   const source  = (document.getElementById('modal-title')   || {}).textContent || 'Модальная форма';
   sendToCRM({ name, phone, equip, product: comment, source });
   showModalSuccess();
+}
+
+
+function expandHeroForm() {
+  document.getElementById('hero-cta-btn').style.display = 'none';
+  const form = document.getElementById('hero-expand-form');
+  form.style.display = 'block';
+  const first = form.querySelector('select,input');
+  if (first) first.focus();
 }
 
 function submitHeroForm(e) {
