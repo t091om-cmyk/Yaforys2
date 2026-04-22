@@ -1182,6 +1182,73 @@ nav a.active { color: var(--blue-mid); font-weight: 600; }
   .header-phone small { display: none; }
   .btn-header { font-size: .76rem; padding: 7px 11px; }
 }
+
+/* ── Hero Slideshow ── */
+.hero-slideshow {
+  position: relative;
+  width: 420px;
+  height: 300px;
+  border-radius: 16px;
+  overflow: hidden;
+  flex-shrink: 0;
+  box-shadow: 0 12px 40px rgba(0,0,0,.4);
+}
+.hero-slide {
+  position: absolute; inset: 0;
+  opacity: 0;
+  transition: opacity .6s ease;
+}
+.hero-slide.active { opacity: 1; }
+.hero-slide img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.hero-slide-caption {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  padding: 10px 16px;
+  background: linear-gradient(transparent, rgba(0,0,0,.6));
+  color: #fff;
+  font-size: .82rem;
+  font-weight: 600;
+  letter-spacing: .3px;
+}
+.hero-slide-prev,
+.hero-slide-next {
+  position: absolute;
+  top: 50%; transform: translateY(-50%);
+  background: rgba(255,255,255,.2);
+  border: none; color: #fff;
+  font-size: 1.6rem; line-height: 1;
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  backdrop-filter: blur(4px);
+  transition: background .2s;
+  z-index: 2;
+}
+.hero-slide-prev:hover,
+.hero-slide-next:hover { background: rgba(255,255,255,.38); }
+.hero-slide-prev { left: 10px; }
+.hero-slide-next { right: 10px; }
+.hero-slide-dots {
+  position: absolute;
+  bottom: 36px; left: 50%; transform: translateX(-50%);
+  display: flex; gap: 6px; z-index: 2;
+}
+.hero-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.5);
+  cursor: pointer;
+  transition: background .2s, transform .2s;
+}
+.hero-dot.active { background: #fff; transform: scale(1.3); }
+@media(max-width:900px) { .hero-slideshow { width: 100%; height: 220px; } }
+@media(max-width:640px) { .hero-slideshow { display: none; } }
+
 </style>
 </head>
 <body>
@@ -1276,54 +1343,20 @@ nav a.active { color: var(--blue-mid); font-weight: 600; }
       </div>
     </div>
 
-    <!-- Hero Form (compact collapsible) -->
-    <div class="hero-form-card" id="hero-form-card">
-      <div class="hero-form-title">Получить КП за 24 часа</div>
-      <div class="hero-form-desc">Термоформер, трейсилер, флоу-пак или этикетировщик — подберём под ваш продукт.</div>
-      <!-- collapsed state: just the CTA button -->
-      <div id="hero-cta-btn" style="margin-top:16px;">
-        <button type="button" class="btn-form-submit" onclick="expandHeroForm()" style="width:100%;font-size:1rem;">
-          📋 Оставить заявку →
-        </button>
+    <!-- Hero Slideshow -->
+    <div class="hero-slideshow" id="heroSlideshow">
+      <div class="hero-slide active"><img src="thermoformer.png" alt="Термоформер ЯFORM"><div class="hero-slide-caption">Термоформер ЯFORM</div></div>
+      <div class="hero-slide"><img src="traysealer.png" alt="Трейсилер ЯTRAY"><div class="hero-slide-caption">Трейсилер ЯTRAY</div></div>
+      <div class="hero-slide"><img src="flowpack.png" alt="Флоу-пак ЯFLOW"><div class="hero-slide-caption">Флоу-пак ЯFLOW</div></div>
+      <div class="hero-slide"><img src="remont.png" alt="Сервис и ремонт"><div class="hero-slide-caption">Сервис и ремонт</div></div>
+      <button class="hero-slide-prev" onclick="heroSlide(-1)">&#8249;</button>
+      <button class="hero-slide-next" onclick="heroSlide(1)">&#8250;</button>
+      <div class="hero-slide-dots">
+        <span class="hero-dot active" onclick="heroGoTo(0)"></span>
+        <span class="hero-dot" onclick="heroGoTo(1)"></span>
+        <span class="hero-dot" onclick="heroGoTo(2)"></span>
+        <span class="hero-dot" onclick="heroGoTo(3)"></span>
       </div>
-      <!-- expanded form (hidden by default) -->
-      <form onsubmit="submitHeroForm(event)" id="hero-expand-form" style="display:none;margin-top:4px;">
-        <div class="form-group">
-          <label>Тип оборудования</label>
-          <select id="hero-eq" required>
-            <option value="">— Выберите оборудование —</option>
-            <option>Термоформер ЯFORM</option>
-            <option>Трейсилер ЯTRAY</option>
-            <option>Флоу-пак ЯFLOW</option>
-            <option>Этикетировщик DIBAL</option>
-            <option>ЯBOX</option>
-            <option>Оборудование Честного знака</option>
-            <option>Ремонт упаковочного оборудования</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>Продукт для упаковки</label>
-          <select id="hero-prod" required>
-            <option value="">— Выберите продукт —</option>
-            <option>Мясо и мясная продукция</option>
-            <option>Птица и полуфабрикаты</option>
-            <option>Молочная продукция</option>
-            <option>Рыба и морепродукты</option>
-            <option>Хлебобулочные изделия</option>
-            <option>Другое</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>Ваше имя</label>
-          <input type="text" id="hero-name" placeholder="Иван Петров" required>
-        </div>
-        <div class="form-group">
-          <label>Способ связи</label>
-          <input type="tel" id="hero-phone" placeholder="Телефон, Телеграм, MAX, e-mail">
-        </div>
-        <button type="submit" class="btn-form-submit">Получить КП →</button>
-        <div class="form-privacy">🔒 Нажимая кнопку, вы соглашаетесь с <a href="#" style="color:var(--blue-mid)">политикой конфиденциальности</a></div>
-      </form>
     </div>
   </div>
 </section>
@@ -2473,6 +2506,30 @@ function openRepairModal() {
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') closeModal();
 });
+
+// Hero Slideshow
+(function() {
+  var cur = 0;
+  var slides = document.querySelectorAll('.hero-slide');
+  var dots   = document.querySelectorAll('.hero-dot');
+  var total  = slides.length;
+  var timer;
+
+  function show(n) {
+    slides[cur].classList.remove('active');
+    dots[cur].classList.remove('active');
+    cur = (n + total) % total;
+    slides[cur].classList.add('active');
+    dots[cur].classList.add('active');
+  }
+
+  window.heroSlide = function(dir) { clearInterval(timer); show(cur + dir); startTimer(); };
+  window.heroGoTo  = function(n)   { clearInterval(timer); show(n);         startTimer(); };
+
+  function startTimer() { timer = setInterval(function(){ show(cur + 1); }, 4000); }
+  startTimer();
+})();
+
 </script>
 </body>
 </html>
